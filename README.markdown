@@ -8,6 +8,7 @@ Designed to make your commingling with the cosmotarian commentariat at
 [reason.com] a marginally more enjoyable experience.
 
 Features (all toggle-able):
+
 * Blacklist trolls and blogwhores. Recommendations are made automatically from
   an online list, and there's an ignore button when reading posts.
 * Display delicious alt text directly underneath images. Also, for larger
