@@ -40,14 +40,14 @@ Installation
 The recommend way to install is through the Chrome Web Store page. [Chrome Web Store](https://chrome.google.com/webstore/detail/fdbllkbadgaglaalokapjlkcagidcndj) page. Chrome
 extensions will automatically update to the latest stable version.
 
-If you'd like to use the compiled source (HTML/CSS/JavaScript), you can check
-in the `lib` directory.
+If you'd like to use the "compiled" source (HTML/CSS/JavaScript), you can check
+in the `lib` directory. Although the JS and CSS are both compiled, they're
+pretty-printed.
 
-If you'd like to compile from the source (which uses CoffeeScript and SASS),
-you'll need the following:
+If you'd like to compile from the source, you'll need the following:
 
 * [Ruby](http://www.ruby-lang.org/en/)
-* [SASS](http://sass-lang.com/) (`gem install sass` should do the trick)
+* [SASS](http://sass-lang.com/)
 * [Node.js](http://nodejs.org/)
 * [CoffeeScript](http://jashkenas.github.com/coffee-script/)
 
