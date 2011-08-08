@@ -21,6 +21,7 @@ Features (all toggle-able):
 * Links to quickly insert HTML into comment forms
 
 Permissions requested:
+
 The extension asks for "access to your data on brymck.com," which is for
 updating the list of trolls and nothing else. You can turn off whether you
 receive (to make troll detection hands-off) or send (to make the automated
@@ -30,6 +31,7 @@ where the extension is active. I store zero personal or identifying information
 on folks using this extension.
 
 Source:
+
 https://github.com/brymck/reasonable
 
 Feel free to send me feedback here, there or anywhere else.
@@ -51,7 +53,7 @@ If you'd like to compile from the source, you'll need the following:
 * [Node.js](http://nodejs.org/)
 * [CoffeeScript](http://jashkenas.github.com/coffee-script/)
 
-Once that's installed, you should be able to just clone the repo and install
+Once those are installed, you should be able to just clone the repo and install
 using `cake`:
 
     git clone git@github.com:brymck/reasonable.git
