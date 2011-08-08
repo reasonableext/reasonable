@@ -3,31 +3,31 @@
    "content_scripts": [ {
       "all_frames": true,
       "js": [
-        "/script/const.js",
-        "/script/jquery-1.6.1.min.js",
-        "/script/jquery.brymck.js",
-        "/script/preload.js"
+        "/js/const.js",
+        "/js/jquery-1.6.1.min.js",
+        "/js/jquery.brymck.js",
+        "/js/preload.js"
       ],
       "matches": [
         "http://reason.com/*"
       ],
       "run_at": "document_start"
    }, {
-      "css": [ "/style/reasonable.css" ],
-      "js": [ "/script/md5.js", "/script/reasonable.js" ],
+      "css": [ "/css/reasonable.css" ],
+      "js":  [ "/js/md5.js", "/js/content.js" ],
       "matches": [ "http://reason.com/*" ]
    } ],
    "description": "For a site called reason, you'd think it would block trolls, help users navigate comment threads, and show inline media. (Drink.)",
    "icons": {
-      "128": "/image/icon_128.png",
-      "16": "/image/icon_16.png",
-      "32": "/image/icon_32.png",
-      "48": "/image/icon_48.png"
+      "128": "/img/icon_128.png",
+      "16":  "/img/icon_16.png",
+      "32":  "/img/icon_32.png",
+      "48":  "/img/icon_48.png"
    },
    "name": "reasonable",
    "options_page": "options.html",
    "page_action": {
-      "default_icon": "/image/icon_16.png",
+      "default_icon": "/img/icon_16.png",
       "default_popup": "options.html#popup",
       "default_title": "reasonable"
    },
@@ -35,5 +35,5 @@
     "tabs",
     "http://www.brymck.com/reasonable/"
    ],
-   "version": "1.5.3"
+   "version": "1.6"
 }

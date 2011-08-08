@@ -1,20 +1,28 @@
+# Yeah, yeah, I'll do a better job with node.js later
+
 {exec} = require 'child_process'
 util   = require 'util'
 
-task 'build:test', 'Build project from source to test', (options) ->
+task 'build:dev', 'Build project from source to dev', (options) ->
   util.log 'Converting SCSS files to CSS...'
-  exec 'sass src/scss/options.scss:test/css/options.css'
-  exec 'sass src/scss/reasonable.scss:test/css/reasonable.css'
+  exec 'mkdir dev'
+  exec 'mkdir dev/css'
+  exec 'sass src/scss/options.scss:dev/css/options.css'
+  exec 'sass src/scss/reasonable.scss:dev/css/reasonable.css'
 
   util.log 'Converting CoffeeScript to JavaScript...'
-  exec 'coffee --compile --output test/js/ src/coffee/', (err, stdout, stderr) ->
+  exec 'coffee --compile --output dev/js/ src/coffee/*.coffee', (err, stdout, stderr) ->
+    throw err if err
+    console.log stdout + stderr
+  exec 'coffee --compile --join content.js --output dev/js/ src/coffee/content/', (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr
 
-  util.log 'Copying images, HTML and manifest to test...'
-  exec 'cp -r src/img test'
-  exec 'cp -r src/html/* test'
-  exec 'cp -r src/manifest.json test/manifest.json'
+  util.log 'Copying images, HTML, vendor JavaScript, and manifest to dev...'
+  exec 'cp -r src/img dev'
+  exec 'cp -r src/html/* dev'
+  exec 'cp -r vendor/js dev'
+  exec 'cp -r src/manifest.json dev/manifest.json'
 
 task 'zip', 'Create a zip of the compiled library', (options) ->
   exec 'zip -r extension.zip lib'

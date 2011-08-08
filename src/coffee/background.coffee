@@ -1,6 +1,6 @@
+window.trolls
 SUBMIT_DAYS = 3
 DAYS_TO_MILLISECONDS = 86400000
-trolls
 
 chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
   switch request.type
