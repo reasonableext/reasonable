@@ -12,13 +12,15 @@ contentScripts = [
   "realtime"
   "init"
 ]
+stylesheets = [
+  "options"
+  "content"
+]
 
 build = (target, environment) ->
   console.log "\n\033[32mCompiling #{environment} build...\033[0m"
   exec "mkdir #{target}"
-  exec "mkdir #{target}"
-  exec "sass src/scss/options.scss:#{target}/css/options.css"
-  exec "sass src/scss/content.scss:#{target}/css/content.css"
+  exec "sass src/scss/#{sheet}.scss:#{target}/css/#{sheet}.css" for sheet in stylesheets
   console.log 'Converted SCSS files to CSS'
 
   exec "coffee --compile --output #{target}/js/ src/coffee/*.coffee", (err, stdout, stderr) ->
@@ -27,7 +29,7 @@ build = (target, environment) ->
   exec "coffee --compile --join content.js --output #{target}/js/ #{concatenate "src/coffee/content", contentScripts, "coffee"}", (err, stdout, stderr) ->
     throw err if err
     console.log stdout + stderr
-  console.log 'Converted CoffeeScript into JavaScript'
+  console.log 'Converted CoffeeScript to JavaScript'
 
   exec "cp -r src/css #{target}"
   exec "cp -r src/img #{target}"
