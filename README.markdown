@@ -5,7 +5,7 @@ Introduction
 ------------
 
 Designed to make your commingling with the cosmotarian commentariat at
-[reason.com] a marginally more enjoyable experience.
+[reason.com](http://www.reason.com/) a marginally more enjoyable experience.
 
 Features (all toggle-able):
 
