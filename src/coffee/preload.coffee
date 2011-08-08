@@ -1,11 +1,12 @@
-re = /(facebook|twitter)/
+re = /(facebook|google|twitter)/
 
 getSource = (obj) ->
-  if obj.src then obj.src else $(obj).data "src"
+  obj.src || $(obj).data("src")
 
 chrome.extension.sendRequest { type: "blockIframes" }, (response) ->
   # Block iframes unless turned off
   if response
     $(document).beforeload (event) ->
-      if event.target.nodeName.toUpperCase() is "IFRAME" and re.text getSource event.target
+      # Currently doesn't work for Google, which is handled in 
+      if event.target.nodeName.toUpperCase() is "IFRAME" and re.test getSource event.target
         event.preventDefault()

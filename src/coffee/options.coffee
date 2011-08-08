@@ -1,6 +1,7 @@
 ENTER_KEY = 13
 SAVED_SUCCESS_MESSAGE = "Saved successfully!\n\nReload any open reason.com pages to reflect any changes you've made."
 $save     = $ "#save"
+$add      = $ "#add"
 $troll    = $ "#troll"
 trollList = []
 
@@ -31,15 +32,15 @@ sortTrolls = (trolls) ->
   white.sort sortFunction
   auto.sort  sortFunction
 
-  $.each black, (index, value) -> temp[value] = actions.black.value
-  $.each white, (index, value) -> temp[value] = actions.white.value
-  $.each auto,  (index, value) -> temp[value] = actions.auto.value
+  temp[value] = actions.black.value for index, value of black
+  temp[value] = actions.white.value for index, value of white
+  temp[value] = actions.auto.value  for index, value of auto
 
   localStorage.trolls = JSON.stringify temp
   temp
 
 buildControll = ($td, key, value, comp) ->
-  $td.append $("<input").attr
+  $td.append $("<input>").attr
     id: "#{key}_#{comp.value}"
     type: "radio"
     checked: value is comp.value
@@ -65,14 +66,14 @@ load = ->
   try
     settings = {}
     settings[key] = localStorage[key] for key of localStorage
-    $.each settings, (key, value) ->
-      $option = $("##{key}")
+    for key, value of settings
+      $option = $ "##{key}"
       switch $option.attr "id"
         when "trolls"
           trolls = sortTrolls JSON.parse value
-          $.each trolls, (tKey, tValue) -> $option.append buildTroll tKey, tValue
+          $option.append buildTroll tKey, tValue for tKey, tValue of trolls
         when "name" then $option.val value or ""
-        else $option.attr "checked", value is "true"
+        else $option.prop "checked", value is "true"
 
   if window.location.hash is "#popup"
     $(".scrollContent").fitToWindow 400
@@ -82,20 +83,22 @@ load = ->
 save = () ->
   temp = {}
   tempTrolls = {}
-  $("#options input[type=checkbox]").each () ->
-    $this = $ this
-    temp[$this.attr "id"] = Boolean $this.attr "checked"
-  $("#options input[type=text]").each () ->
-    $this = $ this
-    temp[$this.attr "id"] = $this.val()
-  $("input:radio:checked").each () ->
-    $this = $ this
-    tempTrolls[$this.attr "name"] = $this.val()
+
+  for checkbox in $ "#options input:checkbox"
+    $checkbox = $ checkbox
+    temp[$checkbox.attr "id"] = Boolean $checkbox.prop "checked"
+  for textbox  in $ "#options input:text" then temp[textbox.id] = textbox.value
+  for radio    in $ "input:radio:checked" then tempTrolls[radio.name] = radio.value
+
   temp.trolls = JSON.stringify tempTrolls
   localStorage[key] = temp[key] for key of temp
   alert SAVED_SUCCESS_MESSAGE
   window.close()
   false
+
+attachClickEvents = ->
+  $save.click save
+  $add.click  addTroll
 
 $ ->
   $.ajax
@@ -111,3 +114,4 @@ $ ->
       load()
       $troll.bind "keydown", (event) ->
         addTroll() if event.which is ENTER_KEY
+  attachClickEvents()

@@ -1,14 +1,14 @@
-window:
-  GET_URL: "http://www.brymck.com/reasonable/get"
-  GIVE_URL: "http://www.brymck.com/reasonable/give"
-  QUICKLOAD_MAX_ITEMS: 20
-  actions:
-    black:
-      label: "hide"
-      value: "black"
-    white:
-      label: "show"
-      value: "white"
-    auto:
-      label: "auto"
-      value: "auto"
+# Attach to window, otherwise won't be accessible to other scripts
+window.GET_URL  = "http://www.brymck.com/reasonable/get"
+window.GIVE_URL = "http://www.brymck.com/reasonable/give"
+window.QUICKLOAD_MAX_ITEMS = 20
+window.actions =
+  black:
+    label: "hide"
+    value: "black"
+  white:
+    label: "show"
+    value: "white"
+  auto:
+    label: "auto"
+    value: "auto"
