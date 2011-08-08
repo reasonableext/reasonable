@@ -2,10 +2,11 @@
 <html>
 <head>
 <title>reasonable</title>
-<link rel="stylesheet" type="text/css" href="/style/options.css">
+<link rel="stylesheet" type="text/css" href="/css/options.css">
+<link rel="stylesheet" type="text/css" href="/css/buttons.css">
 </head>
 <body>
-<h1><img src="/image/icon_48.png" alt="logo" title="I put on my monocle and top hat" height="48" width="48">reason<span class="able">able</span></h1>
+<h1><img src="/img/icon_48.png" alt="logo" title="I put on my monocle and top hat" height="48" width="48">reason<span class="able">able</span></h1>
 <p>Hide trolls you don't want to see again, show the nice folks who have been improperly maligned, and leave on auto to let the update script do its thing.</p>
 <!--Yes, this is a table-based layout. Chrome was wrapping divs in the popup.-->
 <table id="container">
@@ -21,7 +22,7 @@
 <tbody class="scrollContent"></tbody>
 </table>
 <br>
-<input type="text" id="troll" placeholder="Troll"><button id="add" onclick="javascript:addTroll()">Blacklist</button><br>
+<input type="text" id="troll" placeholder="Troll"><button id="add">Blacklist</button><br>
 </td>
 <td id="rightside">
 <ul id="options">
@@ -34,18 +35,18 @@
 <li><input type="checkbox" id="keepHistory" checked><label for="keepHistory">Keep links to recent posts accessible from quickload menu</label></li>
 <li><input type="checkbox" id="highlightMe" checked><label for="highlightMe">Highlight my posts</label></li>
 <li><input type="checkbox" id="showGravatar"><label for="showGravatar">Show <a href="http://en.gravatar.com/">Gravatar</a>/Identicon next to poster's name</label></li>
-<li><input type="checkbox" id="blockIframes" title="Reason fixed slow load times for the main page, but this still works for individual articles"><label for="blockIframes">Reduce load times by blocking Facebook and Twitter buttons (less of an issue now)</a></label></li>
+<li><input type="checkbox" id="blockIframes" title="Reason fixed slow load times for the main page, but this still works for individual articles"><label for="blockIframes">Reduce load times by blocking Facebook, Twitter and Google+ buttons</a></label></li>
 <li><input type="checkbox" id="updatePosts"><label for="updatePosts">Check for new posts (beta)</label></li>
 <li><label for="name">Name to highlight</label><input type="text" id="name"></li>
 </ul>
-<button id="save" onclick="javascript:save()">Save &amp; Exit</button>
+<button id="save">Save &amp; Exit</button>
 </td>
 </tr>
 </tbody>
 </table>
-<script type="text/javascript" src="/script/const.js"></script>
-<script type="text/javascript" src="/script/jquery-1.6.1.min.js"></script>
-<script type="text/javascript" src="/script/jquery.brymck.js"></script>
-<script type="text/javascript" src="/script/options.js"></script>
+<script type="text/javascript" src="/js/const.js"></script>
+<script type="text/javascript" src="/js/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.brymck.js"></script>
+<script type="text/javascript" src="/js/options.js"></script>
 </body>
 </html>

@@ -1,0 +1,45 @@
+/* Button glow animation */
+@-webkit-keyframes hover {
+  from {
+    background-color: #8586b1;
+    border-color: #8586b1;
+    color: #fff;
+    -webkit-box-shadow: 0 0 0 #8586b1;
+    z-index: 100; }
+
+  to {
+    background-color: #ff8;
+    border-color: darkorange;
+    color: darkorange;
+    -webkit-box-shadow: 0 0 18px #ff8;
+    z-index: 100; } }
+
+@-webkit-keyframes lightHover {
+  from {
+    background-color: #e8e8f0;
+    border-color: #aeafcb;
+    color: #63659c;
+    -webkit-box-shadow: 0 0 0 #e8e8f0;
+    z-index: 100; }
+
+  to {
+    background-color: #ff8;
+    border-color: darkorange;
+    color: darkorange;
+    -webkit-box-shadow: 0 0 18px #ff8;
+    z-index: 100; } }
+
+@-webkit-keyframes checkedHover {
+  from {
+    background-color: #ff8;
+    border-color: darkorange;
+    color: darkorange;
+    -webkit-box-shadow: 0 0 18px #ff8;
+    z-index: 100; }
+
+  to {
+    background-color: #ff4;
+    border-color: darkorange;
+    color: darkorange;
+    -webkit-box-shadow: 0 0 18px #ff8;
+    z-index: 100; } }
