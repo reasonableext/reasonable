@@ -40,21 +40,16 @@ sortTrolls = (trolls) ->
   temp
 
 buildControll = ($td, key, value, comp) ->
-  $td.append $("<input>").attr
-    id: "#{key}_#{comp.value}"
-    type: "radio"
-    checked: value is comp.value
-    name: key
-    value: comp.value
-  .append $("<label>").attr("for", "#{key}_#{comp.value}").addClass("actions").text comp.label
+  $td.append "<input id='#{key}_#{comp.value}' type='radio' name='#{key}' checked='#{value is comp.value}' value='#{comp.value}'>" +
+             "<label for='#{key}_#{comp.value}' class='actions'>#{comp.label}</label>"
 
 buildTroll = (key, value) ->
-  $trollConstructor = $("<tr>").append $("<td>").addClass("name").text key
-  $td = $("<td>").addClass "actions"
+  $trollConstructor = $("<tr><td class='name'>#{key}</td></tr>")
+  $td = $('<td class="actions"></td>')
   $td = buildControll $td, key, value, actions.black
   $td = buildControll $td, key, value, actions.white
   $td = buildControll $td, key, value, actions.auto
-  $td = $td.append $("<button>").addClass("remove").text("X").click () -> $(this).closest("tr").remove()
+  $td = $td.append $('<button class="remove">X</button>').click () -> $(this).closest("tr").remove()
   $trollConstructor.append $td
 
 addTroll = ->
