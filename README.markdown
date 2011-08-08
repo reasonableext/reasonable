@@ -7,7 +7,7 @@ Introduction
 Designed to make your commingling with the cosmotarian commentariat at
 [reason.com](http://www.reason.com/) a marginally more enjoyable experience.
 
-Features (all toggle-able):
+*** Features
 
 * Blacklist trolls and blogwhores. Recommendations are made automatically from
   an online list, and there's an ignore button when reading posts.
@@ -20,7 +20,7 @@ Features (all toggle-able):
 * Improve load times by removing the Facebook and Twitter sharing APIs
 * Links to quickly insert HTML into comment forms
 
-Permissions requested:
+*** Permissions requested
 
 The extension asks for "access to your data on brymck.com," which is for
 updating the list of trolls and nothing else. You can turn off whether you
@@ -30,7 +30,7 @@ troll list more democratic) any info. Information on your tabs (i.e. your
 where the extension is active. I store zero personal or identifying information
 on folks using this extension.
 
-Source:
+*** Source
 
 https://github.com/brymck/reasonable
 
