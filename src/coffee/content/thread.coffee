@@ -42,8 +42,8 @@ viewThread = ->
 
     while depth > 0 and iter <= 100
       $comment = $comment.prev()
-      if parseInt $comment.attr("class").replace(" troll", "").substr -1 is depth - 1
-        $comment.addClass("ableHightlight").find(".ableShow").text UNCOLLAPSE
+      if parseInt($comment.attr("class").replace(" troll", "").substr -1) is depth - 1
+        $comment.addClass("ableHighlight").find(".ableShow").text UNCOLLAPSE
         depth--
       else
         hideHeight += $comment.height()
@@ -52,7 +52,7 @@ viewThread = ->
         # in data attribute for when you want to unhide it later
         $comment.data("height", $comment.height()).slideUp()
       iter++
-    $("html, body").animate { scrollTop: "#{curScroll - hideHeight} px" }
+    $("html, body").animate { scrollTop: "#{curScroll - hideHeight}px" }
 
   showAll = () ->
     showHeight = 0
@@ -62,7 +62,7 @@ viewThread = ->
       $this.slideDown()
       showHeight += $this.data "height" # .height() will return 0
     $(".ableHighlight").removeClass("ableHighlight").find(".ableShow").text COLLAPSE
-    $("html, body").animate { scrollTop: "#{$(window).scrollTop() + showHeight} px" }
+    $("html, body").animate { scrollTop: "#{$(window).scrollTop() + showHeight}px" }
 
   $("h2.commentheader:not(:has(a.ignore))").each () ->
     $strong = $ "strong:first", this
