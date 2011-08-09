@@ -15,6 +15,8 @@ contentScripts = [
   "init"
 ]
 
+errorLog = (err, stdout, stderr) -> throw err if err
+
 buildCoffee = (target) ->
   fs.readdir "src/coffee", (err, scripts) ->
     console.log 'Coffee -> JS'
@@ -23,31 +25,31 @@ buildCoffee = (target) ->
         console.log "  #{script}/"
         console.log "    #{subscript}.coffee" for subscript in contentScripts
         exec "coffee --compile --join #{script}.js --output #{target}/js/
-              #{concatenate "src/coffee", contentScripts, "js"}"
+              #{concatenate "src/coffee/content", contentScripts, "coffee"}", errorLog
       else
         console.log "  #{script}"
-        exec "coffee --compile --output #{target}/js/ src/coffee/#{script}"
+        exec "coffee --compile --output #{target}/js/ src/coffee/#{script}", errorLog
 
 buildHAML = (target) ->
   fs.readdir "src/haml", (err, pages) ->
     console.log 'HAML   -> HTML'
     for page in pages
       console.log "  #{page}"
-      exec "haml src/haml/#{page} #{target}/#{page.replace ".haml", ".html"}"
+      exec "haml src/haml/#{page} #{target}/#{page.replace ".haml", ".html"}", errorLog
 
 buildSCSS = (target) ->
   fs.readdir "src/scss", (err, sheets) ->
     console.log 'SCSS   -> CSS'
     for sheet in sheets
       console.log "  #{sheet}"
-      exec "sass --no-cache src/scss/#{sheet}.scss:#{target}/css/#{sheet}.css"
+      exec "sass --no-cache src/scss/#{sheet}:#{target}/css/#{sheet.replace ".scss", ".css"}", errorLog
 
 buildOther = (target) ->
   console.log 'Other: static CSS, images, HTML, vendor JavaScript and manifest'
-  exec "cp -r src/css #{target}"
-  exec "cp -r src/img #{target}"
-  exec "cp -r vendor/js #{target}"
-  exec "cp -r src/manifest.json #{target}/manifest.json"
+  exec "cp -r src/css #{target}", errorLog
+  exec "cp -r src/img #{target}", errorLog
+  exec "cp -r vendor/js #{target}", errorLog
+  exec "cp -r src/manifest.json #{target}/manifest.json", errorLog
 
 build = (target, environment) ->
   console.log "\n\033[32mCompiling #{environment} build...\033[0m"

@@ -33,10 +33,12 @@
                   - if option["type"].nil?
                     %input{:id => option["id"], :type => "checkbox", :checked => option["checked"]}
                     %label{:for  => option["id"]}
-                      #{option["text"]}
+                      :textile
+                        #{option["text"]}
                   - elsif option["type"] == "text"
                     %label{:for  => option["id"]}
-                      #{option["text"]}
+                      :textile
+                        #{option["text"]}
                     %input{:type => "text"}
             %button#save Save &amp; Exit
     - %w(const jquery-1.6.1.min jquery.brymck options).each do |script|

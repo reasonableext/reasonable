@@ -1,12 +1,12 @@
 - id: hideAuto
   checked: true
   help: This option does not affect trolls you manually blacklist or whitelist, just those with the auto tag
-  text: Hide trolls automatically based on <a href="http://www.brymck.com/reasonable/get" target="_newtab">remote list</a>
+  text: Hide trolls automatically based on "remote list":http://www.brymck.com/reasonable/get
 
 - id: shareTrolls
   checked: true
   help: No identifying information is included here, just a straight push of the list to the server. My goal is to make troll detection democratic.
-  text: Share troll list to help improve the auto list (I do not collect identifying info!)
+  text: Share troll list to help improve the auto list (I *do not* collect identifying info!)
 
 - id: showAltText
   checked: true

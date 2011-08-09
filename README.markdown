@@ -50,6 +50,7 @@ If you'd like to compile from the source, you'll need the following:
 
 * [Ruby](http://www.ruby-lang.org/en/)
   * [HAML](http://haml-lang.com/)
+  * [RedCloth](http://redcloth.org/)
   * [SASS](http://sass-lang.com/)
 * [Node.js](http://nodejs.org/)
   * [CoffeeScript](http://jashkenas.github.com/coffee-script/)
