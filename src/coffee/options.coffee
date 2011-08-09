@@ -40,7 +40,8 @@ sortTrolls = (trolls) ->
   temp
 
 buildControll = ($td, key, value, comp) ->
-  $td.append "<input id='#{key}_#{comp.value}' type='radio' name='#{key}' checked='#{value is comp.value}' value='#{comp.value}'>" +
+  console.log "#{value} --- #{comp.value}"
+  $td.append "<input id='#{key}_#{comp.value}' type='radio' name='#{key}'#{if value is comp.value then " checked"} value='#{comp.value}'>" +
              "<label for='#{key}_#{comp.value}' class='actions'>#{comp.label}</label>"
 
 buildTroll = (key, value) ->
