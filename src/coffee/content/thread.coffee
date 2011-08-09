@@ -83,12 +83,11 @@ viewThread = ->
       name    = $this.data "name"
       link    = $this.data "link"
 
-      if $this.text is IGNORE
+      if $this.text() is IGNORE
         chrome.extension.sendRequest { type: "addTroll", name: name, link: link }, (response) ->
           if response.success
             settings.trolls[name] = actions.black.value
-            if link
-              settings.trolls[link] = actions.black.value
+            settings.trolls[link] = actions.black.value if link
             blockTrolls true
           else
             alert "Adding troll failed! Try doing it manually in the options page for now. :("

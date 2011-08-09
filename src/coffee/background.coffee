@@ -5,10 +5,7 @@ DAYS_TO_MILLISECONDS = 86400000
 chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
   switch request.type
     when "settings"
-      if localStorage
-        sendResponse { settings: localStorage, trolls: troll }
-      else
-        sendResponse { trolls: trolls }
+      sendResponse { settings: localStorage, trolls: troll }
     when "addTroll"
       temp = JSON.parse localStorage.trolls
       temp[request.name] = actions.black.value

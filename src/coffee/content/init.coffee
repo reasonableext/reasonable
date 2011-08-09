@@ -4,7 +4,7 @@ getSettings = (response, defaults) ->
   # Use saved settings if they exist
   temp = response.settings ? {}
   
-  $.each defaults, (key, value) ->
+  for key, value of defaults
     switch temp[key]
       when undefined
         temp[key] = value

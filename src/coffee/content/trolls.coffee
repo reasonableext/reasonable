@@ -27,13 +27,13 @@ getLink = ($strong) ->
 blockTrolls = (smoothTransitions) ->
   showHeight = 0
 
-  $($ "h2.commentheader strong").each () ->
+  $("h2.commentheader strong").each () ->
     $this   = $ this
     $ignore = $this.siblings "a.ignore"
     name    = $ignore.data "name"
     link    = $ignore.data "link"
 
-    if name in settings.trolls or (link isnt "" and link in settings.trolls)
+    if settings.trolls[name]? or (link isnt "" and settings.trolls[link]?)
       # If poster is a troll, strip A tag, add troll class, and hide comment body
       $body = $this.html(name).siblings("a.ignore").text(UNIGNORE).closest("div").addClass("troll").children "p, blockquote, img, iframe"
       $this.siblings("a.ignore").hide().prev("span.pipe").hide() unless settings.showUnignore
@@ -42,3 +42,4 @@ blockTrolls = (smoothTransitions) ->
     else if smoothTransitions and $ignore.text() is UNIGNORE
       # Unhide unignored trolls
       $this.siblings("a.ignore").text(IGNORE).closest("div").removeClass("troll").children("p, blockquote").slideDown()
+    true
