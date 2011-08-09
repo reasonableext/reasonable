@@ -1,3 +1,5 @@
+PADDING = 24
+
 fs = require 'fs'
 exec = require('child_process').exec
 path = require 'path'
@@ -12,6 +14,20 @@ contentScripts = [
   "realtime"
   "init"
 ]
+
+# String repetition function
+repeat = (pattern, count) ->
+  return '' if count < 1
+  result = ''
+  while count > 0
+    result += pattern if count & 1
+    count >>= 1
+    pattern += pattern
+  result
+
+highlight = (text, formats...) -> "\033[#{formats.join ";"}m#{text}\033[0m"
+
+pad = (text) -> text + repeat ' ', PADDING - text.length
 
 errorLog = (err, stdout, stderr) -> throw err if err
 verifyTarget = (target) -> fs.mkdir target, 0777 unless path.existsSync target
@@ -43,34 +59,36 @@ task 'coffee', 'Compile CoffeeScript to development', (options) ->
   verifyTarget target
   target ?= "lib"
   fs.readdir "src/coffee", (err, scripts) ->
-    console.log 'Coffee -> JS'
+    console.log highlight 'Coffee -> JS', 1, 32
     for script in scripts
       if path.extname(script) is ""
-        console.log "  #{script}/"
+        console.log pad("  #{script}/") + highlight(script + ".js", 1)
         console.log "    #{subscript}.coffee" for subscript in contentScripts
         exec "coffee --compile --join #{script}.js --output #{target}/js/
               #{concatenate "src/coffee/content", contentScripts, "coffee"}", errorLog
       else
-        console.log "  #{script}"
+        console.log pad("  #{script}") + highlight(script.replace(".coffee", ".js"), 1)
         exec "coffee --compile --output #{target}/js/ src/coffee/#{script}", errorLog
 
 task 'haml', 'Compile HAML to development', (options) ->
   target ?= "lib"
   verifyTarget target
   fs.readdir "src/haml", (err, pages) ->
-    console.log 'HAML   -> HTML'
+    console.log highlight 'HAML -> HTML', 1, 32
     for page in pages
-      console.log "  #{page}"
-      exec "haml src/haml/#{page} #{target}/#{page.replace ".haml", ".html"}", errorLog
+      htmlPage = page.replace ".haml", ".html"
+      console.log pad("  #{page}") + highlight(htmlPage, 1)
+      exec "haml src/haml/#{page} #{target}/#{htmlPage}", errorLog
 
 task 'scss', 'Compile SCSS files to development', (options) ->
   target ?= "lib"
   verifyTarget target
   fs.readdir "src/scss", (err, sheets) ->
-    console.log 'SCSS   -> CSS'
+    console.log highlight 'SCSS   -> CSS', 1, 32
     for sheet in sheets
-      console.log "  #{sheet}"
-      exec "sass --no-cache src/scss/#{sheet}:#{target}/css/#{sheet.replace ".scss", ".css"}", errorLog
+      cssSheet = sheet.replace ".scss", ".css"
+      console.log pad("  #{sheet}") + highlight(cssSheet, 1)
+      exec "sass --no-cache src/scss/#{sheet}:#{target}/css/#{cssSheet}", errorLog
 
 task 'other', 'Copy other files to development', (options) ->
   target ?= "lib"
@@ -83,6 +101,6 @@ task 'other', 'Copy other files to development', (options) ->
 
 # Zipping
 task 'zip', 'Create a zip of the compiled library', (options) ->
-  console.log "\n\033[32mZipping extension...\033[0m"
+  console.log highlight "Zipping extension...", 1, 32
   exec 'zip -r extension.zip lib'
   console.log "Zipped lib directory to extension.zip"

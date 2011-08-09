@@ -40,7 +40,6 @@ sortTrolls = (trolls) ->
   temp
 
 buildControll = ($td, key, value, comp) ->
-  console.log "#{value} --- #{comp.value}"
   $td.append "<input id='#{key}_#{comp.value}' type='radio' name='#{key}'#{if value is comp.value then " checked"} value='#{comp.value}'>" +
              "<label for='#{key}_#{comp.value}' class='actions'>#{comp.label}</label>"
 
@@ -81,11 +80,11 @@ save = () ->
   temp = {}
   tempTrolls = {}
 
-  for checkbox in $ "#options input:checkbox"
-    $checkbox = $ checkbox
+  for checkbox in $("#options input:checkbox")
+    $checkbox = $(checkbox)
     temp[$checkbox.attr "id"] = Boolean $checkbox.prop "checked"
-  for textbox  in $ "#options input:text" then temp[textbox.id] = textbox.value
-  for radio    in $ "input:radio:checked" then tempTrolls[radio.name] = radio.value
+  for textbox  in $("#options input:text") then temp[textbox.id] = textbox.value; console.dir(textbox)
+  for radio    in $("input:radio:checked") then tempTrolls[radio.name] = radio.value
 
   temp.trolls = JSON.stringify tempTrolls
   localStorage[key] = temp[key] for key of temp
