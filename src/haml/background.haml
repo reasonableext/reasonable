@@ -1,0 +1,7 @@
+!!! 5
+%html
+  %head
+    %title reasonable
+  %body
+    - %w(const jquery-1.6.1.min background).each do |script|
+      %script{:type => "text/javascript", :src => "/js/#{script}.js"}
