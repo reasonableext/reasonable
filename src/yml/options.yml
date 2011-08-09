@@ -35,6 +35,7 @@
   text: Keep links to recent posts accessible from quickload menu
 
 - id: highlightMe
+  checked: true
   text: Highlight my posts
 
 - id: showGravatar
@@ -48,6 +49,7 @@
   text: Show HTML helpers in commenting input
 
 - id: showActivity
+  checked: true
   text: Show thread activity metrics
 
 - id: name
