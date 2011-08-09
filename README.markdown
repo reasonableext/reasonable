@@ -60,4 +60,4 @@ using `cake`:
 
     git clone git@github.com:brymck/reasonable.git
     cd reasonable
-    cake build:dev
+    cake build

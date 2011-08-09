@@ -43,6 +43,13 @@
 - id: blockIframes
   text: Reduce load times by blocking Facebook, Twitter and Google+ buttons
 
+- id: showQuickInsert
+  checked: true
+  text: Show HTML helpers in commenting input
+
+- id: showActivity
+  text: Show how recent thread activity has been
+
 - id: name
   placeholder: Amakudari
   text: Name to highlight

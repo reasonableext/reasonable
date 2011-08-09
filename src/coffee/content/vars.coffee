@@ -19,6 +19,24 @@ UNCOLLAPSE = "show all"
 IGNORE = "ignore"
 UNIGNORE = "unignore"
 
+# Date finder
+COMMENT_DATE_REGEX = ///
+                        (1[0-2]|[1-9])            # Month
+                     \. (3[0-1]|[1-2][0-9]|[1-9]) # Day
+                     \. ([0-9]{2})                # Year
+                     \s@\s
+                        (1[0-2]|[1-9])            # Hour
+                     \: ([0-5][0-9])              # Minute
+                        ([AP]M)                   # AM/PM
+                     ///g
+ACTIVITY_CUTOFFS = [
+   1800000 # 30 minutes
+   3600000 # 1 hour
+  14400000 # 4 hours
+  43200000 # 12 hours
+  86400000 # 1 day
+]
+
 # Avatars
 AVATAR_PREFIX = "http://www.gravatar.com/avatar/"
 AVATAR_SUFFIX = "?s=40&d=identicon"
@@ -45,8 +63,10 @@ defaultSettings =
   hideAuto: true
   shareTrolls: true
   showAltText: true
+  showActivity: true
   showUnignore: true
   showPictures: true
+  showQuickInsert: true
   showYouTube: true
   keepHistory: true
   highlightMe: true

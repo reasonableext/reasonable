@@ -3,6 +3,7 @@
    "content_scripts": [ {
       "all_frames": true,
       "js": [
+        "/js/const.js",
         "/js/jquery-1.6.1.min.js",
         "/js/jquery.brymck.js",
         "/js/preload.js"

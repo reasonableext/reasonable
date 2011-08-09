@@ -1,4 +1,4 @@
-re = /(facebook|google|twitter)/
+re = /(facebook|twitter)/
 
 getSource = (obj) ->
   obj.src || $(obj).data("src")

@@ -33,13 +33,10 @@ div.ableMe {
 /* Deal with trolls */
 div.troll {
   color: #bbb;
-}
-div.troll a, div.troll .commentactions button.comment_reply {
-  color: #ffab88;
-}
-div.troll img {
-  opacity: 0.27;
-}
+  a, .commentactions button.comment_reply {
+    color: #ffab88; }
+  img {
+    opacity: 0.27; } }
 iframe.youtube-player {
   display: block;
 }
@@ -59,16 +56,15 @@ div#ableLightsOut {
   width: 100%;
   z-index: 100;
 }
+
 div#ableLightsOutBox {
   background: #fff;
   display: none;
   position: absolute;
   z-index: 200;
-}
-div#ableLightsOutBox img {
-  cursor: pointer;
-  padding: 5px;
-}
+  img {
+    cursor: pointer;
+    padding: 5px; } }
 
 /* Gravatar */
 img.ableGravatar {
@@ -79,23 +75,6 @@ img.ableGravatar {
 }
 
 /* Quickload */
-#ableQuick {
-  background-color: #fff;
-  border-bottom: 1px solid #b6bac0;
-  border-left: 1px solid #b6bac0;
-  border-right: 1px solid #b6bac0;
-  cursor: pointer;
-  font-size: 11px;
-  margin-right: 4px;
-  position: fixed;
-  opacity: 0.5;
-  right: 0px;
-  top: 0px;
-  min-width: 20em;
-  z-index: 100;
-  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
-}
-
 #ableQuick:hover {
   opacity: 1;
   -webkit-animation-name: hover;
@@ -112,32 +91,53 @@ img.ableGravatar {
   }
 }
 
-#ableQuick h3 {
-  background-color: #ff6c11;
-  color: #fff;
-  margin: 1px;
-  text-align: center;
-}
+#ableQuick {
+  background-color: #fff;
+  border-bottom: 1px solid #b6bac0;
+  border-left: 1px solid #b6bac0;
+  border-right: 1px solid #b6bac0;
+  cursor: pointer;
+  font-size: 11px;
+  margin-right: 4px;
+  position: fixed;
+  opacity: 0.5;
+  right: 0px;
+  top: 0px;
+  min-width: 20em;
+  z-index: 100;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+  h3 {
+    background-color: #ff6c11;
+    color: #fff;
+    margin: 1px;
+    text-align: center; }
+  li > a {
+    display: block; }
+  > ul {
+    display: none;
+    > li {
+      display: block;
+      padding-left: 1px;
+      + li {
+        padding-top: 0.5em; } } } }
 
-#ableQuick > ul {
-  display: none;
-}
-
-#ableQuick > ul > li {
-  display: block;
-  padding-left: 1px;
-}
-
-#ableQuick > ul > li + li {
-  padding-top: 0.5em;
-}
-
-#ableQuick li > a {
-  display: block;
-}
 .ableInsert {
   font-size: 87.5%;
-}
-.ableInsert .pipe {
-  padding: 0 1px;
+  .pipe {
+    padding: 0 1px; } }
+
+/* Activity */
+div#ableActivity {
+  background-color: #fff;
+  border-left: 1px solid #b6bac0;
+  border-right: 1px solid #b6bac0;
+  border-top: 1px solid #b6bac0;
+  bottom: 0;
+  font-size: 11px;
+  margin-right: 4px;
+  padding: 0.25em;
+  position: fixed;
+  right: 0;
+  z-index: 100;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
 }

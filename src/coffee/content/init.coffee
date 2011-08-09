@@ -37,6 +37,7 @@ commentOnlyRoutines = ->
   viewThread()
   blockTrolls false
   historyAndHighlight()
+  showActivity()
   setTimeout ( () -> updatePosts() ), UPDATE_POST_TIMEOUT_LENGTH
 
 # Content scripts can't access local storage directly,

@@ -21,18 +21,19 @@ quickInsert = (tag, attrs, $textarea) ->
   false # prevent going to anchor
 
 buildQuickInsert = ->
-  buildToolbar = ($textarea) ->
-    $textarea.before($("<div>").addClass("ableInsert")
-      .append($("<a>").attr("href", "#").text("link").click(   () -> quickInsert "a", { URL: "href" }, $textarea ))
-      .append($("<span>").addClass("pipe").text(" | "))
-      .append($("<a>").attr("href", "#").text("quote").click(  () -> quickInsert "blockquote", null, $textarea ))
-      .append($("<span>").addClass("pipe").text(" | "))
-      .append($("<a>").attr("href", "#").text("bold").click(   () -> quickInsert "b", null, $textarea ))
-      .append($("<span>").addClass("pipe").text(" | "))
-      .append($("<a>").attr("href", "#").text("italic").click( () -> quickInsert "i", null, $textarea ))
-      .append($("<span>").addClass("pipe").text(" | "))
-      .append($("<a>").attr("href", "#").text("strike").click( () -> quickInsert "s", null, $textarea )))
+  if settings.showQuickInsert
+    buildToolbar = ($textarea) ->
+      $textarea.before($("<div>").addClass("ableInsert")
+        .append($("<a>").attr("href", "#").text("link").click(   () -> quickInsert "a", { URL: "href" }, $textarea ))
+        .append($("<span>").addClass("pipe").text(" | "))
+        .append($("<a>").attr("href", "#").text("quote").click(  () -> quickInsert "blockquote", null, $textarea ))
+        .append($("<span>").addClass("pipe").text(" | "))
+        .append($("<a>").attr("href", "#").text("bold").click(   () -> quickInsert "b", null, $textarea ))
+        .append($("<span>").addClass("pipe").text(" | "))
+        .append($("<a>").attr("href", "#").text("italic").click( () -> quickInsert "i", null, $textarea ))
+        .append($("<span>").addClass("pipe").text(" | "))
+        .append($("<a>").attr("href", "#").text("strike").click( () -> quickInsert "s", null, $textarea )))
 
-  $("textarea").each () -> buildToolbar $ this
-  $(".comment_reply.submit").click () ->
-    buildToolbar $(this).parent().next(".leave-comment.reply").find "textarea"
+    $("textarea").each () -> buildToolbar $ this
+    $(".comment_reply.submit").click () ->
+      buildToolbar $(this).parent().next(".leave-comment.reply").find "textarea"

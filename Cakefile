@@ -34,7 +34,6 @@ task 'build', 'Build project from source to dev', (options) ->
   invoke "scss"
   invoke "haml"
   invoke "other"
-  invoke "zip"
 
 task 'clear', 'Clear lib directory', (options) ->
   exec "rm -rf lib/*"
