@@ -1,12 +1,16 @@
 - id: hideAuto
   checked: true
-  help: This option does not affect trolls you manually blacklist or whitelist, just those with the auto tag
-  text: Hide trolls automatically based on "remote list":http://www.brymck.com/reasonable/get
+  help: This option does not affect trolls you manually blacklist or whitelist,
+        just those with the auto tag
+  text: Hide trolls automatically based on
+        "remote list":http://www.brymck.com/reasonable/get
 
 - id: shareTrolls
   checked: true
-  help: No identifying information is included here, just a straight push of the list to the server. My goal is to make troll detection democratic.
-  text: Share troll list to help improve the auto list (I *do not* collect identifying info!)
+  help: No identifying information is included here, just a straight push of
+        the list to the server. My goal is to make troll detection democratic.
+  text: Share troll list to help improve the auto list (I *do not* collect
+        identifying info!)
 
 - id: showAltText
   checked: true
@@ -14,7 +18,8 @@
 
 - id: showUnignore
   checked: true
-  help: Disabling this option will help you avoid the temptation to unhide flamebait
+  help: Disabling this option will help you avoid the temptation to unhide
+        flamebait
   text: Show unignore link for trolls
 
 - id: showPictures
@@ -33,11 +38,12 @@
   text: Highlight my posts
 
 - id: showGravatar
-  text: Show <a href="http://en.gravatar.com/">Gravatar</a>/Identicon next to poster's name
+  text: Show ["Gravatar":http://en.gravatar.com/]/Identicon next to posters
 
 - id: blockIframes
-  text: Reduce load times by blocking Facebook, Twitter and Google+ buttons</a>
+  text: Reduce load times by blocking Facebook, Twitter and Google+ buttons
 
 - id: name
+  placeholder: Amakudari
   text: Name to highlight
   type: text

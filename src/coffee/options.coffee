@@ -20,7 +20,7 @@ sortTrolls = (trolls) ->
   # Add online troll list to current list
   $.each trollList, (key, value) ->
     trolls[key] = actions.auto.value if key not of trolls
-  
+
   $.each trolls, (key, value) ->
     unless key is ""
       switch value
@@ -64,11 +64,12 @@ load = ->
     for key, value of settings
       $option = $ "##{key}"
       switch $option.attr "id"
-        when "trolls"
-          trolls = sortTrolls JSON.parse value
-          $option.append buildTroll tKey, tValue for tKey, tValue of trolls
-        when "name" then $option.val value or ""
+        when "trolls" then trolls = sortTrolls JSON.parse value
+        when "name"   then $option.val value or ""
         else $option.prop "checked", value is "true"
+
+  trolls ||= sortTrolls {}
+  $("#trolls").append buildTroll tKey, tValue for tKey, tValue of trolls
 
   if window.location.hash is "#popup"
     $(".scrollContent").fitToWindow 400
