@@ -14,7 +14,11 @@
       "run_at": "document_start"
    }, {
       "css": [ "/css/content.css" ],
-      "js":  [ "/js/md5.js", "/js/content.js" ],
+      "js":  [
+        "/js/md5.js",
+        "/js/eastern_time.js",
+        "/js/content.js"
+      ],
       "matches": [ "http://reason.com/*" ]
    } ],
    "description": "For a site called reason, you'd think it would block trolls, help users navigate comment threads, and show inline media. (Drink.)",

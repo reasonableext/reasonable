@@ -6,7 +6,6 @@ path = require 'path'
 
 contentScripts = [
   "vars"
-  "eastern_time"
   "trolls"
   "thread"
   "article"
@@ -59,8 +58,9 @@ task 'clear', 'Clear ext directory', (options) ->
 task 'coffee', 'Compile CoffeeScript to development', (options) ->
   verifyTarget target
   target ?= "ext"
+
   fs.readdir "src/coffee", (err, scripts) ->
-    console.log highlight 'Coffee -> JS', 1, 32
+    console.log highlight 'Coffee -> JS (source)', 1, 32
     for script in scripts
       if path.extname(script) is ""
         console.log pad("  #{script}/") + highlight(script + ".js", 1)
@@ -71,9 +71,16 @@ task 'coffee', 'Compile CoffeeScript to development', (options) ->
         console.log pad("  #{script}") + highlight(script.replace(".coffee", ".js"), 1)
         exec "coffee --compile --output #{target}/js/ src/coffee/#{script}", errorLog
 
+  fs.readdir "lib/coffee", (err, scripts) ->
+    console.log highlight 'Coffee -> JS (library)', 1, 32
+    for script in scripts
+      console.log pad("  #{script}") + highlight(script.replace(".coffee", ".js"), 1)
+      exec "coffee --compile --output #{target}/js/ lib/coffee/#{script}", errorLog
+
 task 'haml', 'Compile HAML to development', (options) ->
   target ?= "ext"
   verifyTarget target
+
   fs.readdir "src/haml", (err, pages) ->
     console.log highlight 'HAML -> HTML', 1, 32
     for page in pages
@@ -84,6 +91,7 @@ task 'haml', 'Compile HAML to development', (options) ->
 task 'scss', 'Compile SCSS files to development', (options) ->
   target ?= "ext"
   verifyTarget target
+
   fs.readdir "src/scss", (err, sheets) ->
     console.log highlight 'SCSS -> CSS', 1, 32
     for sheet in sheets

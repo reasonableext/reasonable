@@ -38,6 +38,8 @@ buildQuickload = ->
 
       $quickload = $("<div id='ableQuick' class='ableBox'><h3>#{COMMENT_HISTORY}</h3></div>")
         .append($ul)
-        .hover ( ()-> $ul.slideDown QUICKLOAD_SPEED ),
-               ( ()-> $ul.slideUp   QUICKLOAD_SPEED )
+      if settings.autohideHistory
+        $quickload.addClass("ableAutohide")
+          .hover (-> $ul.slideDown QUICKLOAD_SPEED ),
+                 (-> $ul.slideUp   QUICKLOAD_SPEED )
       $("body").append $quickload

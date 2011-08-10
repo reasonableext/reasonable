@@ -147,30 +147,35 @@ showActivity = ->
           break
       break unless withinCutoff or commentCount < LATEST_COMMENT_COUNT
 
-    html = """
-           <div id='ableActivity' class='ableBox'>
-             <h3>Thread Activity</h3>
-             <ul>
-               <li>
-                 <h4>Most recent #{commentCount} post#{if commentCount is 1 then "" else "s"}</h4>
-                 <ul>
-                   #{latestComments}
-                 </ul>
-               </li>
-               <li>
-                 <h4>Post frequency</h4>
-                 <table>
-                   <tr><th>Last 5 min</th><td>#{  activity[0]}</td></tr>
-                   <tr><th>Last 15 min</th><td>#{ activity[1]}</td></tr>
-                   <tr><th>Last 30 min</th><td>#{ activity[2]}</td></tr>
-                   <tr><th>Last 1 hour</th><td>#{ activity[3]}</td></tr>
-                   <tr><th>Last 2 hours</th><td>#{activity[4]}</td></tr>
-                 </ul>
-               </li>
-             </ul>
-           </div>
-           """
-    $("body").append html
+    $ul = $("""
+            <ul>
+              <li>
+                <h4>Most recent #{commentCount} post#{if commentCount is 1 then "" else "s"}</h4>
+                <ul>
+                  #{latestComments}
+                </ul>
+              </li>
+              <li>
+                <h4>Post frequency</h4>
+                <table>
+                  <tr><th>Last 5 min</th><td>#{  activity[0]}</td></tr>
+                  <tr><th>Last 15 min</th><td>#{ activity[1]}</td></tr>
+                  <tr><th>Last 30 min</th><td>#{ activity[2]}</td></tr>
+                  <tr><th>Last 1 hour</th><td>#{ activity[3]}</td></tr>
+                  <tr><th>Last 2 hours</th><td>#{activity[4]}</td></tr>
+                </ul>
+              </li>
+            </ul>
+            """)
+    $activity = $("<div id='ableActivity' class='ableBox'></div>")
+                  .append("<h3>Thread Activity</h3>")
+                  .append($ul)
+    if settings.autohideActivity
+      $activity.addClass("ableAutohide")
+        .hover (-> $ul.slideDown QUICKLOAD_SPEED ),
+               (-> $ul.slideUp   QUICKLOAD_SPEED )
+
+    $("body").append $activity
 
 gravatars = ->
   # Add gravatars in the top right corner of each post

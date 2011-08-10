@@ -71,7 +71,7 @@ img.ableGravatar {
   z-index: -1; }
 
 /* Quickload */
-#ableQuick:hover {
+.ableAutohide:hover {
   opacity: 1;
   -webkit-animation-name: hover;
   -webkit-animation-duration: 0.5s;
@@ -83,6 +83,11 @@ img.ableGravatar {
 
   to {
     opacity: 1; } }
+
+.ableAutohide {
+  opacity: 0.5; }
+  .ableAutohide > ul {
+    display: none; }
 
 .ableBox {
   background-color: #fff;
@@ -121,10 +126,7 @@ img.ableGravatar {
   border-bottom: 1px solid #b6bac0;
   cursor: pointer;
   min-width: 20em;
-  opacity: 0.5;
   top: 0; }
-  #ableQuick > ul {
-    display: none; }
 
 .ableInsert {
   font-size: 87.5%; }

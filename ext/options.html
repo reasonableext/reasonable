@@ -9,7 +9,10 @@
     <h1><img alt='logo' height='48' src='/img/icon_48.png' title='I put on my monocle and top hat' width='48' />reason<span class='able'>able</span></h1>
     <p>
       Hide trolls you don't want to see again, show the nice folks who have been improperly
-      maligned, and leave on auto to let the update script do its thing.
+      maligned, and leave on auto to let the update script do its thing. Note that I do not
+      collect any identifying info via any of these options aside from server logs if you
+      update the troll list, but none of that information will ever be shared with a third
+      party.
     </p>
     <table id='container'>
       <tbody>
@@ -34,7 +37,7 @@
               </label></li>
               <li title='No identifying information is included here, just a straight push of the list to the server. My goal is to make troll detection democratic.'><input checked='checked' id='shareTrolls' type='checkbox' />
               <label for='shareTrolls'>
-                Share troll list to help improve the auto list (I <em>do not</em> collect identifying info!)
+                Share troll list to help improve the auto list
               </label></li>
               <li><input checked='checked' id='showAltText' type='checkbox' />
               <label for='showAltText'>
@@ -54,7 +57,11 @@
               </label></li>
               <li><input checked='checked' id='keepHistory' type='checkbox' />
               <label for='keepHistory'>
-                Keep links to recent posts accessible from quickload menu
+                Keep links to recent posts accessible in a sidebar
+              </label></li>
+              <li class='depth-1'><input checked='checked' id='autohideHistory' type='checkbox' />
+              <label for='autohideHistory'>
+                Autohide history box
               </label></li>
               <li><input checked='checked' id='highlightMe' type='checkbox' />
               <label for='highlightMe'>
@@ -64,9 +71,9 @@
               <label for='showGravatar'>
                 Show <a href="http://en.gravatar.com/">Gravatar</a>/Identicon next to posters
               </label></li>
-              <li><input id='blockIframes' type='checkbox' />
+              <li title='Facebook, Twitter and Google+ buttons all load their own mini-pages. This slows down page loads considerably.'><input id='blockIframes' type='checkbox' />
               <label for='blockIframes'>
-                Reduce load times by blocking Facebook, Twitter and Google+ buttons
+                Reduce load times by blocking sharing buttons
               </label></li>
               <li><input checked='checked' id='showQuickInsert' type='checkbox' />
               <label for='showQuickInsert'>
@@ -75,6 +82,10 @@
               <li><input checked='checked' id='showActivity' type='checkbox' />
               <label for='showActivity'>
                 Show thread activity metrics
+              </label></li>
+              <li class='depth-1'><input id='autohideActivity' type='checkbox' />
+              <label for='autohideActivity'>
+                Autohide activity box
               </label></li>
               <li><label for='name'>
                 Name to highlight

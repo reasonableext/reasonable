@@ -34,7 +34,7 @@ dstTest = (date, offset = 0) ->
   startEnd = dstStartEnd date.getUTCFullYear(), offset
   date >= startEnd.start and date <= startEnd.end
 
-createFromET = (year, month, day, hour = 0, minute = 0, second = 0, millisecond = 0) ->
+window.createFromET = (year, month, day, hour = 0, minute = 0, second = 0, millisecond = 0) ->
   utc = createUTC year, month, day, hour, minute, second, millisecond
   utc.setUTCHours utc.getUTCHours() - EST_OFFSET - if dstTest(utc, EST_OFFSET) then 1 else 0
   utc

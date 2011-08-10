@@ -13,7 +13,10 @@
       %span.able> able
     %p
       Hide trolls you don't want to see again, show the nice folks who have been improperly
-      maligned, and leave on auto to let the update script do its thing.
+      maligned, and leave on auto to let the update script do its thing. Note that I do not
+      collect any identifying info via any of these options aside from server logs if you
+      update the troll list, but none of that information will ever be shared with a third
+      party.
     %table#container
       %tbody
         %tr
@@ -30,7 +33,8 @@
           %td#rightside
             %ul#options
               - YAML.load_file(File.dirname(__FILE__) + "/../yml/options.yml").each do |option|
-                %li{:title => option["help"]}<
+                - depth_class = "depth-#{option["depth"]}" unless option["depth"].nil?
+                %li{:class => depth_class, :title => option["help"]}<
                   - if option["type"].nil?
                     %input{:id => option["id"], :type => "checkbox", :checked => option["checked"]}
                     %label{:for  => option["id"]}

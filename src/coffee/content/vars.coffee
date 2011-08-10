@@ -60,22 +60,23 @@ UPDATE_POST_TIMEOUT_LENGTH = 60000
 
 # Can't be set as constants, but should not be modified
 defaultSettings =
-  name: null
-  history: []
-  hideAuto:        true
-  shareTrolls:     true
-  showAltText:     true
-  showActivity:    true
-  showUnignore:    true
-  showPictures:    true
-  showQuickInsert: true
-  showYouTube:     true
-  keepHistory:     true
-  highlightMe:     true
-  showGravatar:    false
-  blockIframes:    false
-  # updatePosts: false
-  name: ""
+  autohideActivity: false
+  autohideHistory:  true
+  blockIframes:     false
+  hideAuto:         true
+  highlightMe:      true
+  history:          []
+  keepHistory:      true
+  name:             ""
+  shareTrolls:      true
+  showAltText:      true
+  showActivity:     true
+  showGravatar:     false
+  showPictures:     true
+  showQuickInsert:  true
+  showUnignore:     true
+  showYouTube:      true
+  # updatePosts:      false
 
 months = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"]

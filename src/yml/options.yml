@@ -9,8 +9,7 @@
   checked: true
   help: No identifying information is included here, just a straight push of
         the list to the server. My goal is to make troll detection democratic.
-  text: Share troll list to help improve the auto list (I _do not_ collect
-        identifying info!)
+  text: Share troll list to help improve the auto list
 
 - id: showAltText
   checked: true
@@ -32,7 +31,12 @@
 
 - id: keepHistory
   checked: true
-  text: Keep links to recent posts accessible from quickload menu
+  text: Keep links to recent posts accessible in a sidebar
+
+- id: autohideHistory
+  checked: true
+  depth: 1
+  text: Autohide history box
 
 - id: highlightMe
   checked: true
@@ -42,7 +46,9 @@
   text: Show ["Gravatar":http://en.gravatar.com/]/Identicon next to posters
 
 - id: blockIframes
-  text: Reduce load times by blocking Facebook, Twitter and Google+ buttons
+  help: Facebook, Twitter and Google+ buttons all load their own mini-pages.
+        This slows down page loads considerably.
+  text: Reduce load times by blocking sharing buttons
 
 - id: showQuickInsert
   checked: true
@@ -51,6 +57,11 @@
 - id: showActivity
   checked: true
   text: Show thread activity metrics
+
+- id: autohideActivity
+  checked: false
+  depth: 1
+  text: Autohide activity box
 
 - id: name
   placeholder: Amakudari

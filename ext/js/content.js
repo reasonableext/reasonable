@@ -1,5 +1,5 @@
 (function() {
-  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, EST_OFFSET, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MS_PER_HOUR, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, createFromET, createUTC, defaultSettings, dstStartEnd, dstTest, formatDate, getDate, getLink, getName, getPermalink, getSettings, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
+  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, defaultSettings, formatDate, getDate, getLink, getName, getPermalink, getSettings, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
   QUICKLOAD_MAX_ITEMS = 20;
   URL_REGEX = /^https?:\/\/(www\.)?([^\/]+)?/i;
   PICTURE_REGEX = /(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:jpe?g|gif|png|bmp))(?:\?([^#]*))?(?:#(.*))?/i;
@@ -28,100 +28,27 @@
   QUICKLOAD_SPEED = 100;
   UPDATE_POST_TIMEOUT_LENGTH = 60000;
   defaultSettings = {
-    name: null,
-    history: [],
+    autohideActivity: false,
+    autohideHistory: true,
+    blockIframes: false,
     hideAuto: true,
+    highlightMe: true,
+    history: [],
+    keepHistory: true,
+    name: "",
     shareTrolls: true,
     showAltText: true,
     showActivity: true,
-    showUnignore: true,
+    showGravatar: false,
     showPictures: true,
     showQuickInsert: true,
-    showYouTube: true,
-    keepHistory: true,
-    highlightMe: true,
-    showGravatar: false,
-    blockIframes: false,
-    name: ""
+    showUnignore: true,
+    showYouTube: true
   };
   months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   settings = {};
   trolls = [];
   lightsOn = false;
-  MS_PER_HOUR = 60 * 60 * 1000;
-  EST_OFFSET = -5;
-  createUTC = function(year, month, day, hour, minute, second, millisecond) {
-    var utc;
-    if (hour == null) {
-      hour = 0;
-    }
-    if (minute == null) {
-      minute = 0;
-    }
-    if (second == null) {
-      second = 0;
-    }
-    if (millisecond == null) {
-      millisecond = 0;
-    }
-    utc = new Date();
-    utc.setUTCFullYear(year);
-    utc.setUTCMonth(month - 1);
-    utc.setUTCDate(day);
-    utc.setUTCHours(hour);
-    utc.setUTCMinutes(minute);
-    utc.setUTCSeconds(second);
-    utc.setUTCMilliseconds(millisecond);
-    return utc;
-  };
-  dstStartEnd = function(year, offset) {
-    var march, marchDay, november, novemberDay;
-    if (offset == null) {
-      offset = 0;
-    }
-    march = createUTC(year, 3, 1, 7 + offset);
-    november = createUTC(year, 11, 1, 6 + offset);
-    marchDay = march.getUTCDay();
-    novemberDay = november.getUTCDay();
-    if (marchDay === 0) {
-      marchDay = 7;
-    }
-    if (novemberDay === 0) {
-      novemberDay = 7;
-    }
-    march.setUTCDate(marchDay);
-    november.setUTCDate(novemberDay);
-    return {
-      start: march,
-      end: november
-    };
-  };
-  dstTest = function(date, offset) {
-    var startEnd;
-    if (offset == null) {
-      offset = 0;
-    }
-    startEnd = dstStartEnd(date.getUTCFullYear(), offset);
-    return date >= startEnd.start && date <= startEnd.end;
-  };
-  createFromET = function(year, month, day, hour, minute, second, millisecond) {
-    var utc;
-    if (hour == null) {
-      hour = 0;
-    }
-    if (minute == null) {
-      minute = 0;
-    }
-    if (second == null) {
-      second = 0;
-    }
-    if (millisecond == null) {
-      millisecond = 0;
-    }
-    utc = createUTC(year, month, day, hour, minute, second, millisecond);
-    utc.setUTCHours(utc.getUTCHours() - EST_OFFSET - (dstTest(utc, EST_OFFSET) ? 1 : 0));
-    return utc;
-  };
   getName = function($strong) {
     var temp;
     if ($strong.children("a").size() > 0) {
@@ -329,7 +256,7 @@
     });
   };
   showActivity = function() {
-    var activity, comment, commentCount, currentDate, cutoff, descByDate, html, i, index, latestComments, withinCutoff, _i, _len, _len2, _ref;
+    var $activity, $ul, activity, comment, commentCount, currentDate, cutoff, descByDate, i, index, latestComments, withinCutoff, _i, _len, _len2, _ref;
     if (settings.showActivity) {
       commentCount = 0;
       activity = [0, 0, 0, 0, 0];
@@ -366,8 +293,16 @@
           break;
         }
       }
-      html = "<div id='ableActivity' class='ableBox'>\n  <h3>Thread Activity</h3>\n  <ul>\n    <li>\n      <h4>Most recent " + commentCount + " post" + (commentCount === 1 ? "" : "s") + "</h4>\n      <ul>\n        " + latestComments + "\n      </ul>\n    </li>\n    <li>\n      <h4>Post frequency</h4>\n      <table>\n        <tr><th>Last 5 min</th><td>" + activity[0] + "</td></tr>\n        <tr><th>Last 15 min</th><td>" + activity[1] + "</td></tr>\n        <tr><th>Last 30 min</th><td>" + activity[2] + "</td></tr>\n        <tr><th>Last 1 hour</th><td>" + activity[3] + "</td></tr>\n        <tr><th>Last 2 hours</th><td>" + activity[4] + "</td></tr>\n      </ul>\n    </li>\n  </ul>\n</div>";
-      return $("body").append(html);
+      $ul = $("<ul>\n  <li>\n    <h4>Most recent " + commentCount + " post" + (commentCount === 1 ? "" : "s") + "</h4>\n    <ul>\n      " + latestComments + "\n    </ul>\n  </li>\n  <li>\n    <h4>Post frequency</h4>\n    <table>\n      <tr><th>Last 5 min</th><td>" + activity[0] + "</td></tr>\n      <tr><th>Last 15 min</th><td>" + activity[1] + "</td></tr>\n      <tr><th>Last 30 min</th><td>" + activity[2] + "</td></tr>\n      <tr><th>Last 1 hour</th><td>" + activity[3] + "</td></tr>\n      <tr><th>Last 2 hours</th><td>" + activity[4] + "</td></tr>\n    </ul>\n  </li>\n</ul>");
+      $activity = $("<div id='ableActivity' class='ableBox'></div>").append("<h3>Thread Activity</h3>").append($ul);
+      if (settings.autohideActivity) {
+        $activity.addClass("ableAutohide").hover((function() {
+          return $ul.slideDown(QUICKLOAD_SPEED);
+        }), (function() {
+          return $ul.slideUp(QUICKLOAD_SPEED);
+        }));
+      }
+      return $("body").append($activity);
     }
   };
   gravatars = function() {
@@ -554,11 +489,14 @@
             $ul = $("li:first ul", $ul).prepend("<li>\n  <a href=\"http://reason.com/" + value.url + "#comment_" + value.permalink + "\">\n    " + shortenMatch + " (" + value.permalink + ")\n  </a>\n</li>").parent().parent();
           }
         }
-        $quickload = $("<div id='ableQuick' class='ableBox'><h3>" + COMMENT_HISTORY + "</h3></div>").append($ul).hover((function() {
-          return $ul.slideDown(QUICKLOAD_SPEED);
-        }), (function() {
-          return $ul.slideUp(QUICKLOAD_SPEED);
-        }));
+        $quickload = $("<div id='ableQuick' class='ableBox'><h3>" + COMMENT_HISTORY + "</h3></div>").append($ul);
+        if (settings.autohideHistory) {
+          $quickload.addClass("ableAutohide").hover((function() {
+            return $ul.slideDown(QUICKLOAD_SPEED);
+          }), (function() {
+            return $ul.slideUp(QUICKLOAD_SPEED);
+          }));
+        }
         return $("body").append($quickload);
       }
     }
