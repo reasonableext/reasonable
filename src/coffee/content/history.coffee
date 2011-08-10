@@ -22,7 +22,7 @@ buildQuickload = ->
             date = temp
             $ul = $ul.prepend """
                               <li>
-                                <h2>#{date}</h2>
+                                <h4>#{date}</h4>
                                 <ul></ul>
                               </li>
                               """
@@ -36,7 +36,7 @@ buildQuickload = ->
                                               """
           ).parent().parent()
 
-      $quickload = $("<div id=\"ableQuick\"><h3>#{COMMENT_HISTORY}</h3></div>")
+      $quickload = $("<div id='ableQuick' class='ableBox'><h3>#{COMMENT_HISTORY}</h3></div>")
         .append($ul)
         .hover ( ()-> $ul.slideDown QUICKLOAD_SPEED ),
                ( ()-> $ul.slideUp   QUICKLOAD_SPEED )

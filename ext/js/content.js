@@ -1,5 +1,5 @@
 (function() {
-  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, ESCAPE_KEY, FADE_SPEED, FIRST_MATCH, IGNORE, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, defaultSettings, formatDate, getLink, getName, getSettings, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
+  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, EST_OFFSET, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MS_PER_HOUR, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, createFromET, createUTC, defaultSettings, dstStartEnd, dstTest, formatDate, getDate, getLink, getName, getPermalink, getSettings, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
   QUICKLOAD_MAX_ITEMS = 20;
   URL_REGEX = /^https?:\/\/(www\.)?([^\/]+)?/i;
   PICTURE_REGEX = /(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:jpe?g|gif|png|bmp))(?:\?([^#]*))?(?:#(.*))?/i;
@@ -10,8 +10,10 @@
   UNCOLLAPSE = "show all";
   IGNORE = "ignore";
   UNIGNORE = "unignore";
-  COMMENT_DATE_REGEX = /(1[0-2]|[1-9])\.(3[0-1]|[1-2][0-9]|[1-9])\.([0-9]{2})\s@\s(1[0-2]|[1-9])\:([0-5][0-9])([AP]M)/g;
-  ACTIVITY_CUTOFFS = [1800000, 3600000, 14400000, 43200000, 86400000];
+  DATE_INDEX = 2;
+  COMMENT_DATE_REGEX = /(1[0-2]|[1-9])\.(3[0-1]|[1-2][0-9]|[1-9])\.([0-9]{2})\s@\s(1[0-2]|[1-9])\:([0-5][0-9])([AP]M)/;
+  ACTIVITY_CUTOFFS = [300000, 900000, 1800000, 3600000, 7200000];
+  LATEST_COMMENT_COUNT = 5;
   AVATAR_PREFIX = "http://www.gravatar.com/avatar/";
   AVATAR_SUFFIX = "?s=40&d=identicon";
   MY_MD5 = "b5ce5f2f748ceefff8b6a5531d865a27";
@@ -46,10 +48,84 @@
   settings = {};
   trolls = [];
   lightsOn = false;
+  MS_PER_HOUR = 60 * 60 * 1000;
+  EST_OFFSET = -5;
+  createUTC = function(year, month, day, hour, minute, second, millisecond) {
+    var utc;
+    if (hour == null) {
+      hour = 0;
+    }
+    if (minute == null) {
+      minute = 0;
+    }
+    if (second == null) {
+      second = 0;
+    }
+    if (millisecond == null) {
+      millisecond = 0;
+    }
+    utc = new Date();
+    utc.setUTCFullYear(year);
+    utc.setUTCMonth(month - 1);
+    utc.setUTCDate(day);
+    utc.setUTCHours(hour);
+    utc.setUTCMinutes(minute);
+    utc.setUTCSeconds(second);
+    utc.setUTCMilliseconds(millisecond);
+    return utc;
+  };
+  dstStartEnd = function(year, offset) {
+    var march, marchDay, november, novemberDay;
+    if (offset == null) {
+      offset = 0;
+    }
+    march = createUTC(year, 3, 1, 7 + offset);
+    november = createUTC(year, 11, 1, 6 + offset);
+    marchDay = march.getUTCDay();
+    novemberDay = november.getUTCDay();
+    if (marchDay === 0) {
+      marchDay = 7;
+    }
+    if (novemberDay === 0) {
+      novemberDay = 7;
+    }
+    march.setUTCDate(marchDay);
+    november.setUTCDate(novemberDay);
+    return {
+      start: march,
+      end: november
+    };
+  };
+  dstTest = function(date, offset) {
+    var startEnd;
+    if (offset == null) {
+      offset = 0;
+    }
+    startEnd = dstStartEnd(date.getUTCFullYear(), offset);
+    return date >= startEnd.start && date <= startEnd.end;
+  };
+  createFromET = function(year, month, day, hour, minute, second, millisecond) {
+    var utc;
+    if (hour == null) {
+      hour = 0;
+    }
+    if (minute == null) {
+      minute = 0;
+    }
+    if (second == null) {
+      second = 0;
+    }
+    if (millisecond == null) {
+      millisecond = 0;
+    }
+    utc = createUTC(year, month, day, hour, minute, second, millisecond);
+    utc.setUTCHours(utc.getUTCHours() - EST_OFFSET - (dstTest(utc, EST_OFFSET) ? 1 : 0));
+    return utc;
+  };
   getName = function($strong) {
     var temp;
-    if ($strong.children("a").size > 0) {
-      temp = $("a", $strong).text();
+    if ($strong.children("a").size() > 0) {
+      temp = $strong.children("a").text();
     } else {
       temp = $strong.text();
     }
@@ -94,6 +170,19 @@
       }
       return true;
     });
+  };
+  comments = [];
+  getDate = function(node) {
+    var match;
+    match = COMMENT_DATE_REGEX.exec(node.nodeValue);
+    if (match) {
+      return createFromET("20" + match[3], parseInt(match[1]), match[2], parseInt(match[4]) % 12 + (match[6] === "PM" ? 12 : 0), match[5]);
+    } else {
+      return null;
+    }
+  };
+  getPermalink = function($node) {
+    return $node.attr("href");
   };
   showMedia = function() {
     if (settings.showPictures || settings.showYouTube) {
@@ -173,11 +262,20 @@
         scrollTop: "" + ($(window).scrollTop() + showHeight) + "px"
       });
     };
-    return $("h2.commentheader:not(:has(a.ignore))").each(function() {
-      var $ignore, $pipe, $show, $strong, link, name;
-      $strong = $("strong:first", this);
+    $("h2.commentheader:not(:has(a.ignore))").each(function() {
+      var $header, $ignore, $pipe, $show, $strong, date, link, name, permalink;
+      $header = $(this);
+      $strong = $header.children("strong:first");
       name = getName($strong);
       link = getLink($strong);
+      date = getDate($header.contents()[DATE_INDEX]);
+      permalink = getPermalink($header.children("a.permalink"));
+      comments.push({
+        name: name,
+        link: link,
+        date: date,
+        permalink: permalink
+      });
       $pipe = $("<span>").addClass("pipe").text("|");
       $show = $("<a>").addClass("ableShow").click(function(event) {
         if ($(this).parent().parent().hasClass("ableHighlight")) {
@@ -226,44 +324,49 @@
       }).text(IGNORE);
       return $(this).append($pipe).append($show).append($pipe.clone()).append($ignore);
     });
+    return comments.sort(function(a, b) {
+      return a.date < b.date;
+    });
   };
   showActivity = function() {
-    var activity, commentHTML, cutoff, date, dates, html, i, index, lastDate, lastDateAmPm, lastDateHours, lastDateMinutes, lastDateText, match, _i, _len, _len2;
+    var activity, comment, commentCount, currentDate, cutoff, descByDate, html, i, index, latestComments, withinCutoff, _i, _len, _len2, _ref;
     if (settings.showActivity) {
-      commentHTML = $("#commentcontainer").html();
-      i = 0;
-      dates = [];
+      commentCount = 0;
       activity = [0, 0, 0, 0, 0];
-      while (match = COMMENT_DATE_REGEX.exec(commentHTML)) {
-        dates.push(new Date("20" + match[3], parseInt(match[1]) - 1, match[2], parseInt(match[4]) % 12 + (match[6] === "PM" ? 12 : 0), match[5]));
-      }
-      dates.sort();
-      lastDate = dates[dates.length - 1];
-      lastDateHours = lastDate.getHours();
-      lastDateAmPm = "a";
-      if (lastDateHours >= 12) {
-        lastDateHours -= 12;
-        lastDateAmPm = "p";
-      }
-      if (lastDateHours === 0) {
-        lastDateHours += 12;
-      }
-      lastDateMinutes = lastDate.getMinutes();
-      if (lastDateMinutes < 10) {
-        lastDateMinutes = "0" + lastDateMinutes;
-      }
-      lastDateText = "" + (lastDate.getMonth() + 1) + "/" + (lastDate.getDate()) + "/" + (lastDate.getFullYear()) + "                    " + lastDateHours + ":" + lastDateMinutes + lastDateAmPm;
-      for (_i = 0, _len = dates.length; _i < _len; _i++) {
-        date = dates[_i];
+      latestComments = "";
+      descByDate = function(a, b) {
+        if (a.date > b.date) {
+          return -1;
+        } else if (a.date < b.date) {
+          return 1;
+        } else {
+          return 0;
+        }
+      };
+      currentDate = new Date();
+      comments.sort(descByDate);
+      for (_i = 0, _len = comments.length; _i < _len; _i++) {
+        comment = comments[_i];
+        if (commentCount < LATEST_COMMENT_COUNT) {
+          commentCount++;
+          latestComments += "<li><a href='" + comment.permalink + "'>" + comment.name + "</a></li>";
+        }
+        withinCutoff = false;
         for (index = 0, _len2 = ACTIVITY_CUTOFFS.length; index < _len2; index++) {
           cutoff = ACTIVITY_CUTOFFS[index];
-          if (lastDate - date <= cutoff) {
-            activity[index]++;
+          if (currentDate - comment.date <= cutoff) {
+            for (i = index, _ref = ACTIVITY_CUTOFFS.length; index <= _ref ? i <= _ref : i >= _ref; index <= _ref ? i++ : i--) {
+              activity[i]++;
+            }
+            withinCutoff = true;
             break;
           }
         }
+        if (!(withinCutoff || commentCount < LATEST_COMMENT_COUNT)) {
+          break;
+        }
       }
-      html = "<div id='ableActivity'>\n  <ul id='ableActivity'>\n    <li>Latest post: " + lastDateText + "</li>\n    <li>30 min prior: " + activity[0] + "</li>\n    <li>1 hour prior: " + activity[1] + "</li>\n    <li>4 hours prior: " + activity[2] + "</li>\n    <li>12 hours prior: " + activity[3] + "</li>\n    <li>1 day prior: " + activity[4] + "</li>\n  </ul>\n</div>";
+      html = "<div id='ableActivity' class='ableBox'>\n  <h3>Thread Activity</h3>\n  <ul>\n    <li>\n      <h4>Most recent " + commentCount + " post" + (commentCount === 1 ? "" : "s") + "</h4>\n      <ul>\n        " + latestComments + "\n      </ul>\n    </li>\n    <li>\n      <h4>Post frequency</h4>\n      <table>\n        <tr><th>Last 5 min</th><td>" + activity[0] + "</td></tr>\n        <tr><th>Last 15 min</th><td>" + activity[1] + "</td></tr>\n        <tr><th>Last 30 min</th><td>" + activity[2] + "</td></tr>\n        <tr><th>Last 1 hour</th><td>" + activity[3] + "</td></tr>\n        <tr><th>Last 2 hours</th><td>" + activity[4] + "</td></tr>\n      </ul>\n    </li>\n  </ul>\n</div>";
       return $("body").append(html);
     }
   };
@@ -446,12 +549,12 @@
             temp = formatDate(value.timestamp);
             if (temp !== date) {
               date = temp;
-              $ul = $ul.prepend("<li>\n  <h2>" + date + "</h2>\n  <ul></ul>\n</li>");
+              $ul = $ul.prepend("<li>\n  <h4>" + date + "</h4>\n  <ul></ul>\n</li>");
             }
             $ul = $("li:first ul", $ul).prepend("<li>\n  <a href=\"http://reason.com/" + value.url + "#comment_" + value.permalink + "\">\n    " + shortenMatch + " (" + value.permalink + ")\n  </a>\n</li>").parent().parent();
           }
         }
-        $quickload = $("<div id=\"ableQuick\"><h3>" + COMMENT_HISTORY + "</h3></div>").append($ul).hover((function() {
+        $quickload = $("<div id='ableQuick' class='ableBox'><h3>" + COMMENT_HISTORY + "</h3></div>").append($ul).hover((function() {
           return $ul.slideDown(QUICKLOAD_SPEED);
         }), (function() {
           return $ul.slideUp(QUICKLOAD_SPEED);
@@ -465,7 +568,7 @@
       $.ajax({
         url: window.location.href,
         success: function(data) {
-          var $container, $prevNode, comments, idRe, ids, match, re, updateLinks;
+          var $container, $prevNode, idRe, ids, match, re, updateLinks;
           re = /<div class=\"com-block[\s\S]*?<\/div>[\s\S]*?<\/div>/gim;
           idRe = /id=\"(comment_[0-9].*?)\"/;
           match = re.exec(data);

@@ -1,3 +1,15 @@
+comments = []
+
+getDate = (node) ->
+  match = COMMENT_DATE_REGEX.exec node.nodeValue
+  if match
+    createFromET "20#{match[3]}", parseInt(match[1]), match[2],
+      parseInt(match[4]) % 12 + (if match[6] is "PM" then 12 else 0), match[5]
+  else null
+
+getPermalink = ($node) ->
+  $node.attr "href"
+
 showMedia = ->
   if settings.showPictures or settings.showYouTube
     $("div.com-block p a").each () ->
@@ -65,10 +77,14 @@ viewThread = ->
     $("html, body").animate { scrollTop: "#{$(window).scrollTop() + showHeight}px" }
 
   $("h2.commentheader:not(:has(a.ignore))").each () ->
-    $strong = $ "strong:first", this
-    name    = getName $strong
-    link    = getLink $strong
-    $pipe   = $("<span>").addClass("pipe").text("|")
+    $header   = $(this)
+    $strong   = $header.children("strong:first")
+    name      = getName      $strong
+    link      = getLink      $strong
+    date      = getDate      $header.contents()[DATE_INDEX]
+    permalink = getPermalink $header.children("a.permalink")
+    comments.push { name: name, link: link, date: date, permalink: permalink }
+    $pipe     = $("<span>").addClass("pipe").text("|")
 
     $show   = $("<a>").addClass("ableShow").click (event) ->
       if $(this).parent().parent().hasClass "ableHighlight"
@@ -101,48 +117,56 @@ viewThread = ->
             alert "Removing troll failed! Try doing it manually in the options page for now. :("
     .text IGNORE
     $(this).append($pipe).append($show).append($pipe.clone()).append $ignore
+  comments.sort (a, b) -> a.date < b.date
 
 showActivity = ->
   if settings.showActivity
-    commentHTML = $("#commentcontainer").html()
-    i = 0
-    dates = []
-    activity = [0, 0, 0, 0, 0]
-
-    # Parse all date string in comments section
-    while match = COMMENT_DATE_REGEX.exec commentHTML
-      dates.push new Date "20#{match[3]}", parseInt(match[1]) - 1, match[2],
-        parseInt(match[4]) % 12 + (if match[6] is "PM" then 12 else 0), match[5]
+    commentCount   = 0
+    activity       = [0, 0, 0, 0, 0]
+    latestComments = ""
+    descByDate = (a, b) ->
+      if      a.date > b.date then -1
+      else if a.date < b.date then  1
+      else                          0
 
     # Sort and get the last date
-    dates.sort()
-    lastDate = dates[dates.length - 1]
-    lastDateHours = lastDate.getHours()
-    lastDateAmPm = "a"
-    if lastDateHours >= 12
-      lastDateHours -= 12
-      lastDateAmPm = "p"
-    lastDateHours += 12 if lastDateHours is 0
-    lastDateMinutes = lastDate.getMinutes()
-    lastDateMinutes = "0#{lastDateMinutes}" if lastDateMinutes < 10
-    lastDateText = "#{lastDate.getMonth() + 1}/#{lastDate.getDate()}/#{lastDate.getFullYear()}
-                    #{lastDateHours}:#{lastDateMinutes}#{lastDateAmPm}"
+    currentDate = new Date()
+    comments.sort descByDate
 
-    for date in dates
+    for comment in comments
+      # Collect latest comments as links in a list
+      if commentCount < LATEST_COMMENT_COUNT
+        commentCount++
+        latestComments += "<li><a href='#{comment.permalink}'>#{comment.name}</a></li>"
+
+      withinCutoff = false
       for cutoff, index in ACTIVITY_CUTOFFS
-        if lastDate - date <= cutoff
-          activity[index]++
+        if currentDate - comment.date <= cutoff
+          activity[i]++ for i in [index..ACTIVITY_CUTOFFS.length]
+          withinCutoff = true
           break
+      break unless withinCutoff or commentCount < LATEST_COMMENT_COUNT
 
     html = """
-           <div id='ableActivity'>
-             <ul id='ableActivity'>
-               <li>Latest post: #{  lastDateText}</li>
-               <li>30 min prior: #{  activity[0]}</li>
-               <li>1 hour prior: #{  activity[1]}</li>
-               <li>4 hours prior: #{ activity[2]}</li>
-               <li>12 hours prior: #{activity[3]}</li>
-               <li>1 day prior: #{   activity[4]}</li>
+           <div id='ableActivity' class='ableBox'>
+             <h3>Thread Activity</h3>
+             <ul>
+               <li>
+                 <h4>Most recent #{commentCount} post#{if commentCount is 1 then "" else "s"}</h4>
+                 <ul>
+                   #{latestComments}
+                 </ul>
+               </li>
+               <li>
+                 <h4>Post frequency</h4>
+                 <table>
+                   <tr><th>Last 5 min</th><td>#{  activity[0]}</td></tr>
+                   <tr><th>Last 15 min</th><td>#{ activity[1]}</td></tr>
+                   <tr><th>Last 30 min</th><td>#{ activity[2]}</td></tr>
+                   <tr><th>Last 1 hour</th><td>#{ activity[3]}</td></tr>
+                   <tr><th>Last 2 hours</th><td>#{activity[4]}</td></tr>
+                 </ul>
+               </li>
              </ul>
            </div>
            """

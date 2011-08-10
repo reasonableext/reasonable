@@ -1,8 +1,8 @@
 getName = ($strong) ->
   # Get name from STRONG tag encapsulating poster's name
-  if $strong.children("a").size > 0
+  if $strong.children("a").size() > 0
     # Kind of ugly, but necessary to avoid CDATA
-    temp = $("a", $strong).text()
+    temp = $strong.children("a").text()
   else
     temp = $strong.text()
 

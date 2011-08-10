@@ -20,6 +20,7 @@ IGNORE = "ignore"
 UNIGNORE = "unignore"
 
 # Date finder
+DATE_INDEX = 2 # index of node in commentheader containing date
 COMMENT_DATE_REGEX = ///
                         (1[0-2]|[1-9])            # Month
                      \. (3[0-1]|[1-2][0-9]|[1-9]) # Day
@@ -28,14 +29,15 @@ COMMENT_DATE_REGEX = ///
                         (1[0-2]|[1-9])            # Hour
                      \: ([0-5][0-9])              # Minute
                         ([AP]M)                   # AM/PM
-                     ///g
+                     ///
 ACTIVITY_CUTOFFS = [
-   1800000 # 30 minutes
-   3600000 # 1 hour
-  14400000 # 4 hours
-  43200000 # 12 hours
-  86400000 # 1 day
+   300000 # 5 minutes
+   900000 # 15 minutes
+  1800000 # 30 minutes
+  3600000 # 1 hour
+  7200000 # 2 hours
 ]
+LATEST_COMMENT_COUNT = 5
 
 # Avatars
 AVATAR_PREFIX = "http://www.gravatar.com/avatar/"

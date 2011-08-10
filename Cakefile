@@ -6,6 +6,7 @@ path = require 'path'
 
 contentScripts = [
   "vars"
+  "eastern_time"
   "trolls"
   "thread"
   "article"
@@ -45,19 +46,19 @@ concatenate = (directory, files, extension = "") ->
   result.join " "
 
 task 'build', 'Build project from source to dev', (options) ->
-  target ?= "lib"
+  target ?= "ext"
   invoke "coffee"
   invoke "scss"
   invoke "haml"
   invoke "other"
 
-task 'clear', 'Clear lib directory', (options) ->
-  exec "rm -rf lib/*"
+task 'clear', 'Clear ext directory', (options) ->
+  exec "rm -rf ext/*"
 
 # Individual filetypes
 task 'coffee', 'Compile CoffeeScript to development', (options) ->
   verifyTarget target
-  target ?= "lib"
+  target ?= "ext"
   fs.readdir "src/coffee", (err, scripts) ->
     console.log highlight 'Coffee -> JS', 1, 32
     for script in scripts
@@ -71,7 +72,7 @@ task 'coffee', 'Compile CoffeeScript to development', (options) ->
         exec "coffee --compile --output #{target}/js/ src/coffee/#{script}", errorLog
 
 task 'haml', 'Compile HAML to development', (options) ->
-  target ?= "lib"
+  target ?= "ext"
   verifyTarget target
   fs.readdir "src/haml", (err, pages) ->
     console.log highlight 'HAML -> HTML', 1, 32
@@ -81,17 +82,17 @@ task 'haml', 'Compile HAML to development', (options) ->
       exec "haml src/haml/#{page} #{target}/#{htmlPage}", errorLog
 
 task 'scss', 'Compile SCSS files to development', (options) ->
-  target ?= "lib"
+  target ?= "ext"
   verifyTarget target
   fs.readdir "src/scss", (err, sheets) ->
-    console.log highlight 'SCSS   -> CSS', 1, 32
+    console.log highlight 'SCSS -> CSS', 1, 32
     for sheet in sheets
       cssSheet = sheet.replace ".scss", ".css"
       console.log pad("  #{sheet}") + highlight(cssSheet, 1)
       exec "sass --no-cache src/scss/#{sheet}:#{target}/css/#{cssSheet}", errorLog
 
 task 'other', 'Copy other files to development', (options) ->
-  target ?= "lib"
+  target ?= "ext"
   verifyTarget target
   console.log 'Other: static CSS, images, HTML, vendor JavaScript and manifest'
   exec "cp -r src/css #{target}", errorLog
@@ -100,7 +101,7 @@ task 'other', 'Copy other files to development', (options) ->
   exec "cp -r src/manifest.json #{target}/manifest.json", errorLog
 
 # Zipping
-task 'zip', 'Create a zip of the compiled library', (options) ->
+task 'zip', 'Create a zip of the compiled extrary', (options) ->
   console.log highlight "Zipping extension...", 1, 32
-  exec 'zip -r extension.zip lib'
-  console.log "Zipped lib directory to extension.zip"
+  exec 'zip -r extension.zip ext'
+  console.log "Zipped ext directory to extension.zip"

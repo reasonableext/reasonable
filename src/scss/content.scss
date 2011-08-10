@@ -91,19 +91,14 @@ img.ableGravatar {
   }
 }
 
-#ableQuick {
+.ableBox {
   background-color: #fff;
-  border-bottom: 1px solid #b6bac0;
   border-left: 1px solid #b6bac0;
   border-right: 1px solid #b6bac0;
-  cursor: pointer;
   font-size: 11px;
   margin-right: 4px;
   position: fixed;
-  opacity: 0.5;
-  right: 0px;
-  top: 0px;
-  min-width: 20em;
+  right: 0;
   z-index: 100;
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
   h3 {
@@ -111,15 +106,33 @@ img.ableGravatar {
     color: #fff;
     margin: 1px;
     text-align: center; }
-  li > a {
-    display: block; }
+  h4 {
+    font-weight: bold; }
+  table {
+    th {
+      font-weight: normal;
+      text-align: left; }
+    td {
+      padding-left: 0.5em; 
+      text-align: right; } }
   > ul {
-    display: none;
-    > li {
+    padding: 1px;
+    > li {    
       display: block;
       padding-left: 1px;
+      > a {
+        display: block; }
       + li {
         padding-top: 0.5em; } } } }
+
+#ableQuick {
+  border-bottom: 1px solid #b6bac0;
+  cursor: pointer;
+  min-width: 20em;
+  opacity: 0.5;
+  top: 0;
+  > ul {
+    display: none; } }
 
 .ableInsert {
   font-size: 87.5%;
@@ -127,17 +140,8 @@ img.ableGravatar {
     padding: 0 1px; } }
 
 /* Activity */
-div#ableActivity {
-  background-color: #fff;
-  border-left: 1px solid #b6bac0;
-  border-right: 1px solid #b6bac0;
+#ableActivity {
   border-top: 1px solid #b6bac0;
   bottom: 0;
-  font-size: 11px;
-  margin-right: 4px;
-  padding: 0.25em;
-  position: fixed;
-  right: 0;
-  z-index: 100;
-  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+  min-width: 10em;
 }
