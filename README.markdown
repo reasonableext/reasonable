@@ -16,7 +16,7 @@ Designed to make your commingling with the cosmotarian commentariat at
 * In threaded comments, toggle between showing all replies and direct replies
 * See YouTube videos and images in posts
 * Store the hyperlinks to recent comments you've made for easier access
-* See Gravatar/Identicon avatars
+* See [Gravatar](http://www.gravatar.com)/Identicon avatars
 * Improve load times by removing the Facebook and Twitter sharing APIs
 * Links to quickly insert HTML into comment forms
 
