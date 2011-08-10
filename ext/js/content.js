@@ -258,6 +258,9 @@
   showActivity = function() {
     var $activity, $ul, activity, comment, commentCount, currentDate, cutoff, descByDate, i, index, latestComments, withinCutoff, _i, _len, _len2, _ref;
     if (settings.showActivity) {
+      if (comments.length === 0) {
+        return;
+      }
       commentCount = 0;
       activity = [0, 0, 0, 0, 0];
       latestComments = "";

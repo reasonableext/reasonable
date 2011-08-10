@@ -121,6 +121,7 @@ viewThread = ->
 
 showActivity = ->
   if settings.showActivity
+    return if comments.length is 0
     commentCount   = 0
     activity       = [0, 0, 0, 0, 0]
     latestComments = ""
