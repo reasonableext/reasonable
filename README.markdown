@@ -43,7 +43,7 @@ The recommend way to install is through the Chrome Web Store page. [Chrome Web S
 extensions will automatically update to the latest stable version.
 
 If you'd like to use the "compiled" source (HTML/CSS/JavaScript), you can check
-in the [`ext`](https://github.com/brymck/reasonable/tree/master/lib) directory.
+in the [`ext`](https://github.com/brymck/reasonable/tree/master/ext) directory.
 Although the HTML, JS and CSS are all compiled, the results are pretty-printed.
 
 If you'd like to compile from the source, you'll need the following:
