@@ -77,7 +77,7 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
       sendResponse {} # snub
 
 chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
-  chrome.pageAction.show tabId if tab.url.indexOf "reason.com" > -1
+  chrome.pageAction.show tabId if tab.url.indexOf("reason.com") > -1
 
 if localStorage.shareTrolls
   black = []

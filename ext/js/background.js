@@ -113,7 +113,7 @@
     }
   });
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (tab.url.indexOf("reason.com" > -1)) {
+    if (tab.url.indexOf("reason.com") > -1) {
       return chrome.pageAction.show(tabId);
     }
   });

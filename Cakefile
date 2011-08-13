@@ -111,5 +111,7 @@ task 'other', 'Copy other files to development', (options) ->
 # Zipping
 task 'zip', 'Create a zip of the compiled extrary', (options) ->
   console.log highlight "Zipping extension...", 1, 32
-  exec 'zip -r extension.zip ext'
+  exec "cd ./ext"
+  exec "zip -r ../extension.zip *"
+  exec "cd .."
   console.log "Zipped ext directory to extension.zip"
