@@ -22,11 +22,10 @@ sortTrolls = (trolls) ->
     trolls[key] = actions.auto.value if key not of trolls
 
   $.each trolls, (key, value) ->
-    unless key is ""
-      switch value
-        when actions.black.value then black.push key
-        when actions.white.value then white.push key
-        when actions.auto.value  then auto.push  key
+    switch value
+      when actions.black.value then black.push key
+      when actions.white.value then white.push key
+      when actions.auto.value  then auto.push  key
 
   black.sort sortFunction
   white.sort sortFunction
@@ -67,8 +66,9 @@ load = ->
         when "trolls" then trolls = sortTrolls JSON.parse value
         when "name"   then $option.val value or ""
         else $option.prop "checked", value is "true"
+  catch error
+    trolls = sortTrolls {}
 
-  trolls ||= sortTrolls {}
   $("#trolls").append buildTroll tKey, tValue for tKey, tValue of trolls
 
   if window.location.hash is "#popup"
@@ -83,7 +83,7 @@ save = () ->
   for checkbox in $("#options input:checkbox")
     $checkbox = $(checkbox)
     temp[$checkbox.attr "id"] = Boolean $checkbox.prop "checked"
-  for textbox  in $("#options input:text") then temp[textbox.id] = textbox.value; console.dir(textbox)
+  for textbox  in $("#options input:text") then temp[textbox.id] = textbox.value
   for radio    in $("input:radio:checked") then tempTrolls[radio.name] = radio.value
 
   temp.trolls = JSON.stringify tempTrolls

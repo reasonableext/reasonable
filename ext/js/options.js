@@ -30,15 +30,13 @@
       }
     });
     $.each(trolls, function(key, value) {
-      if (key !== "") {
-        switch (value) {
-          case actions.black.value:
-            return black.push(key);
-          case actions.white.value:
-            return white.push(key);
-          case actions.auto.value:
-            return auto.push(key);
-        }
+      switch (value) {
+        case actions.black.value:
+          return black.push(key);
+        case actions.white.value:
+          return white.push(key);
+        case actions.auto.value:
+          return auto.push(key);
       }
     });
     black.sort(sortFunction);
@@ -100,8 +98,9 @@
             $option.prop("checked", value === "true");
         }
       }
-    } catch (_e) {}
-    trolls || (trolls = sortTrolls({}));
+    } catch (error) {
+      trolls = sortTrolls({});
+    }
     for (tKey in trolls) {
       tValue = trolls[tKey];
       $("#trolls").append(buildTroll(tKey, tValue));
@@ -126,7 +125,6 @@
     for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
       textbox = _ref2[_j];
       temp[textbox.id] = textbox.value;
-      console.dir(textbox);
     }
     _ref3 = $("input:radio:checked");
     for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {

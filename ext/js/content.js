@@ -313,7 +313,7 @@
       return $(".commentheader > strong").each(function() {
         var $img, $link, $this, hash;
         $this = $(this);
-        $link = $("a", $this);
+        $link = $this.find("a");
         hash = "";
         if ($this.text() === "Amakudari") {
           hash = MY_MD5;

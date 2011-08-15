@@ -12,8 +12,8 @@ getPermalink = ($node) ->
 
 showMedia = ->
   if settings.showPictures or settings.showYouTube
-    $("div.com-block p a").each () ->
-      $this = $ this
+    $("div.com-block p a").each ->
+      $this = $(@)
       
       # Picture routine
       if settings.showPictures
@@ -30,12 +30,12 @@ showMedia = ->
             type: "text/html"
             width: "480"
             height: "390"
-            src: "http://www.youtube.com/embed/" + matches[1]
+            src: "http://www.youtube.com/embed/#{matches[1]}"
             frameborder: "0"
           $this.parent().after $youtube
 
-    $("div.com-block p:not(:has(a)):contains(http)").each () ->
-      $this = $ this
+    $("div.com-block p:not(:has(a)):contains(http)").each ->
+      $this = $(@)
       if settings.showPictures
         if PICTURE_REGEX.test $this.text()
           $img = $("<img>").addClass("ableCommentPic").attr "src", $this.text()
@@ -182,8 +182,8 @@ gravatars = ->
   # Add gravatars in the top right corner of each post
   if settings.showGravatar
     $(".commentheader > strong").each () ->
-      $this = $ this
-      $link = $ "a", $this
+      $this = $(@)
+      $link = $this.find "a"
       hash  = ""
 
       # Create hash based on poster link or name
