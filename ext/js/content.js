@@ -225,9 +225,7 @@
           }, function(response) {
             if (response.success) {
               settings.trolls[name] = actions.black.value;
-              if (link) {
-                settings.trolls[link] = actions.black.value;
-              }
+              if (link) settings.trolls[link] = actions.black.value;
               return blockTrolls(true);
             } else {
               return alert("Adding troll failed! Try doing it manually in the options page for now. :(");
@@ -258,9 +256,7 @@
   showActivity = function() {
     var $activity, $ul, activity, comment, commentCount, currentDate, cutoff, descByDate, i, index, latestComments, withinCutoff, _i, _len, _len2, _ref;
     if (settings.showActivity) {
-      if (comments.length === 0) {
-        return;
-      }
+      if (comments.length === 0) return;
       commentCount = 0;
       activity = [0, 0, 0, 0, 0];
       latestComments = "";
@@ -292,9 +288,7 @@
             break;
           }
         }
-        if (!(withinCutoff || commentCount < LATEST_COMMENT_COUNT)) {
-          break;
-        }
+        if (!(withinCutoff || commentCount < LATEST_COMMENT_COUNT)) break;
       }
       $ul = $("<ul>\n  <li>\n    <h4>Most recent " + commentCount + " post" + (commentCount === 1 ? "" : "s") + "</h4>\n    <ul>\n      " + latestComments + "\n    </ul>\n  </li>\n  <li>\n    <h4>Post frequency</h4>\n    <table>\n      <tr><th>Last 5 min</th><td>" + activity[0] + "</td></tr>\n      <tr><th>Last 15 min</th><td>" + activity[1] + "</td></tr>\n      <tr><th>Last 30 min</th><td>" + activity[2] + "</td></tr>\n      <tr><th>Last 1 hour</th><td>" + activity[3] + "</td></tr>\n      <tr><th>Last 2 hours</th><td>" + activity[4] + "</td></tr>\n    </ul>\n  </li>\n</ul>");
       $activity = $("<div id='ableActivity' class='ableBox'></div>").append("<h3>Thread Activity</h3>").append($ul);
@@ -340,13 +334,9 @@
           $header = $(header);
           if (settings.keepHistory) {
             temp = parseFloat($header.attr("href").replace("#comment_", ""));
-            if (temp > permalink) {
-              permalink = temp;
-            }
+            if (temp > permalink) permalink = temp;
           }
-          if (settings.highlightMe) {
-            $header.closest("div").addClass("ableMe");
-          }
+          if (settings.highlightMe) $header.closest("div").addClass("ableMe");
         }
       }
       if (settings.keepHistory) {
@@ -409,15 +399,11 @@
     };
     $("body").append($box.click(turnLightsOn)).append($overlay.click(turnLightsOn));
     return $(window).keydown(function(event) {
-      if (lightsOn && event.which === ESCAPE_KEY) {
-        return turnLightsOn();
-      }
+      if (lightsOn && event.which === ESCAPE_KEY) return turnLightsOn();
     });
   };
   removeGooglePlus = function() {
-    if (settings.blockIframes) {
-      return $("li.google").remove();
-    }
+    if (settings.blockIframes) return $("li.google").remove();
   };
   quickInsert = function(tag, attrs, $textarea) {
     var endPos, endTag, endText, midText, startPos, startTag, startText, text, textarea;

@@ -1,13 +1,12 @@
 (function() {
-  var $add, $save, $troll, ENTER_KEY, SAVED_SUCCESS_MESSAGE, addTroll, attachClickEvents, buildControll, buildTroll, load, save, sortTrolls, trollList;
+  var $add, $save, $troll, ENTER_KEY, SAVED_SUCCESS_MESSAGE, addTroll, attachClickEvents, buildControll, buildTroll, load, save, sortTrolls;
   ENTER_KEY = 13;
   SAVED_SUCCESS_MESSAGE = "Saved successfully!\n\nReload any open reason.com pages to reflect any changes you've made.";
   $save = $("#save");
   $add = $("#add");
   $troll = $("#troll");
-  trollList = [];
   sortTrolls = function(trolls) {
-    var auto, black, index, sortFunction, temp, value, white;
+    var auto, black, index, key, sortFunction, temp, value, white, _ref;
     sortFunction = function(x, y) {
       var a, b;
       a = String(x).toUpperCase();
@@ -24,21 +23,24 @@
     white = [];
     auto = [];
     temp = {};
-    $.each(trollList, function(key, value) {
-      if (!(key in trolls)) {
-        return trolls[key] = actions.auto.value;
-      }
-    });
-    $.each(trolls, function(key, value) {
+    _ref = window.onlineList;
+    for (key in _ref) {
+      value = _ref[key];
+      if (!(key in trolls)) trolls[key] = actions.auto.value;
+    }
+    for (key in trolls) {
+      value = trolls[key];
       switch (value) {
         case actions.black.value:
-          return black.push(key);
+          black.push(key);
+          break;
         case actions.white.value:
-          return white.push(key);
+          white.push(key);
+          break;
         case actions.auto.value:
-          return auto.push(key);
+          auto.push(key);
       }
-    });
+    }
     black.sort(sortFunction);
     white.sort(sortFunction);
     auto.sort(sortFunction);
@@ -144,27 +146,9 @@
     return $add.click(addTroll);
   };
   $(function() {
-    $.ajax({
-      url: GET_URL,
-      dataType: "json",
-      success: function(data) {
-        trollList = data;
-        load();
-        return $troll.bind("keydown", function(event) {
-          if (event.which === ENTER_KEY) {
-            return addTroll();
-          }
-        });
-      },
-      error: function() {
-        trollList = {};
-        load();
-        return $troll.bind("keydown", function(event) {
-          if (event.which === ENTER_KEY) {
-            return addTroll();
-          }
-        });
-      }
+    load();
+    $troll.bind("keydown", function(event) {
+      if (event.which === ENTER_KEY) return addTroll();
     });
     return attachClickEvents();
   });

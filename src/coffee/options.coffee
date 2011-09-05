@@ -3,7 +3,6 @@ SAVED_SUCCESS_MESSAGE = "Saved successfully!\n\nReload any open reason.com pages
 $save     = $ "#save"
 $add      = $ "#add"
 $troll    = $ "#troll"
-trollList = []
 
 sortTrolls = (trolls) ->
   sortFunction = (x, y) ->
@@ -18,10 +17,10 @@ sortTrolls = (trolls) ->
   temp  = {}
 
   # Add online troll list to current list
-  $.each trollList, (key, value) ->
+  for key, value of window.onlineList
     trolls[key] = actions.auto.value if key not of trolls
 
-  $.each trolls, (key, value) ->
+  for key, value of trolls
     switch value
       when actions.black.value then black.push key
       when actions.white.value then white.push key
@@ -97,17 +96,7 @@ attachClickEvents = ->
   $add.click  addTroll
 
 $ ->
-  $.ajax
-    url: GET_URL
-    dataType: "json"
-    success: (data) ->
-      trollList = data
-      load()
-      $troll.bind "keydown", (event) ->
-        addTroll() if event.which is ENTER_KEY
-    error: () ->
-      trollList = {}
-      load()
-      $troll.bind "keydown", (event) ->
-        addTroll() if event.which is ENTER_KEY
+  load()
+  $troll.bind "keydown", (event) ->
+    addTroll() if event.which is ENTER_KEY
   attachClickEvents()

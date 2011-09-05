@@ -1,4 +1,5 @@
 window.trolls
+window.onlineList = {}
 SUBMIT_DAYS = 3
 DAYS_TO_MILLISECONDS = 86400000
 
@@ -110,11 +111,13 @@ $.ajax
   url: GET_URL
   dataType: "json"
   success: (data) ->
+    console.dir data
     try
       temp = JSON.parse localStorage.trolls
+      window.onlineList = data
 
       # Remove non-trolls and add new trolls
-      $.each temp, (key, value) -> delete temp[key] if value is "auto" and key not of data
+      $.each temp, (key, value) -> delete temp[key] if value is "auto" and key not of onlineList
       $.each temp, (key, value) -> temp[key] = "auto" if key not of temp
 
       trolls = temp
