@@ -78,14 +78,18 @@
   load = function() {
     var $option, key, tKey, tValue, trolls, value;
     for (key in localStorage) {
-      value = JSON.parse(localStorage[key]);
+      try {
+        value = JSON.parse(localStorage[key]);
+      } catch (error) {
+        value = localStorage[key];
+      }
       $option = $("#" + key);
       switch ($option.attr("id")) {
         case "trolls":
           trolls = sortTrolls(value);
           break;
         case "name":
-          $option.val(value != null ? value : "");
+          $option.val(value);
           break;
         default:
           $option.prop("checked", value);

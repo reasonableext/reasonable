@@ -60,14 +60,18 @@ addTroll = ->
 
 load = ->
   for key of localStorage
-    value = JSON.parse localStorage[key]
+    try
+      value = JSON.parse localStorage[key]
+    catch error
+      value = localStorage[key]
+
     $option = $("##{key}")
 
     switch $option.attr "id"
       when "trolls"
         trolls = sortTrolls value
       when "name"
-        $option.val value ? ""
+        $option.val value
       else
         $option.prop "checked", value
 
