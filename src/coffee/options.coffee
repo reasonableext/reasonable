@@ -5,6 +5,8 @@ $add      = $("#add")
 $troll    = $("#troll")
 bg        = chrome.extension.getBackgroundPage()
 
+# This relies on the implicit sort order in Chrome JS hashes, where items are
+# ordered by when they're added to the hash (first in first out)
 sortTrolls = (trolls) ->
   # Organizes trolls alphabetically and case-insensitive
   sortFunction = (x, y) ->

@@ -1,12 +1,7 @@
 (function() {
-  var DAYS_TO_MILLISECONDS, SUBMIT_DAYS, buildTrolls;
-  var __hasProp = Object.prototype.hasOwnProperty, __indexOf = Array.prototype.indexOf || function(item) {
-    for (var i = 0, l = this.length; i < l; i++) {
-      if (__hasProp.call(this, i) && this[i] === item) return i;
-    }
-    return -1;
-  };
+  var DAYS_TO_MILLISECONDS, SUBMIT_DAYS, buildTrolls, onlineList;
   window.settings = {};
+  onlineList = {};
   SUBMIT_DAYS = 3;
   DAYS_TO_MILLISECONDS = 86400000;
   window.parseSettings = function() {
@@ -27,7 +22,7 @@
     return window.settings = temp;
   };
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    var alreadyExists, datetime, index, value, _ref, _ref2, _ref3;
+    var alreadyExists, datetime, index, value, _ref;
     switch (request.type) {
       case "settings":
         return sendResponse({
@@ -51,15 +46,15 @@
           success: true
         });
       case "removeTroll":
-        if (_ref = request.name, __indexOf.call(settings.trolls, _ref) >= 0) {
-          if (settings.trolls[request.name] === actions.auto.value) {
+        if (request.name in settings.trolls) {
+          if (request.name in onlineList) {
             settings.trolls[request.name] = actions.white.value;
           } else {
             delete settings.trolls[request.name];
           }
         }
-        if (_ref2 = request.link, __indexOf.call(settings.trolls, _ref2) >= 0) {
-          if (settings.trolls[request.link] === actions.auto.value) {
+        if (request.link in settings.trolls) {
+          if (request.link in onlineList) {
             settings.trolls[request.link] = actions.white.value;
           } else {
             delete settings.trolls[request.link];
@@ -82,9 +77,9 @@
       case "keepHistory":
         datetime = new Date();
         alreadyExists = false;
-        _ref3 = settings.history;
-        for (index in _ref3) {
-          value = _ref3[index];
+        _ref = settings.history;
+        for (index in _ref) {
+          value = _ref[index];
           if (value.permalink >= request.permalink) {
             alreadyExists = true;
             break;
@@ -176,7 +171,7 @@
       url: GET_URL,
       dataType: "json",
       success: function(data) {
-        var key, onlineList, temp, value;
+        var key, temp, value;
         temp = JSON.parse(localStorage.trolls);
         onlineList = data;
         for (key in temp) {

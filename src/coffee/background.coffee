@@ -1,4 +1,5 @@
 window.settings = {}
+onlineList = {}
 
 SUBMIT_DAYS = 3
 DAYS_TO_MILLISECONDS = 86400000
@@ -34,16 +35,19 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
           hideAuto: localStorage.hideAuto
       sendResponse success: true
     when "removeTroll"
-      if request.name in settings.trolls
-        if settings.trolls[request.name] is actions.auto.value
+      # If a poster is part of the online troll list we must whitelist him, otherwise
+      # his post will only display if the user has remote list access turned off
+      if request.name of settings.trolls
+        if request.name of onlineList
           settings.trolls[request.name] = actions.white.value
         else
           delete settings.trolls[request.name]
-      if request.link in settings.trolls
-        if settings.trolls[request.link] is actions.auto.value
+      if request.link of settings.trolls
+        if request.link of onlineList
           settings.trolls[request.link] = actions.white.value
         else
           delete settings.trolls[request.link]
+
       localStorage.trolls = JSON.stringify settings.trolls
       $.ajax
         type: "post"

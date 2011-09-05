@@ -58,6 +58,7 @@ If you'd like to compile from the source, you'll need the following:
 Once those are installed, you should be able to just clone the repo and install
 using `cake`:
 
-    git clone git@github.com:brymck/reasonable.git
+    git clone http://github.com/brymck/reasonable.git
     cd reasonable
+    git checkout v1.7.3
     cake build
