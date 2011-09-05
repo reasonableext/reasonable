@@ -372,14 +372,16 @@
   };
   lightsOut = function() {
     var $box, $overlay, turnLightsOn;
-    $overlay = $("<div>").attr("id", "ableLightsOut").css("height", $(document).height());
+    $overlay = $("<div id='ableLightsOut' style='height:" + ($(document).height()) + "px'>");
     $box = $("<div>").attr("id", "ableLightsOutBox").keepCentered();
     turnLightsOn = function() {
       lightsOn = false;
       $overlay.fadeOut();
       return $box.fadeOut();
     };
-    $("body").append($box.click(turnLightsOn)).append($overlay.click(turnLightsOn));
+    $box.click(turnLightsOn);
+    $overlay.click(turnLightsOn);
+    $("body").append($box).append($overlay);
     return $(window).keydown(function(event) {
       if (lightsOn && event.which === ESCAPE_KEY) return turnLightsOn();
     });

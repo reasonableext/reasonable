@@ -4,15 +4,15 @@
     var $win;
     $win = $(window);
     return this.css({
-      top: "" + (($win.height() - this.outerHeight()) / 2 + $win.scrollTop()) + " px",
-      left: "" + (($win.width() - this.outerWidth()) / 2 + $win.scrollLeft()) + " px"
+      top: "" + (($win.height() - this.outerHeight()) / 2 + $win.scrollTop()) + "px",
+      left: "" + (($win.width() - this.outerWidth()) / 2 + $win.scrollLeft()) + "px"
     });
   };
   jQuery.fn.keepCentered = function() {
     $(window).scroll(__bind(function() {
-      return this.center;
+      return this.center();
     }, this)).resize(__bind(function() {
-      return this.center;
+      return this.center();
     }, this));
     return this;
   };

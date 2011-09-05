@@ -1,11 +1,11 @@
 jQuery.fn.center = ->
-  $win = $ window
+  $win = $(window)
   this.css
-    top:  "#{($win.height() - this.outerHeight()) / 2 + $win.scrollTop() } px"
-    left: "#{($win.width()  - this.outerWidth() ) / 2 + $win.scrollLeft()} px"
+    top:  "#{($win.height() - this.outerHeight()) / 2 + $win.scrollTop() }px"
+    left: "#{($win.width()  - this.outerWidth() ) / 2 + $win.scrollLeft()}px"
 
 jQuery.fn.keepCentered = ->
-  $(window).scroll( () => this.center ).resize () => this.center
+  $(window).scroll( () => this.center() ).resize () => this.center()
   this
 
 jQuery.fn.fitToWindow = (maxHeight) ->

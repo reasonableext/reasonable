@@ -1,6 +1,6 @@
 showImagePopup = (img) ->
-  $win = $ window
-  $box = $ "div#ableLightsOutBox"
+  $win = $(window)
+  $box = $("div#ableLightsOutBox")
   $img = $("<img>").load () ->
     $this = $ this
 
@@ -27,7 +27,7 @@ altText = ->
 
 lightsOut = ->
   # When clicking on an image in the article, darken page and center image
-  $overlay = $("<div>").attr("id", "ableLightsOut").css "height", $(document).height()
+  $overlay = $("<div id='ableLightsOut' style='height:#{$(document).height()}px'>")
   $box = $("<div>").attr("id", "ableLightsOutBox").keepCentered()
   
   # Routine for turning lights on
@@ -35,9 +35,12 @@ lightsOut = ->
     lightsOn = false
     $overlay.fadeOut()
     $box.fadeOut()
+
+  $box.click turnLightsOn
+  $overlay.click turnLightsOn
   
-  $("body").append($box.click turnLightsOn).append $overlay.click turnLightsOn
-  
+  $("body").append($box).append($overlay)
+
   # Turns lights back on if escape key is pressed
   $(window).keydown (event) -> turnLightsOn() if lightsOn and event.which is ESCAPE_KEY
 

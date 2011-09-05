@@ -50,18 +50,18 @@ div#ableLightsOut {
   background: #000;
   display: none;
   left: 0;
-  position: absolute;
+  position: absolute !important;
   text-align:left;
   top: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 100 !important;
 }
 
 div#ableLightsOutBox {
   background: #fff;
   display: none;
-  position: absolute;
-  z-index: 200;
+  position: absolute !important;
+  z-index: 200 !important;
   img {
     cursor: pointer;
     padding: 5px; } }
