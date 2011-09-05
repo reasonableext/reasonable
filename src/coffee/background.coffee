@@ -1,16 +1,29 @@
 window.settings = {}
-window.trolls = []
+
 SUBMIT_DAYS = 3
 DAYS_TO_MILLISECONDS = 86400000
+
+window.parseSettings = ->
+  temp = {}
+  temp[key] = JSON.parse(value) for key, value of localStorage
+
+  for key, value of window.defaultSettings
+    # Set undefined settings to defaults
+    unless temp[key]?
+      temp[key] = value
+      localStorage[key] = JSON.stringify value
+
+  # Store temp object to settings
+  window.settings = temp
 
 chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
   switch request.type
     when "settings"
-      sendResponse { settings: window.settings }
+      sendResponse settings: settings
     when "addTroll"
-      window.settings.trolls[request.name] = actions.black.value
-      window.settings.trolls[request.link] = actions.black.value if request.link
-      localStorage.trolls = JSON.stringify window.settings.trolls
+      settings.trolls[request.name] = actions.black.value
+      settings.trolls[request.link] = actions.black.value if request.link
+      localStorage.trolls = JSON.stringify settings.trolls
       $.ajax
         type: "post"
         url: GIVE_URL
@@ -19,13 +32,19 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
           white: ""
           auto: ""
           hideAuto: localStorage.hideAuto
-      sendResponse { success: true }
+      sendResponse success: true
     when "removeTroll"
-      if request.name in window.settings.trolls
-        delete window.settings.trolls[request.name]
-      if request.link in window.settings.trolls
-        delete window.settings.trolls[request.link]
-      localStorage.trolls = JSON.stringify window.settings.trolls
+      if request.name in settings.trolls
+        if settings.trolls[request.name] is actions.auto.value
+          settings.trolls[request.name] = actions.white.value
+        else
+          delete settings.trolls[request.name]
+      if request.link in settings.trolls
+        if settings.trolls[request.link] is actions.auto.value
+          settings.trolls[request.link] = actions.white.value
+        else
+          delete settings.trolls[request.link]
+      localStorage.trolls = JSON.stringify settings.trolls
       $.ajax
         type: "post"
         url: GIVE_URL
@@ -34,26 +53,26 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
           white: request.name + (if request.link then ",#{request.link}" else ""),
           auto: ""
           hideAuto: localStorage.hideAuto
-      sendResponse { success: true }
+      sendResponse success: true
     when "keepHistory"
       datetime      = new Date()
       alreadyExists = false
       
-      temp = if localStorage.history then JSON.parse localStorage.history else []
-
       # Ignore if permalink was from a point in the past or is identical to one
       # that already exists. This prevents old posts from showing up with a current
       # timestamp
-      $.each temp, (index, value) ->
-        alreadyExists = true if value.permalink >= request.permalink
+      for index, value of settings.history
+        if value.permalink >= request.permalink
+          alreadyExists = true
+          break
 
       # Delete old items, then add to history if comment was not already there
       unless alreadyExists
-        temp.shift() while temp.length > QUICKLOAD_MAX_ITEMS
-        temp.push { timestamp: datetime.getTime(), url: request.url, permalink: request.permalink }
+        settings.history.shift() while settings.history.length > QUICKLOAD_MAX_ITEMS
+        settings.history.push timestamp: datetime.getTime(), url: request.url, permalink: request.permalink
       
-      localStorage.history = JSON.stringify temp
-      sendResponse { success: true, exists: alreadyExists, timestamp: datetime.getTime() }
+      localStorage.history = JSON.stringify settings.history
+      sendResponse success: true, exists: alreadyExists, timestamp: datetime.getTime()
     when "blockIframes"
       sendResponse localStorage.blockIframes is "true"
     when "reset"
@@ -77,7 +96,7 @@ buildTrolls = ->
   white = []
   auto  = []
 
-  for troll, value of window.settings.trolls
+  for troll, value of settings.trolls
     switch value
       when actions.black.value then black.push troll
       when actions.white.value then white.push troll
@@ -99,20 +118,7 @@ buildTrolls = ->
         dataType: "text"
         success: (data) -> localStorage.submitted = current.getTime()
 
-parseSettings = ->
-  temp = {}
-  temp[key] = JSON.parse(value) for key, value of localStorage
-
-  for key, value of window.defaultSettings
-    # Set undefined settings to defaults
-    unless temp[key]?
-      temp[key] = value
-      localStorage[key] = JSON.stringify value
-
-  # Store temp object to settings
-  window.settings = temp
-
-parseSettings()
+window.parseSettings()
 
 if localStorage.shareTrolls
   $.ajax

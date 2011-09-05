@@ -1,5 +1,5 @@
 (function() {
-  var DAYS_TO_MILLISECONDS, SUBMIT_DAYS, buildTrolls, parseSettings;
+  var DAYS_TO_MILLISECONDS, SUBMIT_DAYS, buildTrolls;
   var __hasProp = Object.prototype.hasOwnProperty, __indexOf = Array.prototype.indexOf || function(item) {
     for (var i = 0, l = this.length; i < l; i++) {
       if (__hasProp.call(this, i) && this[i] === item) return i;
@@ -7,22 +7,36 @@
     return -1;
   };
   window.settings = {};
-  window.trolls = [];
   SUBMIT_DAYS = 3;
   DAYS_TO_MILLISECONDS = 86400000;
+  window.parseSettings = function() {
+    var key, temp, value, _ref;
+    temp = {};
+    for (key in localStorage) {
+      value = localStorage[key];
+      temp[key] = JSON.parse(value);
+    }
+    _ref = window.defaultSettings;
+    for (key in _ref) {
+      value = _ref[key];
+      if (temp[key] == null) {
+        temp[key] = value;
+        localStorage[key] = JSON.stringify(value);
+      }
+    }
+    return window.settings = temp;
+  };
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    var alreadyExists, datetime, temp, _ref, _ref2;
+    var alreadyExists, datetime, index, value, _ref, _ref2, _ref3;
     switch (request.type) {
       case "settings":
         return sendResponse({
-          settings: window.settings
+          settings: settings
         });
       case "addTroll":
-        window.settings.trolls[request.name] = actions.black.value;
-        if (request.link) {
-          window.settings.trolls[request.link] = actions.black.value;
-        }
-        localStorage.trolls = JSON.stringify(window.settings.trolls);
+        settings.trolls[request.name] = actions.black.value;
+        if (request.link) settings.trolls[request.link] = actions.black.value;
+        localStorage.trolls = JSON.stringify(settings.trolls);
         $.ajax({
           type: "post",
           url: GIVE_URL,
@@ -37,13 +51,21 @@
           success: true
         });
       case "removeTroll":
-        if (_ref = request.name, __indexOf.call(window.settings.trolls, _ref) >= 0) {
-          delete window.settings.trolls[request.name];
+        if (_ref = request.name, __indexOf.call(settings.trolls, _ref) >= 0) {
+          if (settings.trolls[request.name] === actions.auto.value) {
+            settings.trolls[request.name] = actions.white.value;
+          } else {
+            delete settings.trolls[request.name];
+          }
         }
-        if (_ref2 = request.link, __indexOf.call(window.settings.trolls, _ref2) >= 0) {
-          delete window.settings.trolls[request.link];
+        if (_ref2 = request.link, __indexOf.call(settings.trolls, _ref2) >= 0) {
+          if (settings.trolls[request.link] === actions.auto.value) {
+            settings.trolls[request.link] = actions.white.value;
+          } else {
+            delete settings.trolls[request.link];
+          }
         }
-        localStorage.trolls = JSON.stringify(window.settings.trolls);
+        localStorage.trolls = JSON.stringify(settings.trolls);
         $.ajax({
           type: "post",
           url: GIVE_URL,
@@ -60,21 +82,25 @@
       case "keepHistory":
         datetime = new Date();
         alreadyExists = false;
-        temp = localStorage.history ? JSON.parse(localStorage.history) : [];
-        $.each(temp, function(index, value) {
-          if (value.permalink >= request.permalink) return alreadyExists = true;
-        });
-        if (!alreadyExists) {
-          while (temp.length > QUICKLOAD_MAX_ITEMS) {
-            temp.shift();
+        _ref3 = settings.history;
+        for (index in _ref3) {
+          value = _ref3[index];
+          if (value.permalink >= request.permalink) {
+            alreadyExists = true;
+            break;
           }
-          temp.push({
+        }
+        if (!alreadyExists) {
+          while (settings.history.length > QUICKLOAD_MAX_ITEMS) {
+            settings.history.shift();
+          }
+          settings.history.push({
             timestamp: datetime.getTime(),
             url: request.url,
             permalink: request.permalink
           });
         }
-        localStorage.history = JSON.stringify(temp);
+        localStorage.history = JSON.stringify(settings.history);
         return sendResponse({
           success: true,
           exists: alreadyExists,
@@ -84,6 +110,7 @@
         return sendResponse(localStorage.blockIframes === "true");
       case "reset":
         return $.each(request.settings, function(key, value) {
+          var temp;
           if (key === "trolls") {
             temp = JSON.parse(localStorage.trolls);
             for (key in value) {
@@ -108,7 +135,7 @@
     black = [];
     white = [];
     auto = [];
-    _ref = window.settings.trolls;
+    _ref = settings.trolls;
     for (troll in _ref) {
       value = _ref[troll];
       switch (value) {
@@ -143,24 +170,7 @@
       }
     }
   };
-  parseSettings = function() {
-    var key, temp, value, _ref;
-    temp = {};
-    for (key in localStorage) {
-      value = localStorage[key];
-      temp[key] = JSON.parse(value);
-    }
-    _ref = window.defaultSettings;
-    for (key in _ref) {
-      value = _ref[key];
-      if (temp[key] == null) {
-        temp[key] = value;
-        localStorage[key] = JSON.stringify(value);
-      }
-    }
-    return window.settings = temp;
-  };
-  parseSettings();
+  window.parseSettings();
   if (localStorage.shareTrolls) {
     $.ajax({
       url: GET_URL,

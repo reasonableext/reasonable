@@ -1,16 +1,17 @@
 (function() {
-  var $add, $save, $troll, ENTER_KEY, SAVED_SUCCESS_MESSAGE, addTroll, attachClickEvents, buildControll, buildTroll, load, save, sortTrolls;
+  var $add, $save, $troll, ENTER_KEY, SAVED_SUCCESS_MESSAGE, addTroll, attachClickEvents, bg, buildControll, buildTroll, load, save, sortTrolls;
   ENTER_KEY = 13;
   SAVED_SUCCESS_MESSAGE = "Saved successfully!\n\nReload any open reason.com pages to reflect any changes you've made.";
   $save = $("#save");
   $add = $("#add");
   $troll = $("#troll");
+  bg = chrome.extension.getBackgroundPage();
   sortTrolls = function(trolls) {
     var auto, black, index, key, sortFunction, temp, value, white;
     sortFunction = function(x, y) {
       var a, b;
-      a = String(x).toUpperCase();
-      b = String(y).toUpperCase();
+      a = x.toUpperCase();
+      b = y.toUpperCase();
       if (a > b) {
         return 1;
       } else if (a < b) {
@@ -101,29 +102,24 @@
     }
   };
   save = function() {
-    var $checkbox, checkbox, key, radio, temp, tempTrolls, textbox, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
-    temp = {};
-    tempTrolls = {};
+    var $checkbox, checkbox, radio, textbox, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
     _ref = $("#options input:checkbox");
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       checkbox = _ref[_i];
       $checkbox = $(checkbox);
-      temp[$checkbox.attr("id")] = Boolean($checkbox.prop("checked"));
+      localStorage[$checkbox.attr("id")] = JSON.stringify($checkbox.prop("checked"));
     }
     _ref2 = $("#options input:text");
     for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
       textbox = _ref2[_j];
-      temp[textbox.id] = textbox.value;
+      localStorage[textbox.id] = JSON.stringify(textbox.value);
     }
     _ref3 = $("input:radio:checked");
     for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
       radio = _ref3[_k];
-      tempTrolls[radio.name] = radio.value;
+      localStorage.trolls[radio.name] = radio.value;
     }
-    temp.trolls = tempTrolls;
-    for (key in temp) {
-      localStorage[key] = JSON.stringify(temp[key]);
-    }
+    bg.parseSettings();
     alert(SAVED_SUCCESS_MESSAGE);
     window.close();
     return false;

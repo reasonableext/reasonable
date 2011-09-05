@@ -1,27 +1,32 @@
 ENTER_KEY = 13
 SAVED_SUCCESS_MESSAGE = "Saved successfully!\n\nReload any open reason.com pages to reflect any changes you've made."
-$save     = $ "#save"
-$add      = $ "#add"
-$troll    = $ "#troll"
+$save     = $("#save")
+$add      = $("#add")
+$troll    = $("#troll")
+bg        = chrome.extension.getBackgroundPage()
 
 sortTrolls = (trolls) ->
+  # Organizes trolls alphabetically and case-insensitive
   sortFunction = (x, y) ->
-    a = String(x).toUpperCase()
-    b = String(y).toUpperCase()
+    a = x.toUpperCase()
+    b = y.toUpperCase()
     if a > b then 1
     else if a < b then -1
     else 0
+
   black = []
   white = []
   auto  = []
   temp  = {}
 
+  # Categorize trolls based on blacklist/whitelist
   for key, value of trolls
     switch value
       when actions.black.value then black.push key
       when actions.white.value then white.push key
       when actions.auto.value  then auto.push  key
 
+  # Sort lists alphabetically without regard to case
   black.sort sortFunction
   white.sort sortFunction
   auto.sort  sortFunction
@@ -54,7 +59,7 @@ addTroll = ->
 load = ->
   for key of localStorage
     value = JSON.parse localStorage[key]
-    $option = $ "##{key}"
+    $option = $("##{key}")
 
     switch $option.attr "id"
       when "trolls"
@@ -72,19 +77,25 @@ load = ->
     $(".scrollContent").fitToWindow().keepFitToWindow()
 
 save = () ->
-  temp = {}
-  tempTrolls = {}
-
+  # Handle checkboxes (generic options)
   for checkbox in $("#options input:checkbox")
     $checkbox = $(checkbox)
-    temp[$checkbox.attr "id"] = Boolean $checkbox.prop "checked"
-  for textbox  in $("#options input:text") then temp[textbox.id] = textbox.value
-  for radio    in $("input:radio:checked") then tempTrolls[radio.name] = radio.value
+    localStorage[$checkbox.attr "id"] = JSON.stringify $checkbox.prop("checked")
 
-  temp.trolls = tempTrolls
-  localStorage[key] = JSON.stringify temp[key] for key of temp
+  # Handle inputs (name)
+  localStorage[textbox.id] = JSON.stringify textbox.value for textbox in $("#options input:text")
+
+  # Handle trolls (those buttons are actually heavily styled radio buttons)
+  localStorage.trolls[radio.name] = radio.value for radio in $("input:radio:checked")
+
+  # Update settings variable
+  bg.parseSettings()
+
+  # Alert user and exit popup or options page
   alert SAVED_SUCCESS_MESSAGE
   window.close()
+
+  # Prevent form submission
   false
 
 attachClickEvents = ->
