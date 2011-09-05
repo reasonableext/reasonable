@@ -1,5 +1,5 @@
 (function() {
-  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, defaultSettings, formatDate, getDate, getLink, getName, getPermalink, getSettings, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
+  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, formatDate, getDate, getLink, getName, getPermalink, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
   QUICKLOAD_MAX_ITEMS = 20;
   URL_REGEX = /^https?:\/\/(www\.)?([^\/]+)?/i;
   PICTURE_REGEX = /(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:jpe?g|gif|png|bmp))(?:\?([^#]*))?(?:#(.*))?/i;
@@ -27,24 +27,6 @@
   FIRST_MATCH = 1;
   QUICKLOAD_SPEED = 100;
   UPDATE_POST_TIMEOUT_LENGTH = 60000;
-  defaultSettings = {
-    autohideActivity: false,
-    autohideHistory: true,
-    blockIframes: false,
-    hideAuto: true,
-    highlightMe: true,
-    history: [],
-    keepHistory: true,
-    name: "",
-    shareTrolls: true,
-    showAltText: true,
-    showActivity: true,
-    showGravatar: false,
-    showPictures: true,
-    showQuickInsert: true,
-    showUnignore: true,
-    showYouTube: true
-  };
   months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   settings = {};
   trolls = [];
@@ -536,53 +518,6 @@
       return setTimeout(updatePosts, UPDATE_POST_TIMEOUT_LENGTH);
     }
   };
-  getSettings = function(response, defaults) {
-    var arr, key, reset, temp, value, _ref;
-    reset = false;
-    temp = (_ref = response.settings) != null ? _ref : {};
-    for (key in defaults) {
-      value = defaults[key];
-      switch (temp[key]) {
-        case void 0:
-          temp[key] = value;
-          reset = true;
-          break;
-        case "true":
-          temp[key] = true;
-          break;
-        case "false":
-          temp[key] = false;
-          break;
-        default:
-          switch (key) {
-            case "trolls":
-              arr = JSON.parse(temp.trolls);
-              temp.trolls = {};
-              $.each(arr, function(trollKey, trollValue) {
-                if (trollValue === actions.black.value || (temp.hideAuto && trollValue === actions.auto.value)) {
-                  return temp.trolls[trollKey] = trollValue;
-                }
-              });
-              break;
-            case "history":
-              try {
-                temp.history = JSON.parse(temp.history).sort(function(a, b) {
-                  return a.permalink - b.permalink;
-                });
-              } catch (error) {
-                temp = [];
-              }
-          }
-      }
-    }
-    settings = temp;
-    if (reset) {
-      return chrome.extension.sendRequest({
-        type: "reset",
-        settings: temp
-      });
-    }
-  };
   commentOnlyRoutines = function() {
     gravatars();
     viewThread();
@@ -596,8 +531,7 @@
   chrome.extension.sendRequest({
     type: "settings"
   }, function(response) {
-    defaultSettings.trolls = response.trolls;
-    getSettings(response, defaultSettings);
+    settings = response.settings;
     removeGooglePlus();
     lightsOut();
     altText();

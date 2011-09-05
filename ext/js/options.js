@@ -6,7 +6,7 @@
   $add = $("#add");
   $troll = $("#troll");
   sortTrolls = function(trolls) {
-    var auto, black, index, key, sortFunction, temp, value, white, _ref;
+    var auto, black, index, key, sortFunction, temp, value, white;
     sortFunction = function(x, y) {
       var a, b;
       a = String(x).toUpperCase();
@@ -23,11 +23,6 @@
     white = [];
     auto = [];
     temp = {};
-    _ref = window.onlineList;
-    for (key in _ref) {
-      value = _ref[key];
-      if (!(key in trolls)) trolls[key] = actions.auto.value;
-    }
     for (key in trolls) {
       value = trolls[key];
       switch (value) {
@@ -80,28 +75,20 @@
     return false;
   };
   load = function() {
-    var $option, key, settings, tKey, tValue, trolls, value;
-    try {
-      settings = {};
-      for (key in localStorage) {
-        settings[key] = localStorage[key];
+    var $option, key, tKey, tValue, trolls, value;
+    for (key in localStorage) {
+      value = JSON.parse(localStorage[key]);
+      $option = $("#" + key);
+      switch ($option.attr("id")) {
+        case "trolls":
+          trolls = sortTrolls(value);
+          break;
+        case "name":
+          $option.val(value);
+          break;
+        default:
+          $option.prop("checked", value);
       }
-      for (key in settings) {
-        value = settings[key];
-        $option = $("#" + key);
-        switch ($option.attr("id")) {
-          case "trolls":
-            trolls = sortTrolls(JSON.parse(value));
-            break;
-          case "name":
-            $option.val(value || "");
-            break;
-          default:
-            $option.prop("checked", value === "true");
-        }
-      }
-    } catch (error) {
-      trolls = sortTrolls({});
     }
     for (tKey in trolls) {
       tValue = trolls[tKey];
@@ -133,9 +120,9 @@
       radio = _ref3[_k];
       tempTrolls[radio.name] = radio.value;
     }
-    temp.trolls = JSON.stringify(tempTrolls);
+    temp.trolls = tempTrolls;
     for (key in temp) {
-      localStorage[key] = temp[key];
+      localStorage[key] = JSON.stringify(temp[key]);
     }
     alert(SAVED_SUCCESS_MESSAGE);
     window.close();

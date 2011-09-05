@@ -16,10 +16,6 @@ sortTrolls = (trolls) ->
   auto  = []
   temp  = {}
 
-  # Add online troll list to current list
-  for key, value of window.onlineList
-    trolls[key] = actions.auto.value if key not of trolls
-
   for key, value of trolls
     switch value
       when actions.black.value then black.push key
@@ -56,17 +52,17 @@ addTroll = ->
   false
 
 load = ->
-  try
-    settings = {}
-    settings[key] = localStorage[key] for key of localStorage
-    for key, value of settings
-      $option = $ "##{key}"
-      switch $option.attr "id"
-        when "trolls" then trolls = sortTrolls JSON.parse value
-        when "name"   then $option.val value or ""
-        else $option.prop "checked", value is "true"
-  catch error
-    trolls = sortTrolls {}
+  for key of localStorage
+    value = JSON.parse localStorage[key]
+    $option = $ "##{key}"
+
+    switch $option.attr "id"
+      when "trolls"
+        trolls = sortTrolls value
+      when "name"
+        $option.val value
+      else
+        $option.prop "checked", value
 
   $("#trolls").append buildTroll tKey, tValue for tKey, tValue of trolls
 
@@ -85,8 +81,8 @@ save = () ->
   for textbox  in $("#options input:text") then temp[textbox.id] = textbox.value
   for radio    in $("input:radio:checked") then tempTrolls[radio.name] = radio.value
 
-  temp.trolls = JSON.stringify tempTrolls
-  localStorage[key] = temp[key] for key of temp
+  temp.trolls = tempTrolls
+  localStorage[key] = JSON.stringify temp[key] for key of temp
   alert SAVED_SUCCESS_MESSAGE
   window.close()
   false
