@@ -67,7 +67,7 @@ load = ->
       when "trolls"
         trolls = sortTrolls value
       when "name"
-        $option.val value
+        $option.val value ? ""
       else
         $option.prop "checked", value
 

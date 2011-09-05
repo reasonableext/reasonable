@@ -85,7 +85,7 @@
           trolls = sortTrolls(value);
           break;
         case "name":
-          $option.val(value);
+          $option.val(value != null ? value : "");
           break;
         default:
           $option.prop("checked", value);
