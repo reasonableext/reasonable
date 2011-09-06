@@ -59,12 +59,23 @@
     var showHeight;
     showHeight = 0;
     return $("h2.commentheader strong").each(function() {
-      var $body, $ignore, $this, link, name;
+      var $body, $ignore, $this, isTroll, link, name;
       $this = $(this);
       $ignore = $this.siblings("a.ignore");
       name = $ignore.data("name");
       link = $ignore.data("link");
-      if ((settings.trolls[name] != null) || (link !== "" && (settings.trolls[link] != null))) {
+      isTroll = false;
+      if (settings.trolls[name] != null) {
+        if ((settings.trolls[name] === actions.black.value) || (settings.trolls[name] === actions.auto.value && settings.hideAuto)) {
+          isTroll = true;
+        }
+      }
+      if (link !== "" && (settings.trolls[link] != null)) {
+        if ((settings.trolls[link] === actions.black.value) || (settings.trolls[link] === actions.auto.value && settings.hideAuto)) {
+          isTroll = true;
+        }
+      }
+      if (isTroll) {
         $body = $this.html(name).siblings("a.ignore").text(UNIGNORE).closest("div").addClass("troll").children("p, blockquote, img, iframe");
         if (!settings.showUnignore) {
           $this.siblings("a.ignore").hide().prev("span.pipe").hide();
