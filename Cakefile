@@ -47,7 +47,7 @@ concatenate = (directory, files, extension = "") ->
 task 'build', 'Build project from source to dev', (options) ->
   target ?= "ext"
   invoke "coffee"
-  invoke "scss"
+  invoke "sass"
   invoke "haml"
   invoke "other"
 
@@ -88,16 +88,16 @@ task 'haml', 'Compile HAML to development', (options) ->
       console.log pad("  #{page}") + highlight(htmlPage, 1)
       exec "haml src/haml/#{page} #{target}/#{htmlPage}", errorLog
 
-task 'scss', 'Compile SCSS files to development', (options) ->
+task 'sass', 'Compile SASS files to development', (options) ->
   target ?= "ext"
   verifyTarget target
 
-  fs.readdir "src/scss", (err, sheets) ->
-    console.log highlight 'SCSS -> CSS', 1, 32
+  fs.readdir "src/sass", (err, sheets) ->
+    console.log highlight 'SASS -> CSS', 1, 32
     for sheet in sheets
-      cssSheet = sheet.replace ".scss", ".css"
+      cssSheet = sheet.replace ".sass", ".css"
       console.log pad("  #{sheet}") + highlight(cssSheet, 1)
-      exec "sass --no-cache src/scss/#{sheet}:#{target}/css/#{cssSheet}", errorLog
+      exec "sass --no-cache src/sass/#{sheet}:#{target}/css/#{cssSheet}", errorLog
 
 task 'other', 'Copy other files to development', (options) ->
   target ?= "ext"

@@ -1,9 +1,10 @@
 (function() {
-  var DAYS_TO_MILLISECONDS, SUBMIT_DAYS, buildTrolls, onlineList;
+  var DAYS_TO_MILLISECONDS, MINUTES_TO_MILLISECONDS, SUBMIT_DAYS, lookupTrollsOnline, onlineList, submitTrolls;
   window.settings = {};
   onlineList = {};
   SUBMIT_DAYS = 3;
   DAYS_TO_MILLISECONDS = 86400000;
+  MINUTES_TO_MILLISECONDS = 60000;
   window.parseSettings = function() {
     var key, temp, value, _ref;
     temp = {};
@@ -39,7 +40,8 @@
             black: request.name + (request.link ? "," + request.link : ""),
             white: "",
             auto: "",
-            hideAuto: localStorage.hideAuto
+            admin: settings.admin,
+            hideAuto: settings.hideAuto
           }
         });
         return sendResponse({
@@ -68,7 +70,8 @@
             black: "",
             white: request.name + (request.link ? "," + request.link : ""),
             auto: "",
-            hideAuto: localStorage.hideAuto
+            admin: settings.admin,
+            hideAuto: settings.hideAuto
           }
         });
         return sendResponse({
@@ -102,7 +105,7 @@
           timestamp: datetime.getTime()
         });
       case "blockIframes":
-        return sendResponse(localStorage.blockIframes === "true");
+        return sendResponse(settings.blockIframes);
       case "reset":
         return $.each(request.settings, function(key, value) {
           var temp;
@@ -125,29 +128,28 @@
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (tab.url.indexOf("reason.com") > -1) return chrome.pageAction.show(tabId);
   });
-  buildTrolls = function() {
+  submitTrolls = function() {
     var auto, black, current, troll, value, white, _ref;
-    black = [];
-    white = [];
-    auto = [];
-    _ref = settings.trolls;
-    for (troll in _ref) {
-      value = _ref[troll];
-      switch (value) {
-        case actions.black.value:
-          black.push(troll);
-          break;
-        case actions.white.value:
-          white.push(troll);
-          break;
-        case actions.auto.value:
-          auto.push(troll);
-      }
-    }
-    current = new Date();
-    if (localStorage.submitted == null) localStorage.submitted = 0;
-    if (localStorage.shareTrolls) {
-      if (current.getTime() - localStorage.submitted > SUBMIT_DAYS * DAYS_TO_MILLISECONDS) {
+    if (settings.shareTrolls) {
+      current = new Date();
+      if ((current.getTime() - settings.submitted) > SUBMIT_DAYS * DAYS_TO_MILLISECONDS) {
+        black = [];
+        white = [];
+        auto = [];
+        _ref = settings.trolls;
+        for (troll in _ref) {
+          value = _ref[troll];
+          switch (value) {
+            case actions.black.value:
+              black.push(troll);
+              break;
+            case actions.white.value:
+              white.push(troll);
+              break;
+            case actions.auto.value:
+              auto.push(troll);
+          }
+        }
         return $.ajax({
           type: "post",
           url: GIVE_URL,
@@ -155,19 +157,20 @@
             black: black.join(","),
             white: white.join(","),
             auto: auto.join(","),
-            hideAuto: localStorage.hideAuto
+            admin: settings.admin,
+            hideAuto: settings.hideAuto
           },
           dataType: "text",
           success: function(data) {
-            return localStorage.submitted = current.getTime();
+            settings.submitted = current.getTime();
+            return localStorage.submitted = JSON.stringify(settings.submitted);
           }
         });
       }
     }
   };
-  window.parseSettings();
-  if (localStorage.shareTrolls) {
-    $.ajax({
+  lookupTrollsOnline = function() {
+    return $.ajax({
       url: GET_URL,
       dataType: "json",
       success: function(data) {
@@ -186,13 +189,17 @@
         }
         window.settings.trolls = temp;
         localStorage.trolls = JSON.stringify(temp);
-        return buildTrolls();
+        return submitTrolls();
       },
       error: function() {
-        return buildTrolls();
+        return submitTrolls();
       }
     });
+  };
+  window.parseSettings();
+  if (settings.hideAuto) {
+    setInterval(lookupTrollsOnline, settings.lookupFrequency * MINUTES_TO_MILLISECONDS);
   } else {
-    buildTrolls();
+    submitTrolls();
   }
 }).call(this);

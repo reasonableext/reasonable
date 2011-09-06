@@ -3,6 +3,7 @@ onlineList = {}
 
 SUBMIT_DAYS = 3
 DAYS_TO_MILLISECONDS = 86400000
+MINUTES_TO_MILLISECONDS = 60000
 
 window.parseSettings = ->
   temp = {}
@@ -32,7 +33,8 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
           black: request.name + (if request.link then ",#{request.link}" else "")
           white: ""
           auto: ""
-          hideAuto: localStorage.hideAuto
+          admin: settings.admin
+          hideAuto: settings.hideAuto
       sendResponse success: true
     when "removeTroll"
       # If a poster is part of the online troll list we must whitelist him, otherwise
@@ -56,7 +58,8 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
           black: ""
           white: request.name + (if request.link then ",#{request.link}" else ""),
           auto: ""
-          hideAuto: localStorage.hideAuto
+          admin: settings.admin
+          hideAuto: settings.hideAuto
       sendResponse success: true
     when "keepHistory"
       datetime      = new Date()
@@ -78,7 +81,7 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
       localStorage.history = JSON.stringify settings.history
       sendResponse success: true, exists: alreadyExists, timestamp: datetime.getTime()
     when "blockIframes"
-      sendResponse localStorage.blockIframes is "true"
+      sendResponse settings.blockIframes
     when "reset"
       $.each request.settings, (key, value) ->
         if key is "trolls"
@@ -95,22 +98,21 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
   chrome.pageAction.show tabId if tab.url.indexOf("reason.com") > -1
 
-buildTrolls = ->
-  black = []
-  white = []
-  auto  = []
+submitTrolls = ->
+  if settings.shareTrolls
+    current = new Date()
 
-  for troll, value of settings.trolls
-    switch value
-      when actions.black.value then black.push troll
-      when actions.white.value then white.push troll
-      when actions.auto.value  then auto.push  troll
+    if (current.getTime() - settings.submitted) > SUBMIT_DAYS * DAYS_TO_MILLISECONDS
+      black = []
+      white = []
+      auto  = []
 
-  current = new Date()
-  localStorage.submitted = 0 unless localStorage.submitted?
+      for troll, value of settings.trolls
+        switch value
+          when actions.black.value then black.push troll
+          when actions.white.value then white.push troll
+          when actions.auto.value  then auto.push  troll
 
-  if localStorage.shareTrolls
-    if current.getTime() - localStorage.submitted > SUBMIT_DAYS * DAYS_TO_MILLISECONDS
       $.ajax
         type: "post"
         url:  GIVE_URL
@@ -118,13 +120,14 @@ buildTrolls = ->
           black: black.join ","
           white: white.join ","
           auto:  auto.join  ","
-          hideAuto: localStorage.hideAuto
+          admin: settings.admin
+          hideAuto: settings.hideAuto
         dataType: "text"
-        success: (data) -> localStorage.submitted = current.getTime()
+        success: (data) ->
+          settings.submitted = current.getTime()
+          localStorage.submitted = JSON.stringify settings.submitted
 
-window.parseSettings()
-
-if localStorage.shareTrolls
+lookupTrollsOnline = ->
   $.ajax
     url: GET_URL
     dataType: "json"
@@ -145,8 +148,13 @@ if localStorage.shareTrolls
 
       window.settings.trolls = temp
       localStorage.trolls = JSON.stringify temp
-      buildTrolls()
-    error: () ->
-      buildTrolls()
+      submitTrolls()
+    error: -> submitTrolls()
+
+window.parseSettings()
+
+if settings.hideAuto
+  # Lookup trolls online at the specified frequency
+  setInterval lookupTrollsOnline, settings.lookupFrequency * MINUTES_TO_MILLISECONDS
 else
-  buildTrolls()
+  submitTrolls()

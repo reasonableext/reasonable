@@ -1,6 +1,6 @@
 div.ablePic {
-  border: 1px solid #ccc;
-  color: #333;
+  border: 1px solid #cccccc;
+  color: #333333;
   display: block;
   float: right;
   font-family: georgia;
@@ -19,18 +19,18 @@ div.post div.ablePic > img {
   padding: 0; }
 
 div.ableHighlight {
-  background-color: #eee; }
+  background-color: #eeeeee; }
 
 .ableShow, .ignore, .able_STEVE_SMITH {
   cursor: pointer; }
 
 /* Highlight myself */
 div.ableMe {
-  background-color: #ffc; }
+  background-color: #ffffcc; }
 
 /* Deal with trolls */
 div.troll {
-  color: #bbb; }
+  color: #bbbbbb; }
   div.troll a, div.troll .commentactions button.comment_reply {
     color: #ffab88; }
   div.troll img {
@@ -45,7 +45,7 @@ img.ableCommentPic {
 
 /* Image popup */
 div#ableLightsOut {
-  background: #000;
+  background: black;
   display: none;
   left: 0;
   position: absolute !important;
@@ -55,7 +55,7 @@ div#ableLightsOut {
   z-index: 100 !important; }
 
 div#ableLightsOutBox {
-  background: #fff;
+  background: white;
   display: none;
   position: absolute !important;
   z-index: 200 !important; }
@@ -90,7 +90,7 @@ img.ableGravatar {
     display: none; }
 
 .ableBox {
-  background-color: #fff;
+  background-color: white;
   border-left: 1px solid #b6bac0;
   border-right: 1px solid #b6bac0;
   font-size: 11px;
@@ -101,7 +101,7 @@ img.ableGravatar {
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.25); }
   .ableBox h3 {
     background-color: #ff6c11;
-    color: #fff;
+    color: white;
     margin: 1px;
     text-align: center; }
   .ableBox h4 {

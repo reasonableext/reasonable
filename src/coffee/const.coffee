@@ -1,5 +1,6 @@
 # Can't be set as constants, but should not be modified
 window.defaultSettings =
+  admin:            ""
   autohideActivity: false
   autohideHistory:  true
   blockIframes:     false
@@ -7,6 +8,7 @@ window.defaultSettings =
   highlightMe:      true
   history:          []
   keepHistory:      true
+  lookupFrequency:  15
   name:             ""
   shareTrolls:      true
   showAltText:      true
@@ -16,6 +18,7 @@ window.defaultSettings =
   showQuickInsert:  true
   showUnignore:     true
   showYouTube:      true
+  submitted:        0
   trolls:           {}
   updatePosts:      false
 
