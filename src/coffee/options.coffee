@@ -92,7 +92,9 @@ save = () ->
   localStorage[textbox.id] = JSON.stringify textbox.value for textbox in $("#options input:text")
 
   # Handle trolls (those buttons are actually heavily styled radio buttons)
-  localStorage.trolls[radio.name] = radio.value for radio in $("input:radio:checked")
+  temp = {}
+  temp[radio.name] = radio.value for radio in $("input:radio:checked")
+  localStorage.trolls = JSON.stringify temp
 
   # Update settings variable
   bg.parseSettings()

@@ -106,7 +106,7 @@
     }
   };
   save = function() {
-    var $checkbox, checkbox, radio, textbox, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
+    var $checkbox, checkbox, radio, temp, textbox, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
     _ref = $("#options input:checkbox");
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       checkbox = _ref[_i];
@@ -118,11 +118,13 @@
       textbox = _ref2[_j];
       localStorage[textbox.id] = JSON.stringify(textbox.value);
     }
+    temp = {};
     _ref3 = $("input:radio:checked");
     for (_k = 0, _len3 = _ref3.length; _k < _len3; _k++) {
       radio = _ref3[_k];
-      localStorage.trolls[radio.name] = radio.value;
+      temp[radio.name] = radio.value;
     }
+    localStorage.trolls = JSON.stringify(temp);
     bg.parseSettings();
     alert(SAVED_SUCCESS_MESSAGE);
     window.close();
