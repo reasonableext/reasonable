@@ -48,5 +48,5 @@
                          #{option["text"]}
                     %input{:id => option["id"], :type => "text", :placeholder => option["placeholder"]}
             %button#save Save &amp; Exit
-    - %w(const jquery-1.6.1.min jquery.brymck options).each do |script|
+    - %w(const portext.chrome jquery-1.6.1.min jquery.brymck options).each do |script|
       %script{:type => "text/javascript", :src => "/js/#{script}.js"}
