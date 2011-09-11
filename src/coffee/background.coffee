@@ -5,9 +5,13 @@ SUBMIT_DAYS = 3
 DAYS_TO_MILLISECONDS = 86400000
 MINUTES_TO_MILLISECONDS = 60000
 
-window.parseSettings = ->
+parseSettings = ->
   temp = {}
-  temp[key] = JSON.parse(value) for key, value of localStorage
+  for key, value of localStorage
+    try
+      temp[key] = JSON.parse(value)
+    catch error
+      temp[key] = value
 
   for key, value of window.defaultSettings
     # Set undefined settings to defaults
@@ -151,10 +155,11 @@ lookupTrollsOnline = ->
       submitTrolls()
     error: -> submitTrolls()
 
-window.parseSettings()
+parseSettings()
 
 if settings.hideAuto
   # Lookup trolls online at the specified frequency
+  lookupTrollsOnline()
   setInterval lookupTrollsOnline, settings.lookupFrequency * MINUTES_TO_MILLISECONDS
 else
   submitTrolls()
