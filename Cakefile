@@ -45,18 +45,19 @@ concatenate = (directory, files, extension = "") ->
   result.join " "
 
 task 'build', 'Build project from source to dev', (options) ->
-  target ?= "chrome"
+  target ?= "ext"
   invoke "coffee"
   invoke "sass"
   invoke "haml"
   invoke "other"
 
-task 'clear', 'Clear extension directories', (options) ->
-  exec "rm -rf chrome/*"
+task 'clear', 'Clear ext directory', (options) ->
+  exec "rm -rf ext/*"
 
 # Individual filetypes
 task 'coffee', 'Compile CoffeeScript to development', (options) ->
-  target ?= "chrome"
+  verifyTarget target
+  target ?= "ext"
 
   fs.readdir "src/coffee", (err, scripts) ->
     console.log highlight 'Coffee -> JS (source)', 1, 32
@@ -64,23 +65,21 @@ task 'coffee', 'Compile CoffeeScript to development', (options) ->
       if path.extname(script) is ""
         console.log pad("  #{script}/") + highlight(script + ".js", 1)
         console.log "    #{subscript}.coffee" for subscript in contentScripts
-        exec "coffee --compile --bare --join #{script}.js --output #{target}/js/
+        exec "coffee --compile --join #{script}.js --output #{target}/js/
               #{concatenate "src/coffee/content", contentScripts, "coffee"}", errorLog
       else
         console.log pad("  #{script}") + highlight(script.replace(".coffee", ".js"), 1)
-        exec "coffee --compile --bare --output #{target}/js/ src/coffee/#{script}", errorLog
+        exec "coffee --compile --output #{target}/js/ src/coffee/#{script}", errorLog
 
   fs.readdir "lib/coffee", (err, scripts) ->
     console.log highlight 'Coffee -> JS (library)', 1, 32
     for script in scripts
       console.log pad("  #{script}") + highlight(script.replace(".coffee", ".js"), 1)
-      exec "coffee --compile --bare --output #{target}/js/ lib/coffee/#{script}", errorLog
-
-task 'gems', 'Install required Ruby gems', (options) ->
-  exec 'gem install haml sass RedCloth', errorLog
+      exec "coffee --compile --output #{target}/js/ lib/coffee/#{script}", errorLog
 
 task 'haml', 'Compile HAML to development', (options) ->
-  target ?= "chrome"
+  target ?= "ext"
+  verifyTarget target
 
   fs.readdir "src/haml", (err, pages) ->
     console.log highlight 'HAML -> HTML', 1, 32
@@ -90,7 +89,8 @@ task 'haml', 'Compile HAML to development', (options) ->
       exec "haml src/haml/#{page} #{target}/#{htmlPage}", errorLog
 
 task 'sass', 'Compile SASS files to development', (options) ->
-  target ?= "chrome"
+  target ?= "ext"
+  verifyTarget target
 
   fs.readdir "src/sass", (err, sheets) ->
     console.log highlight 'SASS -> CSS', 1, 32
@@ -100,7 +100,8 @@ task 'sass', 'Compile SASS files to development', (options) ->
       exec "sass --no-cache src/sass/#{sheet}:#{target}/css/#{cssSheet}", errorLog
 
 task 'other', 'Copy other files to development', (options) ->
-  target ?= "chrome"
+  target ?= "ext"
+  verifyTarget target
   console.log 'Other: static CSS, images, HTML, vendor JavaScript and manifest'
   exec "cp -r src/css #{target}", errorLog
   exec "cp -r src/img #{target}", errorLog
@@ -108,9 +109,9 @@ task 'other', 'Copy other files to development', (options) ->
   exec "cp -r src/manifest.json #{target}/manifest.json", errorLog
 
 # Zipping
-task 'zip', 'Create a zip of the compiled extension', (options) ->
+task 'zip', 'Create a zip of the compiled extrary', (options) ->
   console.log highlight "Zipping extension...", 1, 32
-  exec "cd ./chrome"
+  exec "cd ./ext"
   exec "zip -r ../extension.zip *"
   exec "cd .."
-  console.log "Zipped chrome directory to extension.zip"
+  console.log "Zipped ext directory to extension.zip"
