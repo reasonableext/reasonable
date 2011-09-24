@@ -1,4 +1,4 @@
-PADDING = 25
+PADDING = 24
 
 fs = require 'fs'
 exec = require('child_process').exec
