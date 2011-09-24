@@ -60,4 +60,5 @@ using `cake`:
 
     git clone http://github.com/brymck/reasonable.git
     cd reasonable
+    git checkout v1.7.3
     cake build
