@@ -32,12 +32,6 @@ troll list more democratic) any info. Information on your tabs (i.e. your
 where the extension is active. I store zero personal or identifying information
 on folks using this extension.
 
-### Source
-
-https://github.com/brymck/reasonable
-
-Feel free to send me feedback here, there or anywhere else.
-
 Installation
 ------------
 
