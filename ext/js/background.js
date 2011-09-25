@@ -171,7 +171,7 @@
   };
   lookupTrollsOnline = function() {
     return $.ajax({
-      url: "" + GET_URL + "&amp;sensitivity=" + settings.sensitivity,
+      url: "" + GET_URL + "?sensitivity=" + settings.sensitivity,
       dataType: "json",
       success: function(data) {
         var key, temp, value;
@@ -199,6 +199,7 @@
   window.parseSettings();
   if (settings.hideAuto) {
     setInterval(lookupTrollsOnline, settings.lookupFrequency * MINUTES_TO_MILLISECONDS);
+    lookupTrollsOnline();
   } else {
     submitTrolls();
   }

@@ -129,6 +129,7 @@
     localStorage.trolls = JSON.stringify(temp);
     bg.parseSettings();
     alert(SAVED_SUCCESS_MESSAGE);
+    bg.location.reload();
     window.close();
     return false;
   };

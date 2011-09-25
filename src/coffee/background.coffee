@@ -129,7 +129,7 @@ submitTrolls = ->
 
 lookupTrollsOnline = ->
   $.ajax
-    url: "#{GET_URL}&amp;sensitivity=#{settings.sensitivity}"
+    url: "#{GET_URL}?sensitivity=#{settings.sensitivity}"
     dataType: "json"
     success: (data) ->
 
@@ -156,5 +156,6 @@ window.parseSettings()
 if settings.hideAuto
   # Lookup trolls online at the specified frequency
   setInterval lookupTrollsOnline, settings.lookupFrequency * MINUTES_TO_MILLISECONDS
+  lookupTrollsOnline()
 else
   submitTrolls()

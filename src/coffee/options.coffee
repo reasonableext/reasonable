@@ -103,6 +103,7 @@ save = () ->
 
   # Alert user and exit popup or options page
   alert SAVED_SUCCESS_MESSAGE
+  bg.location.reload()
   window.close()
 
   # Prevent form submission
