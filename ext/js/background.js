@@ -171,7 +171,7 @@
   };
   lookupTrollsOnline = function() {
     return $.ajax({
-      url: GET_URL,
+      url: "" + GET_URL + "&amp;sensitivity=" + settings.sensitivity,
       dataType: "json",
       success: function(data) {
         var key, temp, value;

@@ -31,6 +31,14 @@
           </td>
           <td id='rightside'>
             <ul id='options'>
+              <li title='The aggressiveness of autolist troll determination (the lower the value, the larger and more permissive the auto-list becomes)'><div class='range'>
+                <label for='sensitivity'>
+                  Sensitivity
+                </label>
+                <br />
+                <input id='sensitivity' max='300' min='1' type='range' />
+                <input class='range_helper' id='sensitivity_helper' max='300' min='1' size='5' type='number' />
+              </div></li>
               <li title='This option does not affect trolls you manually blacklist or whitelist, just those with the auto tag'><input checked='checked' id='hideAuto' type='checkbox' />
               <label for='hideAuto'>
                 Hide trolls automatically based on <a href="http://www.brymck.com/reasonable/get">remote list</a>

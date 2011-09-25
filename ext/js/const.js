@@ -10,6 +10,7 @@
     keepHistory: true,
     lookupFrequency: 15,
     name: "",
+    sensitivity: 30,
     shareTrolls: true,
     showAltText: true,
     showActivity: true,

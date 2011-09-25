@@ -1,5 +1,5 @@
 (function() {
-  var $add, $save, $troll, ENTER_KEY, SAVED_SUCCESS_MESSAGE, addTroll, attachClickEvents, bg, buildControll, buildTroll, load, save, sortTrolls;
+  var $add, $save, $troll, ENTER_KEY, SAVED_SUCCESS_MESSAGE, addTroll, attachClickEvents, bg, buildControll, buildTroll, load, save, sortTrolls, updateHelper, updateRange;
   ENTER_KEY = 13;
   SAVED_SUCCESS_MESSAGE = "Saved successfully!\n\nReload any open reason.com pages to reflect any changes you've made.";
   $save = $("#save");
@@ -89,7 +89,9 @@
           trolls = sortTrolls(value);
           break;
         case "name":
+        case "sensitivity":
           $option.val(value);
+          $("#" + ($option.attr("id")) + "_helper").val(value);
           break;
         default:
           $option.prop("checked", value);
@@ -113,7 +115,7 @@
       $checkbox = $(checkbox);
       localStorage[$checkbox.attr("id")] = JSON.stringify($checkbox.prop("checked"));
     }
-    _ref2 = $("#options input:text");
+    _ref2 = $("#options input:text, #options input[type=range]");
     for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
       textbox = _ref2[_j];
       localStorage[textbox.id] = JSON.stringify(textbox.value);
@@ -130,9 +132,21 @@
     window.close();
     return false;
   };
+  updateHelper = function(event) {
+    var $target;
+    $target = $(event.target);
+    return $("#" + ($target.attr("id")) + "_helper").val($target.val());
+  };
+  updateRange = function(event) {
+    var $target;
+    $target = $(event.target);
+    return $("#" + ($target.attr("id").replace("_helper", ""))).val($target.val());
+  };
   attachClickEvents = function() {
     $save.click(save);
-    return $add.click(addTroll);
+    $add.click(addTroll);
+    $("#options input[type=range]").change(updateHelper);
+    return $("#options .range_helper").change(updateRange).keyup(updateRange);
   };
   $(function() {
     load();

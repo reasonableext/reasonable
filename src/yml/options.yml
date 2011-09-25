@@ -1,3 +1,9 @@
+- id: sensitivity
+  help: The aggressiveness of autolist troll determination (the lower the value,
+        the larger and more permissive the auto-list becomes)
+  text: Sensitivity
+  type: range
+
 - id: hideAuto
   checked: true
   help: This option does not affect trolls you manually blacklist or whitelist,

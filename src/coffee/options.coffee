@@ -70,8 +70,9 @@ load = ->
     switch $option.attr "id"
       when "trolls"
         trolls = sortTrolls value
-      when "name"
+      when "name", "sensitivity"
         $option.val value
+        $("##{$option.attr "id"}_helper").val value
       else
         $option.prop "checked", value
 
@@ -88,8 +89,9 @@ save = () ->
     $checkbox = $(checkbox)
     localStorage[$checkbox.attr "id"] = JSON.stringify $checkbox.prop("checked")
 
-  # Handle inputs (name)
-  localStorage[textbox.id] = JSON.stringify textbox.value for textbox in $("#options input:text")
+  # Handle text and range inputs (name and sensitivity)
+  for textbox in $("#options input:text, #options input[type=range]")
+    localStorage[textbox.id] = JSON.stringify textbox.value
 
   # Handle trolls (those buttons are actually heavily styled radio buttons)
   temp = {}
@@ -106,9 +108,19 @@ save = () ->
   # Prevent form submission
   false
 
+updateHelper = (event) ->
+  $target = $(event.target)
+  $("##{$target.attr("id")}_helper").val $target.val()
+
+updateRange = (event) ->
+  $target = $(event.target)
+  $("##{$target.attr("id").replace("_helper", "")}").val $target.val()
+
 attachClickEvents = ->
   $save.click save
   $add.click  addTroll
+  $("#options input[type=range]").change(updateHelper)
+  $("#options .range_helper").change(updateRange).keyup(updateRange)
 
 $ ->
   load()

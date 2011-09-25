@@ -47,6 +47,14 @@
                       :textile
                          #{option["text"]}
                     %input{:id => option["id"], :type => "text", :placeholder => option["placeholder"]}
+                  - elsif option["type"] == "range"
+                    .range
+                      %label{:for => option["id"]}
+                        :textile
+                           #{option["text"]}
+                      %br
+                      %input{:id => option["id"], :type => "range", :min => 1, :max => 300}
+                      %input.range_helper{:id => "#{option["id"]}_helper", :type => "number", :min => 1, :max => 300, :size => 5}
             %button#save Save &amp; Exit
     - %w(const jquery-1.6.1.min jquery.brymck options).each do |script|
       %script{:type => "text/javascript", :src => "/js/#{script}.js"}
