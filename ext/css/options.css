@@ -196,3 +196,12 @@ input[type=text]#troll {
   border: 0;
   min-height: 18px;
   vertical-align: top; }
+
+ul.horizontal {
+  list-style-type: none;
+  padding-left: 0; }
+  ul.horizontal li {
+    display: inline-block; }
+
+.align-top {
+  vertical-align: top; }
