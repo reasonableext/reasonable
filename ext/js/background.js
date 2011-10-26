@@ -1,10 +1,16 @@
 (function() {
   var DAYS_TO_MILLISECONDS, MINUTES_TO_MILLISECONDS, SUBMIT_DAYS, lookupTrollsOnline, onlineList, submitTrolls;
+
   window.settings = {};
+
   onlineList = {};
+
   SUBMIT_DAYS = 3;
+
   DAYS_TO_MILLISECONDS = 86400000;
+
   MINUTES_TO_MILLISECONDS = 60000;
+
   window.parseSettings = function() {
     var key, temp, value, _ref;
     temp = {};
@@ -22,6 +28,7 @@
     }
     return window.settings = temp;
   };
+
   chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     var alreadyExists, datetime, index, value, _ref;
     switch (request.type) {
@@ -125,9 +132,11 @@
         return sendResponse({});
     }
   });
+
   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (tab.url.indexOf("reason.com") > -1) return chrome.pageAction.show(tabId);
   });
+
   submitTrolls = function() {
     var auto, black, current, troll, value, white, _ref;
     if (settings.shareTrolls) {
@@ -169,6 +178,7 @@
       }
     }
   };
+
   lookupTrollsOnline = function() {
     return $.ajax({
       url: "" + GET_URL + "?sensitivity=" + settings.sensitivity,
@@ -196,11 +206,14 @@
       }
     });
   };
+
   window.parseSettings();
+
   if (settings.hideAuto) {
     setInterval(lookupTrollsOnline, settings.lookupFrequency * MINUTES_TO_MILLISECONDS);
     lookupTrollsOnline();
   } else {
     submitTrolls();
   }
+
 }).call(this);

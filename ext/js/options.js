@@ -1,11 +1,18 @@
 (function() {
   var $add, $save, $troll, ENTER_KEY, SAVED_SUCCESS_MESSAGE, addTroll, attachClickEvents, bg, buildControll, buildTroll, load, save, sortTrolls, updateHelper, updateRange;
+
   ENTER_KEY = 13;
+
   SAVED_SUCCESS_MESSAGE = "Saved successfully!\n\nReload any open reason.com pages to reflect any changes you've made.";
+
   $save = $("#save");
+
   $add = $("#add");
+
   $troll = $("#troll");
+
   bg = chrome.extension.getBackgroundPage();
+
   sortTrolls = function(trolls) {
     var auto, black, index, key, sortFunction, temp, value, white;
     sortFunction = function(x, y) {
@@ -55,9 +62,11 @@
     localStorage.trolls = JSON.stringify(temp);
     return temp;
   };
+
   buildControll = function($td, key, value, comp) {
     return $td.append(("<input id='" + key + "_" + comp.value + "' type='radio' name='" + key + "'" + (value === comp.value ? " checked" : void 0) + " value='" + comp.value + "'>") + ("<label for='" + key + "_" + comp.value + "' class='actions'>" + comp.label + "</label>"));
   };
+
   buildTroll = function(key, value) {
     var $td, $trollConstructor;
     $trollConstructor = $("<tr><td class='name'>" + key + "</td></tr>");
@@ -70,11 +79,13 @@
     }));
     return $trollConstructor.append($td);
   };
+
   addTroll = function() {
     $("#trolls tbody").append(buildTroll($troll.val(), actions.black.value));
     $troll.val(null);
     return false;
   };
+
   load = function() {
     var $option, key, tKey, tValue, trolls, value;
     for (key in localStorage) {
@@ -107,6 +118,7 @@
       return $(".scrollContent").fitToWindow().keepFitToWindow();
     }
   };
+
   save = function() {
     var $checkbox, checkbox, radio, temp, textbox, _i, _j, _k, _len, _len2, _len3, _ref, _ref2, _ref3;
     _ref = $("#options input:checkbox");
@@ -133,22 +145,26 @@
     window.close();
     return false;
   };
+
   updateHelper = function(event) {
     var $target;
     $target = $(event.target);
     return $("#" + ($target.attr("id")) + "_helper").val($target.val());
   };
+
   updateRange = function(event) {
     var $target;
     $target = $(event.target);
     return $("#" + ($target.attr("id").replace("_helper", ""))).val($target.val());
   };
+
   attachClickEvents = function() {
     $save.click(save);
     $add.click(addTroll);
     $("#options input[type=range]").change(updateHelper);
     return $("#options .range_helper").change(updateRange).keyup(updateRange);
   };
+
   $(function() {
     load();
     $troll.bind("keydown", function(event) {
@@ -156,4 +172,5 @@
     });
     return attachClickEvents();
   });
+
 }).call(this);

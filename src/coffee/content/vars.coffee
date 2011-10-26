@@ -31,8 +31,8 @@ COMMENT_DATE_REGEX = ///
                         ([AP]M)                   # AM/PM
                      ///
 ACTIVITY_CUTOFFS = [
-   300000 # 5 minutes
-   900000 # 15 minutes
+  300000  # 5 minutes
+  900000  # 15 minutes
   1800000 # 30 minutes
   3600000 # 1 hour
   7200000 # 2 hours

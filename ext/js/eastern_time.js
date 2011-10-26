@@ -1,7 +1,10 @@
 (function() {
   var EST_OFFSET, MS_PER_HOUR, createUTC, dstStartEnd, dstTest;
+
   MS_PER_HOUR = 60 * 60 * 1000;
+
   EST_OFFSET = -5;
+
   createUTC = function(year, month, day, hour, minute, second, millisecond) {
     var utc;
     if (hour == null) hour = 0;
@@ -18,6 +21,7 @@
     utc.setUTCMilliseconds(millisecond);
     return utc;
   };
+
   dstStartEnd = function(year, offset) {
     var march, marchDay, november, novemberDay;
     if (offset == null) offset = 0;
@@ -34,12 +38,14 @@
       end: november
     };
   };
+
   dstTest = function(date, offset) {
     var startEnd;
     if (offset == null) offset = 0;
     startEnd = dstStartEnd(date.getUTCFullYear(), offset);
     return date >= startEnd.start && date <= startEnd.end;
   };
+
   window.createFromET = function(year, month, day, hour, minute, second, millisecond) {
     var utc;
     if (hour == null) hour = 0;
@@ -50,4 +56,5 @@
     utc.setUTCHours(utc.getUTCHours() - EST_OFFSET - (dstTest(utc, EST_OFFSET) ? 1 : 0));
     return utc;
   };
+
 }).call(this);

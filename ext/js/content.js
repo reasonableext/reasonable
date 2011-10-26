@@ -1,36 +1,68 @@
 (function() {
   var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, formatDate, getDate, getLink, getName, getPermalink, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
+
   QUICKLOAD_MAX_ITEMS = 20;
+
   URL_REGEX = /^https?:\/\/(www\.)?([^\/]+)?/i;
+
   PICTURE_REGEX = /(?:([^:\/?#]+):)?(?:\/\/([^\/?#]*))?([^?#]*\.(?:jpe?g|gif|png|bmp))(?:\?([^#]*))?(?:#(.*))?/i;
+
   YOUTUBE_REGEX = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9-_]+)(?:\#t\=[0-9]{2}m[0-9]{2}s)?/i;
+
   ARTICLE_REGEX = /reason\.com\/(.*?)(?:\#comment)?s?(?:\_[0-9]{6,7})?$/;
+
   ARTICLE_SHORTEN_REGEX = /^(?:archives|blog)?\/(?:19|20)[0-9]{2}\/(?:0[1-9]|1[0-2])\/(?:0[1-9]|[12][0-9]|3[0-1])\/(.*?)(?:\#|$)/;
+
   COLLAPSE = "show direct";
+
   UNCOLLAPSE = "show all";
+
   IGNORE = "ignore";
+
   UNIGNORE = "unignore";
+
   DATE_INDEX = 2;
+
   COMMENT_DATE_REGEX = /(1[0-2]|[1-9])\.(3[0-1]|[1-2][0-9]|[1-9])\.([0-9]{2})\s@\s(1[0-2]|[1-9])\:([0-5][0-9])([AP]M)/;
+
   ACTIVITY_CUTOFFS = [300000, 900000, 1800000, 3600000, 7200000];
+
   LATEST_COMMENT_COUNT = 5;
+
   AVATAR_PREFIX = "http://www.gravatar.com/avatar/";
+
   AVATAR_SUFFIX = "?s=40&d=identicon";
+
   MY_MD5 = "b5ce5f2f748ceefff8b6a5531d865a27";
+
   LIGHTS_OUT_OPACITY = 0.5;
+
   MINIMAL_OPACITY = 0.01;
+
   TOTAL_OPACITY = 1;
+
   FADE_SPEED = 500;
+
   MINIMAL_FADE_SPEED = 5;
+
   COMMENT_HISTORY = "Comment History";
+
   ESCAPE_KEY = 27;
+
   FIRST_MATCH = 1;
+
   QUICKLOAD_SPEED = 100;
+
   UPDATE_POST_TIMEOUT_LENGTH = 60000;
+
   months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
   settings = {};
+
   trolls = [];
+
   lightsOn = false;
+
   getName = function($strong) {
     var temp;
     if ($strong.children("a").size() > 0) {
@@ -40,6 +72,7 @@
     }
     return temp = temp.replace(/^\s|\s$/g, "");
   };
+
   getLink = function($strong) {
     var match, temp;
     if ($strong.children("a").size() > 0) {
@@ -55,6 +88,7 @@
       return "";
     }
   };
+
   blockTrolls = function(smoothTransitions) {
     var showHeight;
     showHeight = 0;
@@ -91,7 +125,9 @@
       return true;
     });
   };
+
   comments = [];
+
   getDate = function(node) {
     var match;
     match = COMMENT_DATE_REGEX.exec(node.nodeValue);
@@ -101,9 +137,11 @@
       return null;
     }
   };
+
   getPermalink = function($node) {
     return $node.attr("href");
   };
+
   showMedia = function() {
     if (settings.showPictures || settings.showYouTube) {
       $("div.com-block p a").each(function() {
@@ -142,6 +180,7 @@
       });
     }
   };
+
   viewThread = function() {
     var showAll, showDirects;
     showDirects = function() {
@@ -246,6 +285,7 @@
       return a.date < b.date;
     });
   };
+
   showActivity = function() {
     var $activity, $ul, activity, comment, commentCount, currentDate, cutoff, descByDate, i, index, latestComments, withinCutoff, _i, _len, _len2, _ref;
     if (settings.showActivity) {
@@ -295,6 +335,7 @@
       return $("body").append($activity);
     }
   };
+
   gravatars = function() {
     if (settings.showGravatar) {
       return $(".commentheader > strong").each(function() {
@@ -316,6 +357,7 @@
       });
     }
   };
+
   historyAndHighlight = function() {
     var $header, header, permalink, temp, urlMatches, _i, _len, _ref;
     if (settings.keepHistory || settings.highlightMe) {
@@ -355,6 +397,7 @@
       }
     }
   };
+
   showImagePopup = function(img) {
     var $box, $img, $win;
     $win = $(window);
@@ -369,6 +412,7 @@
       return lightsOn = true;
     }).attr("src", $(img).attr("src"));
   };
+
   altText = function() {
     if (settings.showAltText) {
       return $("div.post img[alt]").each(function() {
@@ -381,6 +425,7 @@
       });
     }
   };
+
   lightsOut = function() {
     var $box, $overlay, turnLightsOn;
     $overlay = $("<div id='ableLightsOut' style='height:" + ($(document).height()) + "px'>");
@@ -397,9 +442,11 @@
       if (lightsOn && event.which === ESCAPE_KEY) return turnLightsOn();
     });
   };
+
   removeGooglePlus = function() {
     if (settings.blockIframes) return $("li.google").remove();
   };
+
   quickInsert = function(tag, attrs, $textarea) {
     var endPos, endTag, endText, midText, startPos, startTag, startText, text, textarea;
     textarea = $textarea[0];
@@ -422,6 +469,7 @@
     textarea.selectionEnd = endPos + startTag.length;
     return false;
   };
+
   buildQuickInsert = function() {
     var buildToolbar;
     if (settings.showQuickInsert) {
@@ -448,11 +496,13 @@
       });
     }
   };
+
   formatDate = function(milliseconds) {
     var date;
     date = new Date(milliseconds);
     return "" + months[date.getMonth()] + " " + (date.getDate()) + ", " + (date.getFullYear());
   };
+
   buildQuickload = function() {
     var $quickload, $ul, count, date, shortenMatch, temp, value, _i, _len, _ref;
     if ($("#ableQuick").size() === 0) {
@@ -485,6 +535,7 @@
       }
     }
   };
+
   updatePosts = function() {
     if (settings.updatePosts) {
       $.ajax({
@@ -531,6 +582,7 @@
       return setTimeout(updatePosts, UPDATE_POST_TIMEOUT_LENGTH);
     }
   };
+
   commentOnlyRoutines = function() {
     gravatars();
     viewThread();
@@ -541,6 +593,7 @@
       return updatePosts();
     }), UPDATE_POST_TIMEOUT_LENGTH);
   };
+
   chrome.extension.sendRequest({
     type: "settings"
   }, function(response) {
@@ -557,4 +610,5 @@
       return commentOnlyRoutines();
     }
   });
+
 }).call(this);

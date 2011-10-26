@@ -21,6 +21,8 @@ chrome.extension.sendRequest { type: "settings" }, (response) ->
   # event for the comment opener link
   if window.location.href.indexOf("#comment") is -1
     buildQuickload()
-    $("div#commentcontrol").one "click", commentOnlyRoutines # fire only once
+
+    # Fire only once
+    $("div#commentcontrol").one "click", commentOnlyRoutines
   else
     commentOnlyRoutines()

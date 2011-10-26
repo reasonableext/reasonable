@@ -1,9 +1,12 @@
 (function() {
   var getSource, re;
+
   re = /(facebook|twitter)/;
+
   getSource = function(obj) {
     return obj.src || $(obj).data("src");
   };
+
   chrome.extension.sendRequest({
     type: "blockIframes"
   }, function(response) {
@@ -15,4 +18,5 @@
       });
     }
   });
+
 }).call(this);

@@ -1,4 +1,4 @@
-(function() {
+
   window.defaultSettings = {
     admin: "",
     autohideActivity: false,
@@ -23,9 +23,13 @@
     trolls: {},
     updatePosts: false
   };
+
   window.GET_URL = "http://www.brymck.com/reasonable/get";
+
   window.GIVE_URL = "http://www.brymck.com/reasonable/give";
+
   window.QUICKLOAD_MAX_ITEMS = 20;
+
   window.actions = {
     black: {
       label: "hide",
@@ -40,4 +44,3 @@
       value: "auto"
     }
   };
-}).call(this);
