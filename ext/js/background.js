@@ -137,74 +137,12 @@
     if (tab.url.indexOf("reason.com") > -1) return chrome.pageAction.show(tabId);
   });
 
-  submitTrolls = function() {
-    var auto, black, current, troll, value, white, _ref;
-    if (settings.shareTrolls) {
-      current = new Date();
-      if ((current.getTime() - settings.submitted) > SUBMIT_DAYS * DAYS_TO_MILLISECONDS) {
-        black = [];
-        white = [];
-        auto = [];
-        _ref = settings.trolls;
-        for (troll in _ref) {
-          value = _ref[troll];
-          switch (value) {
-            case actions.black.value:
-              black.push(troll);
-              break;
-            case actions.white.value:
-              white.push(troll);
-              break;
-            case actions.auto.value:
-              auto.push(troll);
-          }
-        }
-        return $.ajax({
-          type: "post",
-          url: GIVE_URL,
-          data: {
-            black: black.join(","),
-            white: white.join(","),
-            auto: auto.join(","),
-            admin: settings.admin,
-            hideAuto: settings.hideAuto
-          },
-          dataType: "text",
-          success: function(data) {
-            settings.submitted = current.getTime();
-            return localStorage.submitted = JSON.stringify(settings.submitted);
-          }
-        });
-      }
-    }
-  };
+  submitTrolls = function() {};
 
   lookupTrollsOnline = function() {
-    return $.ajax({
-      url: "" + GET_URL + "?sensitivity=" + settings.sensitivity,
-      dataType: "json",
-      success: function(data) {
-        var key, temp, value;
-        temp = JSON.parse(localStorage.trolls);
-        onlineList = data;
-        for (key in temp) {
-          value = temp[key];
-          if (value === actions.auto.value && !(key in onlineList)) {
-            delete temp[key];
-          }
-        }
-        for (key in onlineList) {
-          value = onlineList[key];
-          if (!(key in temp)) temp[key] = actions.auto.value;
-        }
-        window.settings.trolls = temp;
-        localStorage.trolls = JSON.stringify(temp);
-        return submitTrolls();
-      },
-      error: function() {
-        return submitTrolls();
-      }
-    });
+    var temp;
+    temp = JSON.parse(localStorage.trolls);
+    return window.settings.trolls = temp;
   };
 
   window.parseSettings();

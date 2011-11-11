@@ -99,57 +99,57 @@ chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
   chrome.pageAction.show tabId if tab.url.indexOf("reason.com") > -1
 
 submitTrolls = ->
-  if settings.shareTrolls
-    current = new Date()
+#  if settings.shareTrolls
+#    current = new Date()
 
-    if (current.getTime() - settings.submitted) > SUBMIT_DAYS * DAYS_TO_MILLISECONDS
-      black = []
-      white = []
-      auto  = []
+#    if (current.getTime() - settings.submitted) > SUBMIT_DAYS * DAYS_TO_MILLISECONDS
+#      black = []
+#      white = []
+#      auto  = []
 
-      for troll, value of settings.trolls
-        switch value
-          when actions.black.value then black.push troll
-          when actions.white.value then white.push troll
-          when actions.auto.value  then auto.push  troll
+#      for troll, value of settings.trolls
+#        switch value
+#          when actions.black.value then black.push troll
+#          when actions.white.value then white.push troll
+#          when actions.auto.value  then auto.push  troll
 
-      $.ajax
-        type: "post"
-        url:  GIVE_URL
-        data:
-          black: black.join ","
-          white: white.join ","
-          auto:  auto.join  ","
-          admin: settings.admin
-          hideAuto: settings.hideAuto
-        dataType: "text"
-        success: (data) ->
-          settings.submitted = current.getTime()
-          localStorage.submitted = JSON.stringify settings.submitted
+#      $.ajax
+#        type: "post"
+#        url:  GIVE_URL
+#        data:
+#          black: black.join ","
+#          white: white.join ","
+#          auto:  auto.join  ","
+#          admin: settings.admin
+#          hideAuto: settings.hideAuto
+#        dataType: "text"
+#        success: (data) ->
+#          settings.submitted = current.getTime()
+#          localStorage.submitted = JSON.stringify settings.submitted
 
 lookupTrollsOnline = ->
-  $.ajax
-    url: "#{GET_URL}?sensitivity=#{settings.sensitivity}"
-    dataType: "json"
-    success: (data) ->
+#  $.ajax
+#      url: "#{GET_URL}?sensitivity=#{settings.sensitivity}"
+#      dataType: "json"
+#      success: (data) ->
 
       temp = JSON.parse localStorage.trolls
-      onlineList = data
+#      onlineList = data
 
       # Remove those no longer listed as trolls
-      for key, value of temp
-        if value is actions.auto.value and key not of onlineList
-          delete temp[key]
+#      for key, value of temp
+#        if value is actions.auto.value and key not of onlineList
+#          delete temp[key]
 
       # Add new trolls
-      for key, value of onlineList
-        if key not of temp
-          temp[key] = actions.auto.value
+#      for key, value of onlineList
+#        if key not of temp
+#          temp[key] = actions.auto.value
 
       window.settings.trolls = temp
-      localStorage.trolls = JSON.stringify temp
-      submitTrolls()
-    error: -> submitTrolls()
+#      localStorage.trolls = JSON.stringify temp
+#      submitTrolls()
+#    error: -> submitTrolls()
 
 window.parseSettings()
 
