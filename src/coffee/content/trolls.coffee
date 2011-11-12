@@ -1,3 +1,6 @@
+getContent = ($strong) ->
+  paragraph.innerText for paragraph in $strong.parent().siblings("p")
+
 getName = ($strong) ->
   # Get name from STRONG tag encapsulating poster's name
   if $strong.children("a").size() > 0
@@ -28,19 +31,33 @@ blockTrolls = (smoothTransitions) ->
   showHeight = 0
 
   $("h2.commentheader strong").each () ->
-    $this   = $(this)
-    $ignore = $this.siblings "a.ignore"
-    name    = $ignore.data "name"
-    link    = $ignore.data "link"
-    isTroll = false
+    $this     = $(this)
+    $ignore   = $this.siblings "a.ignore"
+    name      = $ignore.data "name"
+    link      = $ignore.data "link"
+    isTroll   = false
+    isntTroll = false
 
     if settings.trolls[name]?
       if (settings.trolls[name] is actions.black.value) or (settings.trolls[name] is actions.auto.value and settings.hideAuto)
         isTroll = true
+      else
+        isntTroll = true
 
     if link isnt "" and settings.trolls[link]?
       if (settings.trolls[link] is actions.black.value) or (settings.trolls[link] is actions.auto.value and settings.hideAuto)
         isTroll = true
+      else
+        isntTroll = true
+
+    if settings.gambolLockdown and not isntTroll
+      content = getContent($this)
+      for paragraph in content
+        if WHITE_INDIAN.test(content) or WHITE_INDIAN_HEAP_BIG_YELL.test(content)
+          isTroll = true
+          break
+
+    # console.log "Troll status: " + isTroll
 
     if isTroll
       # If poster is a troll, strip A tag, add troll class, and hide comment body

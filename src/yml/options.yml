@@ -4,6 +4,11 @@
   text: Sensitivity
   type: range
 
+- id: gambolLockdown
+  checked: true
+  help: Institute the Gambol Lockdown
+  text: A few simple checks for White Injun
+
 - id: hideAuto
   checked: true
   help: This option does not affect trolls you manually blacklist or whitelist,

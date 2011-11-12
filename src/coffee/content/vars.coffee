@@ -39,6 +39,16 @@ ACTIVITY_CUTOFFS = [
 ]
 LATEST_COMMENT_COUNT = 5
 
+# White Indian
+WHITE_INDIAN = ///
+               city-state  # agriculture is great
+               |
+               gambol      # you are not free to gambol
+               ///i
+WHITE_INDIAN_HEAP_BIG_YELL = ///
+                             STATE  # shh
+                             ///
+
 # Avatars
 AVATAR_PREFIX = "http://www.gravatar.com/avatar/"
 AVATAR_SUFFIX = "?s=40&d=identicon"

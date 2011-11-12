@@ -26,40 +26,43 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
       settings.trolls[request.name] = actions.black.value
       settings.trolls[request.link] = actions.black.value if request.link
       localStorage.trolls = JSON.stringify settings.trolls
-      $.ajax
-        type: "post"
-        url: GIVE_URL
-        data:
-          black: request.name + (if request.link then ",#{request.link}" else "")
-          white: ""
-          auto: ""
-          admin: settings.admin
-          hideAuto: settings.hideAuto
+      # $.ajax
+      #   type: "post"
+      #   url: GIVE_URL
+      #   data:
+      #     black: request.name + (if request.link then ",#{request.link}" else "")
+      #     white: ""
+      #     auto: ""
+      #     admin: settings.admin
+      #     hideAuto: settings.hideAuto
       sendResponse success: true
     when "removeTroll"
       # If a poster is part of the online troll list we must whitelist him, otherwise
       # his post will only display if the user has remote list access turned off
-      if request.name of settings.trolls
-        if request.name of onlineList
-          settings.trolls[request.name] = actions.white.value
-        else
-          delete settings.trolls[request.name]
-      if request.link of settings.trolls
-        if request.link of onlineList
-          settings.trolls[request.link] = actions.white.value
-        else
-          delete settings.trolls[request.link]
+      # if request.name of settings.trolls
+      #   if request.name of onlineList
+      console.log "Whitelisting " + request.name
+      settings.trolls[request.name] = actions.white.value
+      #   else
+      #     delete settings.trolls[request.name]
+      # if request.link of settings.trolls
+      #   if request.link of onlineList
+      if request.link isnt ""
+        console.log "Whitelisting " + request.link
+        settings.trolls[request.link] = actions.white.value
+      #   else
+      #     delete settings.trolls[request.link]
 
-      localStorage.trolls = JSON.stringify settings.trolls
-      $.ajax
-        type: "post"
-        url: GIVE_URL
-        data:
-          black: ""
-          white: request.name + (if request.link then ",#{request.link}" else ""),
-          auto: ""
-          admin: settings.admin
-          hideAuto: settings.hideAuto
+      localStorage.trolls = JSON.stringify(settings.trolls)
+      # $.ajax
+      #   type: "post"
+      #   url: GIVE_URL
+      #   data:
+      #     black: ""
+      #     white: request.name + (if request.link then ",#{request.link}" else ""),
+      #     auto: ""
+      #     admin: settings.admin
+      #     hideAuto: settings.hideAuto
       sendResponse success: true
     when "keepHistory"
       datetime      = new Date()

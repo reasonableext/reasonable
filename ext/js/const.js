@@ -4,6 +4,7 @@
     autohideActivity: false,
     autohideHistory: true,
     blockIframes: false,
+    gambolLockdown: true,
     hideAuto: true,
     highlightMe: true,
     history: [],

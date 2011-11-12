@@ -1,5 +1,5 @@
 (function() {
-  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, formatDate, getDate, getLink, getName, getPermalink, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
+  var ACTIVITY_CUTOFFS, ARTICLE_REGEX, ARTICLE_SHORTEN_REGEX, AVATAR_PREFIX, AVATAR_SUFFIX, COLLAPSE, COMMENT_DATE_REGEX, COMMENT_HISTORY, DATE_INDEX, ESCAPE_KEY, FADE_SPEED, FIRST_MATCH, IGNORE, LATEST_COMMENT_COUNT, LIGHTS_OUT_OPACITY, MINIMAL_FADE_SPEED, MINIMAL_OPACITY, MY_MD5, PICTURE_REGEX, QUICKLOAD_MAX_ITEMS, QUICKLOAD_SPEED, TOTAL_OPACITY, UNCOLLAPSE, UNIGNORE, UPDATE_POST_TIMEOUT_LENGTH, URL_REGEX, WHITE_INDIAN, WHITE_INDIAN_HEAP_BIG_YELL, YOUTUBE_REGEX, altText, blockTrolls, buildQuickInsert, buildQuickload, commentOnlyRoutines, comments, formatDate, getContent, getDate, getLink, getName, getPermalink, gravatars, historyAndHighlight, lightsOn, lightsOut, months, quickInsert, removeGooglePlus, settings, showActivity, showImagePopup, showMedia, trolls, updatePosts, viewThread;
 
   QUICKLOAD_MAX_ITEMS = 20;
 
@@ -28,6 +28,10 @@
   ACTIVITY_CUTOFFS = [300000, 900000, 1800000, 3600000, 7200000];
 
   LATEST_COMMENT_COUNT = 5;
+
+  WHITE_INDIAN = /city-state|gambol/i;
+
+  WHITE_INDIAN_HEAP_BIG_YELL = /STATE/;
 
   AVATAR_PREFIX = "http://www.gravatar.com/avatar/";
 
@@ -63,6 +67,17 @@
 
   lightsOn = false;
 
+  getContent = function($strong) {
+    var paragraph, _i, _len, _ref, _results;
+    _ref = $strong.parent().siblings("p");
+    _results = [];
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      paragraph = _ref[_i];
+      _results.push(paragraph.innerText);
+    }
+    return _results;
+  };
+
   getName = function($strong) {
     var temp;
     if ($strong.children("a").size() > 0) {
@@ -93,20 +108,35 @@
     var showHeight;
     showHeight = 0;
     return $("h2.commentheader strong").each(function() {
-      var $body, $ignore, $this, isTroll, link, name;
+      var $body, $ignore, $this, content, isTroll, isntTroll, link, name, paragraph, _i, _len;
       $this = $(this);
       $ignore = $this.siblings("a.ignore");
       name = $ignore.data("name");
       link = $ignore.data("link");
       isTroll = false;
+      isntTroll = false;
       if (settings.trolls[name] != null) {
         if ((settings.trolls[name] === actions.black.value) || (settings.trolls[name] === actions.auto.value && settings.hideAuto)) {
           isTroll = true;
+        } else {
+          isntTroll = true;
         }
       }
       if (link !== "" && (settings.trolls[link] != null)) {
         if ((settings.trolls[link] === actions.black.value) || (settings.trolls[link] === actions.auto.value && settings.hideAuto)) {
           isTroll = true;
+        } else {
+          isntTroll = true;
+        }
+      }
+      if (settings.gambolLockdown && !isntTroll) {
+        content = getContent($this);
+        for (_i = 0, _len = content.length; _i < _len; _i++) {
+          paragraph = content[_i];
+          if (WHITE_INDIAN.test(content) || WHITE_INDIAN_HEAP_BIG_YELL.test(content)) {
+            isTroll = true;
+            break;
+          }
         }
       }
       if (isTroll) {

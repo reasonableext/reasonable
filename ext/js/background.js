@@ -40,47 +40,17 @@
         settings.trolls[request.name] = actions.black.value;
         if (request.link) settings.trolls[request.link] = actions.black.value;
         localStorage.trolls = JSON.stringify(settings.trolls);
-        $.ajax({
-          type: "post",
-          url: GIVE_URL,
-          data: {
-            black: request.name + (request.link ? "," + request.link : ""),
-            white: "",
-            auto: "",
-            admin: settings.admin,
-            hideAuto: settings.hideAuto
-          }
-        });
         return sendResponse({
           success: true
         });
       case "removeTroll":
-        if (request.name in settings.trolls) {
-          if (request.name in onlineList) {
-            settings.trolls[request.name] = actions.white.value;
-          } else {
-            delete settings.trolls[request.name];
-          }
-        }
-        if (request.link in settings.trolls) {
-          if (request.link in onlineList) {
-            settings.trolls[request.link] = actions.white.value;
-          } else {
-            delete settings.trolls[request.link];
-          }
+        console.log("Whitelisting " + request.name);
+        settings.trolls[request.name] = actions.white.value;
+        if (request.link !== "") {
+          console.log("Whitelisting " + request.link);
+          settings.trolls[request.link] = actions.white.value;
         }
         localStorage.trolls = JSON.stringify(settings.trolls);
-        $.ajax({
-          type: "post",
-          url: GIVE_URL,
-          data: {
-            black: "",
-            white: request.name + (request.link ? "," + request.link : ""),
-            auto: "",
-            admin: settings.admin,
-            hideAuto: settings.hideAuto
-          }
-        });
         return sendResponse({
           success: true
         });
