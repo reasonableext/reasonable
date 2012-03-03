@@ -13,7 +13,7 @@ window.parseSettings = ->
     # Set undefined settings to defaults
     unless temp[key]?
       temp[key] = value
-      localStorage[key] = JSON.stringify value
+      localStorage[key] = JSON.stringify(value)
 
   # Store temp object to settings
   window.settings = temp
@@ -25,7 +25,7 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
     when "addTroll"
       settings.trolls[request.name] = actions.black.value
       settings.trolls[request.link] = actions.black.value if request.link
-      localStorage.trolls = JSON.stringify settings.trolls
+      localStorage.trolls = JSON.stringify(settings.trolls)
       # $.ajax
       #   type: "post"
       #   url: GIVE_URL
