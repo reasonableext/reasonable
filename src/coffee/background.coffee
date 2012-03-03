@@ -98,8 +98,13 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
     else
       sendResponse {} # snub
 
+# Show page action icon if we're on reason.com
 chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
   chrome.pageAction.show tabId if tab.url.indexOf("reason.com") > -1
+
+# Direct page action clicks to the options page
+chrome.pageAction.onClicked.addListener (tab) ->
+  chrome.tabs.create url: "options.html"
 
 submitTrolls = ->
 #  if settings.shareTrolls

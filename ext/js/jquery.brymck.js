@@ -1,3 +1,4 @@
+(function() {
 
   jQuery.fn.center = function() {
     var $win;
@@ -38,3 +39,5 @@
     this[0].addEventListener("beforeload", fn, true);
     return this;
   };
+
+}).call(this);

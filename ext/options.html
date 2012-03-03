@@ -9,10 +9,11 @@
     <h1><img alt='logo' height='48' src='/img/icon_48.png' title='I put on my monocle and top hat' width='48' />reason<span class='able'>able</span></h1>
     <p>
       Hide trolls you don't want to see again, show the nice folks who have been improperly
-      maligned, and leave on auto to let the update script do its thing. Note that I do not
-      collect any identifying info via any of these options aside from server logs if you
-      update the troll list, but none of that information will ever be shared with a third
-      party.
+      maligned, and leave on auto to let the update script do its thing.
+    </p>
+    <p>
+      I do not collect any identifying info via any of these options aside from server logs if you
+      update the troll list, but none of that information will ever be shared with a third party.
     </p>
     <table id='container'>
       <tbody>
@@ -28,6 +29,17 @@
             </table>
             <br />
             <input id='troll' placeholder='Troll' type='text' /><button id='add'>Blacklist</button></td>
+          <td id='leftside'>
+            <table id='filters'>
+              <thead>
+                <tr>
+                  <th>Custom Filters</th>
+                </tr>
+              </thead>
+              <tbody class='scrollContent'></tbody>
+            </table>
+            <br />
+            <input id='filter' placeholder='/regex/' type='text' /><button id='add'>Blacklist</button></td>
           <td id='rightside'>
             <ul id='options'>
               <li title='The aggressiveness of autolist troll determination (the lower the value, the larger and more permissive the auto-list becomes)'><div class='range'>

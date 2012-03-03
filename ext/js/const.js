@@ -1,9 +1,11 @@
+(function() {
 
   window.defaultSettings = {
     admin: "",
     autohideActivity: false,
     autohideHistory: true,
     blockIframes: false,
+    filters: [],
     gambolLockdown: true,
     hideAuto: true,
     highlightMe: true,
@@ -45,3 +47,5 @@
       value: "auto"
     }
   };
+
+}).call(this);

@@ -107,6 +107,12 @@
     if (tab.url.indexOf("reason.com") > -1) return chrome.pageAction.show(tabId);
   });
 
+  chrome.pageAction.onClicked.addListener(function(tab) {
+    return chrome.tabs.create({
+      url: "options.html"
+    });
+  });
+
   submitTrolls = function() {};
 
   lookupTrollsOnline = function() {
