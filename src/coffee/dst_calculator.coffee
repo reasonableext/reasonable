@@ -19,5 +19,5 @@ class DSTCalculator
     first_sunday_of_november = 8 - november_offset
 
     @ranges[year] =
-      from: new Date(Date.UTC(year, 2, second_sunday_of_march, 2 - @offset))
+      from: new Date(Date.UTC(year,  2, second_sunday_of_march,   2 - @offset))
       to:   new Date(Date.UTC(year, 10, first_sunday_of_november, 1 - @offset))
