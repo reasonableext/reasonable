@@ -29,7 +29,7 @@
 
   LATEST_COMMENT_COUNT = 5;
 
-  WHITE_INDIAN = /city-state|gambol/i;
+  WHITE_INDIAN = /city-stat(?:e|ist|ism)|gambol|fibertar(?:d|ian)/i;
 
   WHITE_INDIAN_HEAP_BIG_YELL = /STATE/;
 

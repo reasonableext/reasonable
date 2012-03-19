@@ -4,6 +4,7 @@ window.defaultSettings =
   autohideActivity: false
   autohideHistory:  true
   blockIframes:     false
+  filters:          []
   gambolLockdown:   true
   hideAuto:         true
   highlightMe:      true

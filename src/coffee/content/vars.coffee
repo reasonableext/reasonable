@@ -41,9 +41,11 @@ LATEST_COMMENT_COUNT = 5
 
 # White Indian
 WHITE_INDIAN = ///
-               city-state  # agriculture is great
+               city-stat(?:e|ist|ism)  # agriculture is great
                |
-               gambol      # you are not free to gambol
+               gambol                  # you are not free to gambol
+               |
+               fibertar(?:d|ian)       # fiber is good for you
                ///i
 WHITE_INDIAN_HEAP_BIG_YELL = ///
                              STATE  # shh

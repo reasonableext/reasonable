@@ -14,14 +14,14 @@ getName = ($strong) ->
 
 getLink = ($strong) ->
   if $strong.children("a").size() > 0
-    temp = $("a", $strong).attr "href"
+    temp = $("a", $strong).attr("href")
 
     # For blogwhore filtering, get domain name if link is a URL
     match = temp.match URL_REGEX
     if match
       temp = JSON.stringify match[2]
     else
-      temp = temp.replace "mailto:", ""
+      temp = temp.replace("mailto:", "")
 
     # Replace quotation marks with blank spaces
     temp = temp.replace /"/g, ""
@@ -32,7 +32,7 @@ blockTrolls = (smoothTransitions) ->
 
   $("h2.commentheader strong").each () ->
     $this     = $(this)
-    $ignore   = $this.siblings "a.ignore"
+    $ignore   = $this.siblings("a.ignore")
     name      = $ignore.data "name"
     link      = $ignore.data "link"
     isTroll   = false
@@ -50,10 +50,11 @@ blockTrolls = (smoothTransitions) ->
       else
         isntTroll = true
 
-    if settings.gambolLockdown and not isntTroll
+    # Filter out all content matching the list of filters
+    unless isntTroll
       content = getContent($this)
       for paragraph in content
-        if WHITE_INDIAN.test(content) or WHITE_INDIAN_HEAP_BIG_YELL.test(content)
+        if settings.filters.test(content)
           isTroll = true
           break
 

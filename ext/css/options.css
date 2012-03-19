@@ -32,7 +32,7 @@ li {
 table {
   border-collapse: collapse; }
 
-#trolls thead {
+#trolls thead, #filters thead {
   background-color: #676799;
   color: white; }
 

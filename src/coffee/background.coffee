@@ -13,7 +13,7 @@ window.parseSettings = ->
     # Set undefined settings to defaults
     unless temp[key]?
       temp[key] = value
-      localStorage[key] = JSON.stringify value
+      localStorage[key] = JSON.stringify(value)
 
   # Store temp object to settings
   window.settings = temp
@@ -25,7 +25,7 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
     when "addTroll"
       settings.trolls[request.name] = actions.black.value
       settings.trolls[request.link] = actions.black.value if request.link
-      localStorage.trolls = JSON.stringify settings.trolls
+      localStorage.trolls = JSON.stringify(settings.trolls)
       # $.ajax
       #   type: "post"
       #   url: GIVE_URL
@@ -98,8 +98,13 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
     else
       sendResponse {} # snub
 
+# Show page action icon if we're on reason.com
 chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
   chrome.pageAction.show tabId if tab.url.indexOf("reason.com") > -1
+
+# Direct page action clicks to the options page
+chrome.pageAction.onClicked.addListener (tab) ->
+  chrome.tabs.create url: "options.html"
 
 submitTrolls = ->
 #  if settings.shareTrolls

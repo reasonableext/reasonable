@@ -13,10 +13,10 @@
       %span.able> able
     %p
       Hide trolls you don't want to see again, show the nice folks who have been improperly
-      maligned, and leave on auto to let the update script do its thing. Note that I do not
-      collect any identifying info via any of these options aside from server logs if you
-      update the troll list, but none of that information will ever be shared with a third
-      party.
+      maligned, and leave on auto to let the update script do its thing.
+    %p
+      I do not collect any identifying info via any of these options aside from server logs if you
+      update the troll list, but none of that information will ever be shared with a third party.
     %table#container
       %tbody
         %tr
@@ -28,6 +28,15 @@
               %tbody.scrollContent
             %br
             %input#troll{:type => "text", :placeholder => "Troll"}
+            %button#add> Blacklist
+          %td#leftside
+            %table#filters
+              %thead
+                %tr
+                  %th Custom Filters
+              %tbody.scrollContent
+            %br
+            %input#filter{:type => "text", :placeholder => "/regex/"}
             %button#add> Blacklist
           %td#rightside
             %ul#options
