@@ -56,8 +56,8 @@ task 'clear', 'Clear ext directory', (options) ->
 
 # Individual filetypes
 task 'coffee', 'Compile CoffeeScript to development', (options) ->
-  verifyTarget target
   target ?= "ext"
+  verifyTarget target
 
   fs.readdir "src/coffee", (err, scripts) ->
     console.log highlight 'Coffee -> JS (source)', 1, 32
@@ -65,11 +65,11 @@ task 'coffee', 'Compile CoffeeScript to development', (options) ->
       if path.extname(script) is ""
         console.log pad("  #{script}/") + highlight(script + ".js", 1)
         console.log "    #{subscript}.coffee" for subscript in contentScripts
-        exec "coffee --compile --join #{script}.js --output #{target}/js/
+        exec "coffee --bare --compile --join #{script}.js --output #{target}/js/
               #{concatenate "src/coffee/content", contentScripts, "coffee"}", errorLog
       else
         console.log pad("  #{script}") + highlight(script.replace(".coffee", ".js"), 1)
-        exec "coffee --compile --output #{target}/js/ src/coffee/#{script}", errorLog
+        exec "coffee --bare --compile --output #{target}/js/ src/coffee/#{script}", errorLog
 
   fs.readdir "lib/coffee", (err, scripts) ->
     console.log highlight 'Coffee -> JS (library)', 1, 32

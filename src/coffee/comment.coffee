@@ -4,6 +4,7 @@ class Comment
     header     = node.getElementsByTagName("h2")[0]
     @content   = (p.textContent for p in node.getElementsByTagName("p")).join("\n")
     @timestamp = extract_date(header.textContent)
+    @depth     = parseInt(node.className.substr(-1))
 
   # private
 
