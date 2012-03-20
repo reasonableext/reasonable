@@ -11,7 +11,7 @@ div_for_fixtures = ->
     document.body.appendChild div
   return div
 
-run_with_fixtures = (targets..., callback) ->
+with_fixtures = (targets..., callback) ->
   xml_http  = new XMLHttpRequest()
   responses = []
   for target in targets
