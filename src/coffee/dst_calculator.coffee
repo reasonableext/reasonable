@@ -4,7 +4,7 @@ class DSTCalculator
 
   is_dst: (date) ->
     year = date.getFullYear()
-    @add_range(year) unless year of @ranges
+    @range[year] = @calculate_range(year) unless year of @ranges
     (date >= @ranges[year].from) and (date <= @ranges[year].to)
 
   add_range: (year) ->
@@ -18,6 +18,5 @@ class DSTCalculator
     november_offset += 7 if november_offset is 0
     first_sunday_of_november = 8 - november_offset
 
-    @ranges[year] =
-      from: new Date(Date.UTC(year,  2, second_sunday_of_march,   2 - @offset))
-      to:   new Date(Date.UTC(year, 10, first_sunday_of_november, 1 - @offset))
+    from: new Date(Date.UTC(year,  2, second_sunday_of_march,   2 - @offset))
+    to:   new Date(Date.UTC(year, 10, first_sunday_of_november, 1 - @offset))

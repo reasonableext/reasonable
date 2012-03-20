@@ -30,8 +30,9 @@ class ContentFilter extends StringFilter
 
 # Regular expression filters
 class RegexFilter extends Filter
-  constructor: (text, flags) ->
-    @regex = new RegExp(text, flags)
+  constructor: (text) ->
+    split_text = text.split("/")
+    @regex = new RegExp(split_text[1], split_text[2])
 
 class NameRegexFilter extends RegexFilter
   is_troll: (comment) ->

@@ -40,7 +40,7 @@
             %button#add> Blacklist
           %td#rightside
             %ul#options
-              - YAML.load_file(File.dirname(__FILE__) + "/../yml/options.yml").each do |option|
+              - YAML.load_file(File.join(File.dirname(__FILE__), "/src/yml/options.yml")).each do |option|
                 - depth_class = "depth-#{option["depth"]}" unless option["depth"].nil?
                 %li{:class => depth_class, :title => option["help"]}<
                   - if option["type"].nil?
