@@ -8,8 +8,10 @@ require "sass"
 require_relative "spec/support/jasmine_config.rb"
 load "jasmine/tasks/jasmine.rake"
 
-EXTENSION_DIR = File.join(File.dirname(__FILE__), "ext")
-SOURCE_DIR    = File.join(File.dirname(__FILE__), "src")
+ROOT_DIR      = File.expand_path(File.dirname(__FILE__))
+EXTENSION_DIR = File.join(ROOT_DIR, "ext")
+SOURCE_DIR    = File.join(ROOT_DIR, "src")
+STATIC_EXTENSIONS = %w(json png)
 
 def verify_directory(path)
   FileUtils.mkdir_p(path) unless File.directory?(path)
@@ -20,6 +22,11 @@ def verify_extension_structure
   %w(css img js).each do |subdirectory|
     verify_directory File.join(EXTENSION_DIR, subdirectory)
   end
+end
+
+def manifest
+  require "json"
+  @manifest ||= JSON.parser.new(File.read(File.join(EXTENSION_DIR, "manifest.json"))).parse
 end
 
 def compile_sources(input_type, output_type, opts = {})
@@ -56,7 +63,8 @@ namespace :build do
 
   desc "Compile HAML to HTML"
   task :haml do
-    compile_sources("haml", "html", :top_level => true) { |c| Haml::Engine.new(c).render }
+    opts = { :top_level => true }
+    compile_sources("haml", "html", opts) { |c| Haml::Engine.new(c).render }
   end
 
   desc "Compile SASS to CSS"
@@ -68,12 +76,39 @@ end
 namespace :jasmine do
   desc "Compile CoffeeScript specs to JavaScript specs"
   task :compile do
-    compile_sources("coffee", "js", :input_dir => "../spec", :output_dir => "../spec" ) { |c| CoffeeScript.compile(c, :bare => false) }
+    opts = { :input_dir => "../spec", :output_dir => "../spec" }
+    compile_sources("coffee", "js", opts) { |c| CoffeeScript.compile(c, :bare => true) }
+  end
+end
+
+desc "Copy uncompiled assets from src/ to ext/"
+task :raw do
+  verify_extension_structure
+  STATIC_EXTENSIONS.each do |ext|
+    puts ext
+    Dir[File.join(SOURCE_DIR, "**", "*.#{ext}")].each do |path|
+      relative_path = path.sub(SOURCE_DIR, "").sub(/^\//, "")
+      puts "  #{relative_path}"
+      FileUtils.cp path, File.join(EXTENSION_DIR, relative_path)
+    end
+  end
+end
+
+desc "Zip extension"
+task :zip do
+  base_name = "#{manifest["name"]}_#{manifest["version"]}.zip"
+  zip_name  = File.join(ROOT_DIR, base_name)
+
+  File.delete(zip_name) if File.exists?(zip_name)
+
+  puts base_name
+  Dir.chdir(EXTENSION_DIR) do
+    puts %x[zip -T #{zip_name} *.* **/*.*]
   end
 end
 
 desc "Compile and copy over all extension files"
-task :build => ["build:coffee", "build:haml", "build:sass"]
+task :build => ["build:coffee", "build:haml", "build:sass", :raw]
 
 desc "Compile spec CoffeeScripts and setup tests"
 task :spec => ["jasmine:compile", "jasmine"]
