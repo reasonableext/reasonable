@@ -19,7 +19,7 @@ end
 
 def verify_extension_structure
   verify_directory EXTENSION_DIR
-  %w(css img js).each do |subdirectory|
+  %w(css img js js/content).each do |subdirectory|
     verify_directory File.join(EXTENSION_DIR, subdirectory)
   end
 end
@@ -40,13 +40,14 @@ def compile_sources(input_type, output_type, opts = {})
   }.merge(opts)
 
   output_dir = File.join(EXTENSION_DIR, opts[:output_dir], (opts[:top_level] ? "" : output_type))
-  input_dir  = File.join(SOURCE_DIR, opts[:input_dir])
+  input_dir  = File.join(SOURCE_DIR, opts[:input_dir], input_type)
 
   puts "#{input_type} => #{output_type}"
-  Dir[File.join(input_dir, input_type, "*.#{input_type}")].each do |path|
+  Dir[File.join(input_dir, "**", "*.#{input_type}")].each do |path|
+    sub_path = path.sub(input_dir, "")
     output_name   = "#{File.basename(path, ".*")}.#{output_type}"
-    output_path   = File.join(output_dir, output_name)
-    relative_path = File.join(opts[:output_dir], output_name).sub(/^[\/.]+/, "")
+    relative_path = File.join(File.dirname(sub_path), output_name).sub(/^[\/.]+/, "")
+    output_path   = File.join(output_dir, relative_path)
 
     File.open(output_path, "w") do |handle|
       puts "  #{relative_path}"

@@ -1,3 +1,4 @@
 describe "The truth", ->
   it "should be true", ->
-    expect(true).toBeTruthy()
+    run_with_fixtures "test.html", ->
+      expect(true).toBeTruthy()

@@ -1,5 +1,6 @@
 .DS_Store
 .sass-cache
 ext/
-spec/**/*.js
+spec/js/*.js
+spec/js/helpers/*.js
 *.zip

@@ -1,8 +1,7 @@
 src_files:
-  - js/*.js
+  - ext/js/*.js
 
 stylesheets:
-  - css/*.css
+  - ext/css/*.css
 
-src_dir: ext
 spec_dir: spec/js
