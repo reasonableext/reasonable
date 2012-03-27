@@ -1,9 +1,6 @@
-require "coffee-script"
 require "fileutils"
-require "haml"
 require "jasmine"
 require "RedCloth"
-require "sass"
 
 require_relative "spec/support/jasmine_config.rb"
 load "jasmine/tasks/jasmine.rake"
@@ -11,7 +8,7 @@ load "jasmine/tasks/jasmine.rake"
 ROOT_DIR      = File.expand_path(File.dirname(__FILE__))
 EXTENSION_DIR = File.join(ROOT_DIR, "ext")
 SOURCE_DIR    = File.join(ROOT_DIR, "src")
-STATIC_EXTENSIONS = %w(json png)
+STATIC_EXTENSIONS = %w(png)
 
 def verify_directory(path)
   FileUtils.mkdir_p(path) unless File.directory?(path)
@@ -19,7 +16,7 @@ end
 
 def verify_extension_structure
   verify_directory EXTENSION_DIR
-  %w(css img js js/content).each do |subdirectory|
+  %w(css img js).each do |subdirectory|
     verify_directory File.join(EXTENSION_DIR, subdirectory)
   end
 end
@@ -29,23 +26,17 @@ def manifest
   @manifest ||= JSON.parser.new(File.read(File.join(EXTENSION_DIR, "manifest.json"))).parse
 end
 
-def compile_sources(input_type, output_type, opts = {})
+def compile_sources(input_type, opts = {})
   verify_extension_structure
 
-  # Set default arguments
-  opts = {
-    :top_level  => false,
-    :input_dir  => "",
-    :output_dir => ""
-  }.merge(opts)
+  output_dir = File.join(EXTENSION_DIR, opts[:output_dir] || "")
+  input_dir  = File.join(SOURCE_DIR,    opts[:input_dir]  || "")
+  subdir_search = opts[:merge_subdirectories] ? "*" : "**"
 
-  output_dir = File.join(EXTENSION_DIR, opts[:output_dir], (opts[:top_level] ? "" : output_type))
-  input_dir  = File.join(SOURCE_DIR, opts[:input_dir], input_type)
-
-  puts "#{input_type} => #{output_type}"
-  Dir[File.join(input_dir, "**", "*.#{input_type}")].each do |path|
-    sub_path = path.sub(input_dir, "")
-    output_name   = "#{File.basename(path, ".*")}.#{output_type}"
+  puts input_type
+  Dir[File.join(input_dir, subdir_search, "*.*.#{input_type}")].each do |path|
+    sub_path      = path.sub(input_dir, "").sub(/^[\/.]+/, "")
+    output_name   = File.basename(path, ".*")
     relative_path = File.join(File.dirname(sub_path), output_name).sub(/^[\/.]+/, "")
     output_path   = File.join(output_dir, relative_path)
 
@@ -54,23 +45,51 @@ def compile_sources(input_type, output_type, opts = {})
       handle.puts yield(File.read(path))
     end
   end
+
+  if opts[:merge_subdirectories]
+    Dir[File.join(input_dir, "*", "*/")].each do |subdir|
+      files         = Dir[File.join(subdir, "*.*.#{input_type}")]
+      extension     = File.basename(files[0], ".*").split(".").last
+      result        = files.map { |p| File.read(p) }.join("\n")
+      sub_paths     = subdir.sub(input_dir, "").sub(/^[\/.]+/, "").split("/")
+      output_name   = "#{sub_paths.pop}.#{extension}"
+      sub_path      = sub_paths.join("/")
+      relative_path = File.join(sub_path, output_name).sub(/^[\/.]+/, "")
+      output_path   = File.join(output_dir, relative_path)
+
+      File.open(output_path, "w") do |handle|
+        puts "  #{relative_path}"
+        handle.puts yield(result)
+      end
+    end
+  end
 end
 
 namespace :build do
   desc "Compile CoffeeScript to JavaScript"
   task :coffee do
-    compile_sources("coffee", "js") { |c| CoffeeScript.compile(c, :bare => true) }
+    require "coffee-script"
+    opts = { :merge_subdirectories => true }
+    compile_sources("coffee", opts) { |c| CoffeeScript.compile(c, :bare => true) }
   end
 
   desc "Compile HAML to HTML"
   task :haml do
-    opts = { :top_level => true }
-    compile_sources("haml", "html", opts) { |c| Haml::Engine.new(c).render }
+    require "haml"
+    compile_sources("haml") { |c| Haml::Engine.new(c).render }
   end
 
   desc "Compile SASS to CSS"
   task :sass do
-    compile_sources("sass", "css") { |c| Sass::Engine.new(c).render }
+    require "sass"
+    compile_sources("sass") { |c| Sass::Engine.new(c).render }
+  end
+
+  desc "Compile YAML to JSON"
+  task :yml do
+    require "yaml"
+    require "json"
+    compile_sources("yml") { |c| JSON.pretty_generate(JSON.parse(YAML.load(c).to_json)) }
   end
 end
 
@@ -109,7 +128,7 @@ task :zip do
 end
 
 desc "Compile and copy over all extension files"
-task :build => ["build:coffee", "build:haml", "build:sass", :raw]
+task :build => ["build:coffee", "build:haml", "build:sass", "build:yml", :raw]
 
 desc "Compile spec CoffeeScripts and setup tests"
 task :spec => ["jasmine:compile", "jasmine"]
