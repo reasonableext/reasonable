@@ -32,3 +32,4 @@ Filter.add new ContentFilter("fuck")
 post = new Post(Filter.all)
 for comment in post.comments
   comment.hide() if comment.is_troll()
+  comment.add_controls()

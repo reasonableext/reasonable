@@ -1,3 +1,31 @@
+@mixin horizontal-list($delimiter)
+  ul
+    li
+      background-image: none
+      display: inline-block
+      padding-left: 0
+      &:before
+        content: $delimiter
+      &:first-child:before
+        content: ""
+
+div.com-block
+  div.filter_explanation
+    @include horizontal-list(" | ")
+    color: #bbb
+    a
+      color: #ffcabb
+      cursor: pointer
+      font-size: 14px
+    p
+      margin-bottom: 0
+
+  div.filters
+    @include horizontal-list("\a0")
+    display: inline-block
+    a
+      cursor: pointer
+
 div.ablePic
   border: 1px solid #ccc
   color: #333
