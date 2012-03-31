@@ -7,17 +7,17 @@ class Post
           new Comment(block, index, this)
       else
         null)()
-    @is_threaded = yes
+    @isThreaded = yes
 
   unthread: =>
-    @comments_by_timestamp ?= @comments.sort (a, b) -> a.timestamp - b.timestamp
-    for comment in @comments_by_timestamp
+    @commentsByTimestamp ?= @comments.sort (a, b) -> a.timestamp - b.timestamp
+    for comment in @commentsByTimestamp
       @container.appendChild comment.node
-      comment.hide_depth()
-    @is_threaded = no
+      comment.hideDepth()
+    @isThreaded = no
 
   thread: =>
     for comment in @comments
       @container.appendChild comment.node
-      comment.show_depth()
-    @is_threaded = yes
+      comment.showDepth()
+    @isThreaded = yes

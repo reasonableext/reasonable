@@ -1,19 +1,43 @@
 class Comment
   constructor: (@node, @index, @post) ->
-    @id        = @node.id.replace("comment_", "").parse_int()
+    @id        = @node.id.replace("comment_", "").parseInt()
     @header    = @node.getElementsByTagName("h2")[0]
     @content   = (p.textContent for p in @node.getElementsByTagName("p")).join("\n")
-    @depth     = @node.className.substr(-1).parse_int()
-    @timestamp = (=>
-      matches = @header.textContent.match(/(\d+)\.(\d+)\.(\d+) \@ (\d+):(\d+)(AM|PM)/)
-      [_, month, day, year, hours, minutes, ampm] = matches
-      year   = year.parse_int()  + 2000
-      month  = month.parse_int() - 1
-      hours  = hours.parse_int() + 5
-      hours += 12 if ampm is "PM"
-      new Date(Date.UTC(year, month, day, hours, minutes, 0)))()
+    @depth     = @node.className.substr(-1).parseInt()
+    @name      = @extractName()
+    @link      = @extractLink()
+    @timestamp = @extractTimestamp()
+
+  extractName: ->
+    strong = @header.firstChild
+    if strong.hasChildNodes()
+      strong.lastChild.textContent
+    else
+      strong.textContent
+
+  extractLink: ->
+    strong = @header.firstChild
+    if strong.hasChildNodes()
+      strong.lastChild.href
+    else
+      null
+    
+  extractTimestamp: ->
+    matches = @header.textContent.match(/(\d+)\.(\d+)\.(\d+) \@ (\d+):(\d+)(AM|PM)/)
+    [_, month, day, year, hours, minutes, ampm] = matches
+    year   = year.parseInt()  + 2000
+    month  = month.parseInt() - 1
+    hours  = hours.parseInt() + 5
+    hours += 12 if ampm is "PM"
+    new Date(Date.UTC(year, month, day, hours, minutes, 0))
+
+  # Filters are organized together to make it easier
+  filterName:    => Filter.createAndSave "string", "name", @name
+  filterLink:    => Filter.createAndSave "string", "link", @link
+  filterContent: -> Filter.dialog "string", "content"
+  filterCustom:  -> Filter.dialog "regex",  "content"
   
-  add_controls: ->
+  addControls: ->
     nodes = DOMBuilder.create([
       { tag: "span", class: "pipe", text: "|" }
       "filters: "
@@ -27,31 +51,39 @@ class Comment
             children:
               tag: "a"
               text: "name"
+              events:
+                click: @filterName
           }, {
             tag: "li"
             children:
               tag: "a"
               text: "link"
+              events:
+                click: @filterLink
           }, {
             tag: "li"
             children:
               tag: "a"
               text: "content"
+              events:
+                click: @filterContent
           }, {
             tag: "li"
             children:
               tag: "a"
               text: "custom"
+              events:
+                click: @filterCustom
           }]
       }
     ])
 
     @header.appendChild node for node, index in nodes
 
-  is_troll: ->
+  isTroll: ->
     @filters = []
     for filter in @post.filters
-      if filter.is_troll(this)
+      if filter.isTroll(this)
         @filters.push filter
     return (@filters.length isnt 0)
 
@@ -102,8 +134,8 @@ class Comment
 
       @node.appendChild(@explanation)
 
-  show_depth: ->
+  showDepth: ->
     @node.className = @node.className.replace("depth0", "depth#{@depth}")
 
-  hide_depth: ->
+  hideDepth: ->
     @node.className = @node.className.replace("depth#{@depth}", "depth0")

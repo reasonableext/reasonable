@@ -1,3 +1,13 @@
+/* Mixins */
+@mixin centered($width, $height)
+  height: $height
+  left: 50%
+  margin-left: -$width  / 2
+  margin-top:  -$height / 2
+  position: fixed
+  top: 50%
+  width: $width
+
 @mixin horizontal-list($delimiter)
   ul
     li
@@ -9,6 +19,7 @@
       &:first-child:before
         content: ""
 
+/* CSS */
 div.com-block
   div.filter_explanation
     @include horizontal-list(" | ")
@@ -25,6 +36,16 @@ div.com-block
     display: inline-block
     a
       cursor: pointer
+
+div#filter_dialog
+  @include centered(15em, 8em)
+  background-color: #fff
+  border: solid 1px #000
+  font-size: 14px
+  padding: 1em
+  -webkit-box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3)
+  label + input
+    margin-left: 1em
 
 div.ablePic
   border: 1px solid #ccc
@@ -55,14 +76,6 @@ div.ableHighlight
 /* Highlight myself */
 div.ableMe
   background-color: #ffc
-
-/* Deal with trolls */
-div.troll
-  color: #bbb
-  a, .commentactions button.comment_reply
-    color: #ffab88
-  img
-    opacity: 0.27
 
 iframe.youtube-player
   display: block

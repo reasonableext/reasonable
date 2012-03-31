@@ -27,9 +27,10 @@ chrome.extension.sendRequest { type: "settings" }, (response) ->
   else
     commentOnlyRoutines()
 
-Filter.add new ContentFilter("fiber")
-Filter.add new ContentFilter("fuck")
+Filter.add "regex", "content", "f(i|1)bertar(ian|d)"
+Filter.add "regex", "content", "city(.?)stat(e|ism)"
+console.debug Filter.serialize()
 post = new Post(Filter.all)
 for comment in post.comments
-  comment.hide() if comment.is_troll()
-  comment.add_controls()
+  comment.hide() if comment.isTroll()
+  comment.addControls()

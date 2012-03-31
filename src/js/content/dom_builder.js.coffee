@@ -1,7 +1,7 @@
 class DOMBuilder
   @create: (array) ->
-    is_array = (array instanceof Array)
-    array    = [array] unless is_array
+    isArray = (array instanceof Array)
+    array    = [array] unless isArray
 
     result = for item in array
       if item instanceof Object
@@ -11,8 +11,8 @@ class DOMBuilder
             when "tag"
               break
             when "events"
-              for event_key, callback of value
-                node.addEventListener event_key, callback
+              for eventKey, callback of value
+                node.addEventListener eventKey, callback
             when "children"
               # Recursively build child nodes
               children = DOMBuilder.create(value)
@@ -28,4 +28,4 @@ class DOMBuilder
         node
       else
         document.createTextNode(item)
-    if is_array then result else result[0]
+    if isArray then result else result[0]

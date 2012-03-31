@@ -1,2 +1,2 @@
-String::parse_int = ->
+String::parseInt = ->
   parseInt this, 10
