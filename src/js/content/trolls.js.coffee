@@ -1,32 +1,3 @@
-getContent = ($strong) ->
-  paragraph.innerText for paragraph in $strong.parent().siblings("p")
-
-getName = ($strong) ->
-  # Get name from STRONG tag encapsulating poster's name
-  if $strong.children("a").size() > 0
-    # Kind of ugly, but necessary to avoid CDATA
-    temp = $strong.children("a").text()
-  else
-    temp = $strong.text()
-
-  # Strip leading and trailing whitespace
-  temp = temp.replace /^\s|\s$/g, ""
-
-getLink = ($strong) ->
-  if $strong.children("a").size() > 0
-    temp = $("a", $strong).attr("href")
-
-    # For blogwhore filtering, get domain name if link is a URL
-    match = temp.match URL_REGEX
-    if match
-      temp = JSON.stringify match[2]
-    else
-      temp = temp.replace("mailto:", "")
-
-    # Replace quotation marks with blank spaces
-    temp = temp.replace /"/g, ""
-  else "" # ignore if no link
-
 blockTrolls = (smoothTransitions) ->
   showHeight = 0
 

@@ -48,7 +48,7 @@ def compile_sources(input_type, opts = {})
 
   if opts[:merge_subdirectories]
     Dir[File.join(input_dir, "*", "*/")].each do |subdir|
-      files         = Dir[File.join(subdir, "*.*.#{input_type}")]
+      files         = Dir[File.join(subdir, "**/*.*.#{input_type}")].sort
       extension     = File.basename(files[0], ".*").split(".").last
       result        = files.map { |p| File.read(p) }.join("\n")
       sub_paths     = subdir.sub(input_dir, "").sub(/^[\/.]+/, "").split("/")
@@ -61,6 +61,8 @@ def compile_sources(input_type, opts = {})
         puts "  #{relative_path}"
         handle.puts yield(result)
       end
+
+      files.each { |p| puts "    #{p.sub(subdir, "")}" }
     end
   end
 end

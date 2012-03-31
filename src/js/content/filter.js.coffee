@@ -1,4 +1,8 @@
 class Filter
+  @add: (filter) ->
+    @all ?= []
+    @all.push filter
+
   @by_type: (type, target, text) ->
     switch type
       when "string"

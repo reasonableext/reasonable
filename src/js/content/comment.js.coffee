@@ -1,0 +1,66 @@
+class Comment
+  constructor: (@node, @index, @post) ->
+    @id        = @node.id.replace("comment_", "").parse_int()
+    header     = @node.getElementsByTagName("h2")[0]
+    @content   = (p.textContent for p in @node.getElementsByTagName("p")).join("\n")
+    @depth     = @node.className.substr(-1).parse_int()
+    @timestamp = (=>
+      matches = header.textContent.match(/(\d+)\.(\d+)\.(\d+) \@ (\d+):(\d+)(AM|PM)/)
+      [_, month, day, year, hours, minutes, ampm] = matches
+      year   = year.parse_int()  + 2000
+      month  = month.parse_int() - 1
+      hours  = hours.parse_int() + 5
+      hours += 12 if ampm is "PM"
+      new Date(Date.UTC(year, month, day, hours, minutes, 0)))()
+
+  is_troll: ->
+    @filters = []
+    for filter in @post.filters
+      if filter.is_troll(this)
+        @filters.push filter
+    return (@filters.length isnt 0)
+
+  show: ->
+    for child in @node.children
+      if child.className isnt "filter_explanation"
+        child.style.removeProperty "display"
+      else
+        child.style.setProperty "display", "none"
+
+  hide: ->
+    for child in @node.children
+      if child.className is "filter_explanation"
+        child.style.removeProperty "display"
+      else
+        child.style.setProperty "display", "none"
+    unless @explanation?
+      @explanation = DOMBuilder.create(
+        tag: "div"
+        class: "filter_explanation"
+        children: [{
+          tag: "p"
+          text: "Filters applied:"
+        }, {
+          tag: "ul"
+          children: [
+            tag: "a"
+            text: "show this comment"
+            events:
+              click: => @show()
+          ]
+        }]
+      )
+
+      # ul = document.createElement("ul")
+      # for filter in @filters
+      #   li = document.createElement("li")
+      #   li.appendChild document.createTextNode(filter.text)
+      #   ul.appendChild li
+
+      @node.appendChild(@explanation)
+
+  show_depth: ->
+    @node.className = @node.className.replace("depth0", "depth#{@depth}")
+
+  hide_depth: ->
+    @node.className = @node.className.replace("depth#{@depth}", "depth0")

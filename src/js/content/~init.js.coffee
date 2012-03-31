@@ -26,3 +26,9 @@ chrome.extension.sendRequest { type: "settings" }, (response) ->
     $("div#commentcontrol").one "click", commentOnlyRoutines
   else
     commentOnlyRoutines()
+
+Filter.add new ContentFilter("fiber")
+Filter.add new ContentFilter("fuck")
+post = new Post(Filter.all)
+for comment in post.comments
+  comment.hide() if comment.is_troll()
