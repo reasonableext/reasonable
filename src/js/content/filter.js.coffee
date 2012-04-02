@@ -36,22 +36,33 @@ class Filter
 # String filters
 class StringFilter extends Filter
   constructor: (@text) ->
+    @lowerCase = (text is text.toLowerCase())
   type: "string"
 
 class NameFilter extends StringFilter
   target: "name"
   isTroll: (comment) ->
-    comment.name is @text
+    if @lowerCase
+      comment.name.toLowerCase() is @text
+    else
+      comment.name is @text
 
 class LinkFilter extends StringFilter
   target: "link"
   isTroll: (comment) ->
-    comment.link is @text
+    return false unless comment.link?
+    if @lowerCase
+      comment.link.toLowerCase() is @text
+    else
+      comment.link is @text
 
 class ContentFilter extends StringFilter
   target: "content"
   isTroll: (comment) ->
-    comment.content.indexOf(@text) isnt -1
+    if @lowerCase
+      comment.content.toLowerCase() is @text
+    else
+      comment.content is @text
 
 # Regular expression filters
 class RegexFilter extends Filter
@@ -67,6 +78,7 @@ class NameRegexFilter extends RegexFilter
 class LinkRegexFilter extends RegexFilter
   target: "link"
   isTroll: (comment) ->
+    return false unless comment.link?
     @regex.test comment.link
 
 class ContentRegexFilter extends RegexFilter
