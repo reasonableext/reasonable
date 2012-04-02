@@ -22,14 +22,22 @@
 /* CSS */
 div.com-block
   div.filter_explanation
-    @include horizontal-list(" | ")
+    @include horizontal-list(", ")
     color: #bbb
+    margin-bottom: 8px
+    opacity: 0
+    &:hover
+      opacity: 1
     a
       color: #ffcabb
       cursor: pointer
       font-size: 14px
     p
+      display: inline-block
       margin-bottom: 0
+    ul
+      display: inline-block
+      padding-left: 0.5em
 
   div.filters
     @include horizontal-list("\a0")
@@ -38,7 +46,7 @@ div.com-block
       cursor: pointer
 
 div#filter_dialog
-  @include centered(15em, 8em)
+  @include centered(25em, 6em)
   background-color: #fff
   border: solid 1px #000
   font-size: 14px

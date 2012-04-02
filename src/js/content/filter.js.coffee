@@ -8,23 +8,19 @@ class Filter
       when "string"
         switch target
           when "name"    then new NameFilter(text)
-          when "url"     then new LinkFilter(text)
+          when "link"    then new LinkFilter(text)
           when "content" then new ContentFilter(text)
       when "regex"
         switch target
           when "name"    then new NameRegexFilter(text)
-          when "url"     then new LinkRegexFilter(text)
+          when "link"    then new LinkRegexFilter(text)
           when "content" then new ContentRegexFilter(text)
 
-  @serialize: ->
-    result = {
-      string: { name: [], url: [], content: [] }
-      regex:  { name: [], url: [], content: [] }
-    }
-    for filter in @all
-      result[filter.type]
-      result[filter.type][filter.target] = filter.text
-    return result
+  @load: (json) =>
+    for own type, targets of json
+      for own target, texts of targets
+        for own text of texts
+          @add type, target, text
 
 # String filters
 class StringFilter
@@ -39,7 +35,7 @@ class NameFilter extends StringFilter
 class LinkFilter extends StringFilter
   target: "link"
   isTroll: (comment) ->
-    comment.email is @text
+    comment.link is @text
 
 class ContentFilter extends StringFilter
   target: "content"
@@ -60,7 +56,7 @@ class NameRegexFilter extends RegexFilter
 class LinkRegexFilter extends RegexFilter
   target: "link"
   isTroll: (comment) ->
-    @regex.test comment.email
+    @regex.test comment.link
 
 class ContentRegexFilter extends RegexFilter
   target: "content"

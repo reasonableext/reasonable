@@ -1,103 +1,58 @@
-Filter.dialog = (type = "string", target = "content") ->
+Filter.dialog = (type = "string", target = "content", text = null) ->
+  ESCAPE_KEY = 27
+
   if @dialog_box?
-    @dialog_box.style.removeProperty "display"
+    show()
   else
-    radioLabel = (type, label) ->
-      lowerLabel = label.toLowerCase()
-      [{
-        tag: "input"
-        type: "radio"
-        name: type
-        id: "filter_#{lowerLabel}"
-        value: lowerLabel
-      }, {
-        tag: "label"
-        for: "filter_#{lowerLabel}"
-        text: label
-      }]
+    @dialog_box           = document.createElement("div")
+    @dialog_box.id        = "filter_dialog"
+    @dialog_box.innerHTML = """
+      <form id="filter_form">
+        <div>
+          <input type="radio" name="type" id="filter_string" value="string">
+          <label for="filter_string">String</label>
+          <input type="radio" name="type" id="filter_regex" value="regex">
+          <label for="filter_regex">Regular expression</label>
+        </div>
+        <div>
+          <input type="radio" name="target" id="filter_name" value="name">
+          <label for="filter_name">Name</label>
+          <input type="radio" name="target" id="filter_link" value="link">
+          <label for="filter_link">Link</label>
+          <input type="radio" name="target" id="filter_content" value="content">
+          <label for="filter_content">Content</label>
+        </div>
+        <input type="text" id="filter_text" placeholder="Text" size="50">
+        <input type="submit" id="filter_submit">
+      </form>
+      """
 
-    types = targets = []
-    types.push.apply types, radioLabel("type", text) for text in ["String", "Regex"]
-    targets.push.apply targets, radioLabel("target", text) for text in ["Name", "Link", "Content"]
-
-    @dialog_box = DOMBuilder.create(
-      tag: "div"
-      id: "filter_dialog"
-      children:
-        tag: "form"
-        children: [{
-          tag: "div"
-          children: [{
-            tag: "input"
-            type: "radio"
-            name: "type"
-            id: "filter_string"
-            value: "string"
-          }, {
-            tag: "label"
-            for: "filter_string"
-            text: "String"
-          }, {
-            tag: "input"
-            type: "radio"
-            name: "type"
-            id: "filter_regex"
-            value: "regex"
-          }, {
-            tag: "label"
-            for: "filter_regex"
-            text: "Regular expression"
-          }]
-        }, {
-          tag: "div"
-          children: [{
-            tag: "input"
-            type: "radio"
-            name: "target"
-            id: "filter_name"
-            value: "name"
-          }, {
-            tag: "label"
-            for: "filter_name"
-            text: "Name"
-          }, {
-            tag: "input"
-            type: "radio"
-            name: "target"
-            id: "filter_link"
-            value: "link"
-          }, {
-            tag: "label"
-            for: "filter_link"
-            text: "Link"
-          }, {
-            tag: "input"
-            type: "radio"
-            name: "target"
-            id: "filter_content"
-            value: "content"
-          }, {
-            tag: "label"
-            for: "filter_content"
-            text: "Content"
-          }]
-        }, {
-          tag: "input"
-          type: "text"
-          id: "filter_text"
-          placeholder: "Text"
-        }, {
-          tag: "input"
-          type: "submit"
-          events:
-            submit: ->
-              alert "hi"
-              return false
-        }]
-    )
     document.body.appendChild @dialog_box
+    show = => @dialog_box.style.removeProperty "display"
+    hide = => @dialog_box.style.display = "none"
+    @dialog_box.onkeydown = (e) => hide() if e.keyCode is ESCAPE_KEY
+    form = document.getElementById("filter_form")
+
+    form.onsubmit = =>
+      chrome.extension.sendRequest method: "add", filter: Filter.serialize_form()
+      hide()
+      return false
 
   # Check defaults and select 
   document.getElementById("filter_#{type}").checked = yes
   document.getElementById("filter_#{target}").checked = yes
-  document.getElementById("filter_text").focus()
+  if text?
+    document.getElementById("filter_text").value = text
+    document.getElementById("filter_submit").focus()
+  else
+    document.getElementById("filter_text").focus()
+
+Filter.serialize_form = ->
+  @form = document.getElementById("filter_form")
+  extract_radio_value = (key) =>
+    for radio in @form.elements[key]
+      return radio.value if radio.checked
+  
+  type:   extract_radio_value("type")
+  target: extract_radio_value("target")
+  text:   @form.filter_text.value

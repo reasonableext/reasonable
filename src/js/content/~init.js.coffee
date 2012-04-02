@@ -9,8 +9,16 @@ commentOnlyRoutines = ->
 
 # Content scripts can't access local storage directly,
 # so we have to wait for info from the background script before proceeding
-chrome.extension.sendRequest { type: "settings" }, (response) ->
+chrome.extension.sendRequest method: "settings", (response) ->
+  Filter.load response.settings.filters
+  post = new Post(Filter.all)
+  console.debug post
+  for comment in post.comments
+    console.debug comment
+    comment.hide() if comment.isTroll()
+    comment.addControls()
   settings = response.settings
+
   removeGooglePlus()
   lightsOut()
   altText()
@@ -26,11 +34,3 @@ chrome.extension.sendRequest { type: "settings" }, (response) ->
     $("div#commentcontrol").one "click", commentOnlyRoutines
   else
     commentOnlyRoutines()
-
-Filter.add "regex", "content", "f(i|1)bertar(ian|d)"
-Filter.add "regex", "content", "city(.?)stat(e|ism)"
-console.debug Filter.serialize()
-post = new Post(Filter.all)
-for comment in post.comments
-  comment.hide() if comment.isTroll()
-  comment.addControls()

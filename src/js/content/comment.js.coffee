@@ -32,8 +32,8 @@ class Comment
     new Date(Date.UTC(year, month, day, hours, minutes, 0))
 
   # Filters are organized together to make it easier
-  filterName:    => Filter.createAndSave "string", "name", @name
-  filterLink:    => Filter.createAndSave "string", "link", @link
+  filterName:    => Filter.dialog "string", "name", @name
+  filterLink:    => Filter.dialog "string", "link", @link
   filterContent: -> Filter.dialog "string", "content"
   filterCustom:  -> Filter.dialog "regex",  "content"
   
@@ -81,6 +81,7 @@ class Comment
     @header.appendChild node for node, index in nodes
 
   isTroll: ->
+    console.debug @post
     @filters = []
     for filter in @post.filters
       if filter.isTroll(this)
@@ -114,6 +115,12 @@ class Comment
         }
 
       options.push
+        tag: "li"
+        children:
+          tag: "a"
+          text: "show once"
+          events:
+            click: => @show()
 
       @explanation = DOMBuilder.create(
         tag: "div"
@@ -124,11 +131,6 @@ class Comment
         }, {
           tag: "ul"
           children: options
-        }, {
-          tag: "a"
-          text: "show once"
-          events:
-            click: => @show()
         }]
       )
 
