@@ -1,5 +1,5 @@
 class Post
-  constructor: (@filters) ->
+  @load: (@filters) ->
     @container   = document.getElementById("commentcontainer")
     @comments    = (=>
       if @container?
@@ -9,14 +9,14 @@ class Post
         null)()
     @isThreaded = yes
 
-  unthread: =>
+  @unthread: =>
     @commentsByTimestamp ?= @comments.sort (a, b) -> a.timestamp - b.timestamp
     for comment in @commentsByTimestamp
       @container.appendChild comment.node
       comment.hideDepth()
     @isThreaded = no
 
-  thread: =>
+  @thread: =>
     for comment in @comments
       @container.appendChild comment.node
       comment.showDepth()

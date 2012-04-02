@@ -17,6 +17,7 @@ class Filter
           when "content" then new ContentRegexFilter(text)
 
   @load: (json) =>
+    @all = []
     for own type, targets of json
       for own target, texts of targets
         for own text of texts
@@ -61,4 +62,4 @@ class LinkRegexFilter extends RegexFilter
 class ContentRegexFilter extends RegexFilter
   target: "content"
   isTroll: (comment) ->
-    @regex.test comment.comment
+    @regex.test comment.content

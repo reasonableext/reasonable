@@ -2,7 +2,7 @@ Filter.dialog = (type = "string", target = "content", text = null) ->
   ESCAPE_KEY = 27
 
   if @dialog_box?
-    show()
+    @dialog_box.style.removeProperty "display"
   else
     @dialog_box           = document.createElement("div")
     @dialog_box.id        = "filter_dialog"
@@ -28,14 +28,18 @@ Filter.dialog = (type = "string", target = "content", text = null) ->
       """
 
     document.body.appendChild @dialog_box
-    show = => @dialog_box.style.removeProperty "display"
-    hide = => @dialog_box.style.display = "none"
-    @dialog_box.onkeydown = (e) => hide() if e.keyCode is ESCAPE_KEY
+    @dialog_box.onkeydown = (e) =>
+      @dialog_box.style.display = "none" if e.keyCode is ESCAPE_KEY
     form = document.getElementById("filter_form")
 
     form.onsubmit = =>
-      chrome.extension.sendRequest method: "add", filter: Filter.serialize_form()
-      hide()
+      chrome.extension.sendRequest method: "add", filter: Filter.serialize_form(), (response) ->
+        Filter.load response.filters
+        Post.filters = Filter.all
+        console.debug Post.filters
+        for comment in Post.comments
+          comment.hide() if comment.isTroll()
+      @dialog_box.style.display = "none"
       return false
 
   # Check defaults and select 
@@ -45,6 +49,7 @@ Filter.dialog = (type = "string", target = "content", text = null) ->
     document.getElementById("filter_text").value = text
     document.getElementById("filter_submit").focus()
   else
+    document.getElementById("filter_text").value = ""
     document.getElementById("filter_text").focus()
 
 Filter.serialize_form = ->

@@ -11,10 +11,8 @@ commentOnlyRoutines = ->
 # so we have to wait for info from the background script before proceeding
 chrome.extension.sendRequest method: "settings", (response) ->
   Filter.load response.settings.filters
-  post = new Post(Filter.all)
-  console.debug post
-  for comment in post.comments
-    console.debug comment
+  Post.load Filter.all
+  for comment in Post.comments
     comment.hide() if comment.isTroll()
     comment.addControls()
   settings = response.settings

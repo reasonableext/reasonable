@@ -81,7 +81,6 @@ class Comment
     @header.appendChild node for node, index in nodes
 
   isTroll: ->
-    console.debug @post
     @filters = []
     for filter in @post.filters
       if filter.isTroll(this)
