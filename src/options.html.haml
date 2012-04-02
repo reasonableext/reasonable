@@ -6,63 +6,72 @@
     - %w(options buttons).each do |style|
       %link{:rel => "stylesheet", :type => "text/css", :href => "/css/#{style}.css"}
   %body
-    %h1<
-      %img{:src => "/img/icon_48.png", :alt => "logo", :title => "I put on my monocle and top hat",
-           :height => "48", :width => "48"}>
-      reason
-      %span.able> able
-    %p
-      Hide trolls you don't want to see again, show the nice folks who have been improperly
-      maligned, and leave on auto to let the update script do its thing.
-    %p
-      I do not collect any identifying info via any of these options aside from server logs if you
-      update the troll list, but none of that information will ever be shared with a third party.
-    %table#container
-      %tbody
-        %tr
-          %td#leftside
-            %table#trolls
-              %thead
-                %tr
-                  %th Trolls
-              %tbody.scrollContent
-            %br
-            %input#troll{:type => "text", :placeholder => "Troll"}
-            %button#add> Blacklist
-          %td#leftside
-            %table#filters
-              %thead
-                %tr
-                  %th Custom Filters
-              %tbody.scrollContent
-            %br
-            %input#filter{:type => "text", :placeholder => "/regex/"}
-            %button#add> Blacklist
-          %td#rightside
-            %ul#options
-              - YAML.load_file(File.join(File.dirname(__FILE__), "/src/_data/options.yml")).each do |option|
-                - depth_class = "depth-#{option["depth"]}" unless option["depth"].nil?
-                %li{:class => depth_class, :title => option["help"]}<
-                  - if option["type"].nil?
-                    %input{:id => option["id"], :type => "checkbox", :checked => option["checked"]}
-                    %label{:for  => option["id"]}
-                      -# The extra space at the beginning of the text prevents
-                      -# RedCloth from wrapping the output in <p> tags
-                      :textile
-                         #{option["text"]}
-                  - elsif option["type"] == "text"
-                    %label{:for  => option["id"]}
-                      :textile
-                         #{option["text"]}
-                    %input{:id => option["id"], :type => "text", :placeholder => option["placeholder"]}
-                  - elsif option["type"] == "range"
-                    .range
+    %form#options_form
+      %h1<
+        %img{:src => "/img/icon_48.png", :alt => "logo", :title => "I put on my monocle and top hat",
+             :height => "48", :width => "48"}>
+        reason
+        %span.able> able
+      %p
+        Hide trolls you don't want to see again, show the nice folks who have been improperly
+        maligned, and leave on auto to let the update script do its thing.
+      %p
+        I do not collect any identifying info via any of these options aside from server logs if you
+        update the troll list, but none of that information will ever be shared with a third party.
+      %table#container
+        %tbody
+          %tr
+            %td#leftside
+              %table
+                %thead
+                  %tr
+                    %th
+                    %th String
+                    %th Regex
+                %tbody
+                  %tr
+                    %th Name
+                    %td
+                      %textarea#string_name{rows: 20}
+                    %td
+                      %textarea#regex_name{rows: 20}
+                  %tr
+                    %th Link
+                    %td
+                      %textarea#string_link{rows: 20}
+                    %td
+                      %textarea#regex_link{rows: 20}
+                  %tr
+                    %th Content
+                    %td
+                      %textarea#string_content{rows: 20}
+                    %td
+                      %textarea#regex_content{rows: 20}
+            %td#rightside
+              %ul#options
+                - YAML.load_file(File.join(File.dirname(__FILE__), "/src/_data/options.yml")).each do |option|
+                  - depth_class = "depth-#{option["depth"]}" unless option["depth"].nil?
+                  %li{:class => depth_class, title: option["help"]}<
+                    - if option["type"].nil?
+                      %input{id: option["id"], type: "checkbox", checked: option["checked"]}
+                      %label{:for  => option["id"]}
+                        -# The extra space at the beginning of the text prevents
+                        -# RedCloth from wrapping the output in <p> tags
+                        :textile
+                           #{option["text"]}
+                    - elsif option["type"] == "text"
                       %label{:for => option["id"]}
                         :textile
                            #{option["text"]}
-                      %br
-                      %input{:id => option["id"], :type => "range", :min => 1, :max => 300}
-                      %input.range_helper{:id => "#{option["id"]}_helper", :type => "number", :min => 1, :max => 300, :size => 5}
-            %button#save Save &amp; Exit
-    - %w(const jquery-1.6.1.min jquery.brymck options).each do |script|
+                      %input{id: option["id"], type: "text", placeholder: option["placeholder"]}
+                    - elsif option["type"] == "range"
+                      .range
+                        %label{:for => option["id"]}
+                          :textile
+                             #{option["text"]}
+                        %br
+                        %input{id: option["id"], type: "range", min: 1, max: 300}
+                        %input.range_helper{id: "#{option["id"]}_helper", type: "number", min: 1, max: 300, size: 5}
+              %input#save{type: :submit, value: "Save"}
+    - %w(options).each do |script|
       %script{:type => "text/javascript", :src => "/js/#{script}.js"}
