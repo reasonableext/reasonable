@@ -8,6 +8,12 @@ class Comment
     @link      = @extractLink()
     @timestamp = @extractTimestamp()
 
+    if @name is Settings.username
+      @isMe = yes
+      @node.className += " ableMe"
+    else
+      @isMe = no
+
   extractName: ->
     strong = @header.firstChild
     if strong.hasChildNodes()
@@ -90,12 +96,18 @@ class Comment
   toggle: (status) ->
     if status then @show() else @hide()
 
+  runExtensions: ->
+    for extension in Comment.extensions
+      extension.run this
+
   show: ->
+    return if @visible
     for child in @node.children
       if child.className isnt "filter_explanation"
         child.style.removeProperty "display"
       else
         child.style.setProperty "display", "none"
+    @visible = yes
 
   hide: ->
     # Show only the explanation of why content is filtered
@@ -137,9 +149,14 @@ class Comment
     )
 
     @node.appendChild(@explanation)
+    @visible = no
 
   showDepth: ->
     @node.className = @node.className.replace("depth0", "depth#{@depth}")
 
   hideDepth: ->
     @node.className = @node.className.replace("depth#{@depth}", "depth0")
+
+  @addExtension: (extension) ->
+    @extensions ?= []
+    @extensions.push extension

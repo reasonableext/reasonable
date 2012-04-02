@@ -36,7 +36,6 @@ Filter.dialog = (type = "string", target = "content", text = null) ->
       chrome.extension.sendRequest method: "add", filter: Filter.serialize_form(), (response) ->
         Filter.load response.filters
         Post.filters = Filter.all
-        console.debug Post.filters
         for comment in Post.comments
           comment.hide() if comment.isTroll()
       @dialog_box.style.display = "none"

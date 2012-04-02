@@ -1,5 +1,5 @@
 body, input
-  font-family: verdana
+  font-family: sans-serif
   font-size: 12px
 
 /* Logo */
@@ -9,201 +9,34 @@ h1
     color: #676799
     text-shadow: 0 0 1px rgba(103, 103, 153, 0.5)
 
-td#rightside
-  /* Yes, I'm aware that I'm using tables for page layout.
-     It's much cleaner than using divs because Chrome loves wrapping
-     them to the next line when in popup mode */
-  min-width: 28em
-
-td.actions
-  min-width: 11.8em
-  word-wrap: false
-
-td#leftside, td#rightside 
-  vertical-align: top
 
 ul#options
   margin-top: 0
   padding: 0
-
-li
-  list-style-type: none
-
-table
-  border-collapse: collapse
-
-#trolls, #filters
-  thead
-    background-color: #676799
-    color: #fff
-
-button, input[type=radio]:checked + label
-  background-color: #8586b1
-  border: 1px solid #8586b1
-  color: #fff
-
-.remove
-  border-radius: 2px
-  font-size: 9px
-  height: 12px
-  margin: 0 0 0 4px
-  padding: 0 4px 1px 4px
-  -webkit-border-horizontal-spacing: 0
-  -webkit-border-vertical-spacing: 0
-
-input[type=radio] + label
-  background-color: #e8e8f0
-  border: 1px solid #aeafcb
-  color: #63659c
-  padding-top: 1px
-
-button
-  border-radius: 4px
-  padding: 5px 1em
-
-button:hover
-  -webkit-animation-name: hover
-
-input[type=radio]:not(:checked) + label:hover
-  -webkit-animation-name: lightHover
-
-button:hover, input[type=radio]:not(:checked) + label:hover
-  background-color: #ff8
-  border-color: darkorange
-  color: darkorange
-  cursor: pointer
-  -webkit-animation-duration: 0.5s
-  -webkit-animation-iteration-count: 1
-  -webkit-box-shadow: 0 0 18px #ff8
-  z-index: 100
-
-input[type=radio]:checked + label:hover
-  background-color: #ff4
-  border-color: darkorange
-  color: darkorange
-  cursor: pointer
-  -webkit-animation-name: checkedHover
-  -webkit-animation-duration: 0.5s
-  -webkit-animation-iteration-count: 1
-  -webkit-box-shadow: 0 0 18px #ff8
-  z-index: 100
-
-/* Button glow animation */
-@-webkit-keyframes hover
-  from
-    background-color: #8586b1
-    border-color: #8586b1
-    color: #fff
-    -webkit-box-shadow: 0 0 0 #8586b1
-    z-index: 100
-  to
-    background-color: #ff8
-    border-color: darkorange
-    color: darkorange
-    -webkit-box-shadow: 0 0 18px #ff8
-    z-index: 100
-
-@-webkit-keyframes lightHover
-  from
-    background-color: #e8e8f0
-    border-color: #aeafcb
-    color: #63659c
-    -webkit-box-shadow: 0 0 0 #e8e8f0
-    z-index: 100
-  to
-    background-color: #ff8
-    border-color: darkorange
-    color: darkorange
-    -webkit-box-shadow: 0 0 18px #ff8
-    z-index: 100
-
-@-webkit-keyframes checkedHover
-  from
-    background-color: #ff8
-    border-color: darkorange
-    color: darkorange
-    -webkit-box-shadow: 0 0 18px #ff8
-    z-index: 100
-  to
-    background-color: #ff4
-    border-color: darkorange
-    color: darkorange
-    -webkit-box-shadow: 0 0 18px #ff8
-    z-index: 100
-
-#save
-  font-size: 1.5em
-  margin-left: 3em
-
-#troll
-  line-height: 16px
-  margin-right: 0
-
-#add
-  border-top-left-radius: 0
-  border-bottom-left-radius: 0
-  border-left: none
-  line-height: 10px
-  margin-left: 0
-
-tbody.scrollContent
-  display: block
-  height: 262px
-  overflow-x: hidden
-  overflow-y: scroll
-
-input[type=radio]
-  display: none
-
-td label:nth-child(2)
-  border-top-left-radius: 4px
-  border-bottom-left-radius: 4px
-
-td input[type=radio] + label:nth-child(4)
-  border-left: 0
-  border-right: 0
-
-td label:nth-child(6)
-  border-top-right-radius: 4px
-  border-bottom-right-radius: 4px
-
-input[type=radio] + label
-  padding-left: 4px
-  padding-right: 4px
-
-input[type=radio]:checked + label
-  background-color: #ff8
-  border-color: darkorange
-  color: darkorange
-  -webkit-box-shadow: 0 0 18px #ff8
-
-label
-  cursor: pointer
-
-#trolls tbody tr:nth-child(odd) td
-  background-color: #f0f0f4
-
-li.depth-1
-  padding-left: 2em
-
-input[type=text]
-  border: 1px solid #888
-  padding: 2px
-
-input[type=text]#troll
-  border-right: none
-
-.range
-  .range_helper
-    border: 0
-    min-height: 18px
-    vertical-align: top
+  li
+    list-style-type: none
 
 ul.horizontal
   list-style-type: none
   padding-left: 0
   li
     display: inline-block
+
+table
+  border-collapse: collapse
+  td#rightside
+    /* Yes, I'm aware that I'm using tables for page layout.
+       It's much cleaner than using divs because Chrome loves wrapping
+       them to the next line when in popup mode */
+    min-width: 28em
+  td.actions
+    min-width: 11.8em
+    word-wrap: false
+  td#leftside, td#rightside 
+    vertical-align: top
+
+label
+  cursor: pointer
 
 .align-top
   vertical-align: top

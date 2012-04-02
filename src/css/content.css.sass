@@ -19,6 +19,9 @@
       &:first-child:before
         content: ""
 
+@mixin shadowed($size, $opacity)
+  -webkit-box-shadow: $size $size $size rgba(0, 0, 0, $opacity)
+
 /* CSS */
 div.com-block
   div.filter_explanation
@@ -47,11 +50,11 @@ div.com-block
 
 div#filter_dialog
   @include centered(25em, 6em)
+  @include shadowed(10px, 0.3)
   background-color: #fff
   border: solid 1px #000
   font-size: 14px
   padding: 1em
-  -webkit-box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3)
   label + input
     margin-left: 1em
 
@@ -187,3 +190,15 @@ img.ableGravatar
   border-top: 1px solid #b6bac0
   bottom: 0
   min-width: 10em
+
+#ableControls
+  @include shadowed(4px, 0.2)
+  border: solid 1px
+  bottom: 10px
+  font-size: 12px
+  padding: 0.25em
+  position: fixed
+  right: 10px
+  z-index: 1
+  a
+    cursor: pointer

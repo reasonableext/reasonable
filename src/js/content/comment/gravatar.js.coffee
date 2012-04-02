@@ -6,11 +6,12 @@ class Comment.GravatarExtension
   run: (comment) ->
     if comment.name is "Amakudari"
       hash = @MY_MD5
-    else if comment.link.indexOf("mailto:") is 0
+    else if comment.link?
       hash = MD5.hexDigest(comment.link.replace("mailto:", ""))
     else
-      return
+      hash = MD5.hexDigest(comment.name)
     
     image = document.createElement("img")
     image.className = "ableGravatar"
     image.src = @AVATAR_PREFIX + hash + @AVATAR_SUFFIX
+    comment.node.insertBefore image, comment.node.firstChild

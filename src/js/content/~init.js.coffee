@@ -1,34 +1,14 @@
-# Only run these if there is a comment section displayed
-commentOnlyRoutines = ->
-  gravatars()
-  viewThread()
-  blockTrolls false
-  historyAndHighlight()
-  showActivity()
-  setTimeout ( () -> updatePosts() ), UPDATE_POST_TIMEOUT_LENGTH
-
 # Content scripts can't access local storage directly,
 # so we have to wait for info from the background script before proceeding
 chrome.extension.sendRequest method: "settings", (response) ->
-  Filter.load response.settings.filters
-  Post.load Filter.all
-  for comment in Post.comments
-    comment.hide() if comment.isTroll()
-    comment.addControls()
-  settings = response.settings
+  Settings.load response.settings
+  Filter.load Settings.filters
 
-  removeGooglePlus()
-  lightsOut()
-  altText()
-  showMedia()
-  buildQuickInsert()
+  # Load extensions for comments
+  Comment.addExtension new Comment.GravatarExtension() if Settings.showGravatar
+  Comment.addExtension new Comment.ImageExtension()    if Settings.showImage
+  Comment.addExtension new Comment.YouTubeExtension()  if Settings.showYouTube
 
-  # Run automatically if comments are open, otherwise bind to the click
-  # event for the comment opener link
-  if window.location.href.indexOf("#comment") is -1
-    buildQuickload()
+  Post.load(Filter.all).runEverything()
 
-    # Fire only once
-    $("div#commentcontrol").one "click", commentOnlyRoutines
-  else
-    commentOnlyRoutines()
+  Controls.load()

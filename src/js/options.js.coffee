@@ -28,8 +28,11 @@ class Options
             targets = [ "name", "link", "content" ]
             for type in types
               for target in targets
-                id = "#{type}_#{target}"
-                texts = document.getElementById(id).value.split("\n")
+                id    = "#{type}_#{target}"
+                value = document.getElementById(id).value
+
+                # Prevent blank textareas from introducing blank keys
+                texts = if value is "" then [] else value.split("\n")
 
                 # Remove deleted keys from background settings
                 for own key of @settings.filters[type][target]

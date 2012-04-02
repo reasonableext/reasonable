@@ -13,41 +13,39 @@
         reason
         %span.able> able
       %p
-        Hide trolls you don't want to see again, show the nice folks who have been improperly
-        maligned, and leave on auto to let the update script do its thing.
-      %p
         I do not collect any identifying info via any of these options aside from server logs if you
         update the troll list, but none of that information will ever be shared with a third party.
       %table#container
         %tbody
           %tr
             %td#leftside
+              %h3 Trolls
               %table
                 %thead
                   %tr
                     %th
-                    %th String
-                    %th Regex
+                    %th Name
+                    %th Link
+                    %th Content
                 %tbody
                   %tr
-                    %th Name
+                    %th String
                     %td
-                      %textarea#string_name{rows: 20}
+                      %textarea#string_name{rows: 15}
                     %td
-                      %textarea#regex_name{rows: 20}
+                      %textarea#string_link{rows: 15}
+                    %td
+                      %textarea#string_content{rows: 15}
                   %tr
-                    %th Link
+                    %th Regex
                     %td
-                      %textarea#string_link{rows: 20}
+                      %textarea#regex_name{rows: 15}
                     %td
-                      %textarea#regex_link{rows: 20}
-                  %tr
-                    %th Content
+                      %textarea#regex_link{rows: 15}
                     %td
-                      %textarea#string_content{rows: 20}
-                    %td
-                      %textarea#regex_content{rows: 20}
+                      %textarea#regex_content{rows: 15}
             %td#rightside
+              %h3 Options
               %ul#options
                 - YAML.load_file(File.join(File.dirname(__FILE__), "/src/_data/options.yml")).each do |option|
                   - depth_class = "depth-#{option["depth"]}" unless option["depth"].nil?

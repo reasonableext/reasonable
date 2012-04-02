@@ -1,13 +1,14 @@
 class Post
   @load: (@filters) ->
     @container   = document.getElementById("commentcontainer")
-    @comments    = (=>
+    @comments    = do =>
       if @container?
         for block, index in @container.getElementsByClassName("com-block")
           new Comment(block, index, this)
       else
-        null)()
+        null
     @isThreaded = yes
+    this
 
   @reload: ->
     @filters = Filter.all
@@ -17,8 +18,15 @@ class Post
     for comment in @comments
       comment.toggle not comment.isTroll()
 
+  @runEverything: ->
+    for comment in @comments
+      comment.runExtensions()
+      comment.addControls()
+      comment.toggle not comment.isTroll()
+
   @unthread: =>
-    @commentsByTimestamp ?= @comments.sort (a, b) -> a.timestamp - b.timestamp
+    # slice(0) makes a clone of the original comments array
+    @commentsByTimestamp ?= @comments.slice(0).sort (a, b) -> a.timestamp - b.timestamp
     for comment in @commentsByTimestamp
       @container.appendChild comment.node
       comment.hideDepth()
