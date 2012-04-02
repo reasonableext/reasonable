@@ -9,6 +9,14 @@ class Post
         null)()
     @isThreaded = yes
 
+  @reload: ->
+    @filters = Filter.all
+    this
+
+  @runFilters: ->
+    for comment in @comments
+      comment.toggle not comment.isTroll()
+
   @unthread: =>
     @commentsByTimestamp ?= @comments.sort (a, b) -> a.timestamp - b.timestamp
     for comment in @commentsByTimestamp

@@ -11,6 +11,11 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
       Settings.filters[f.type][f.target][f.text] = Settings.timestamp()
       Settings.save "filters"
       sendResponse filters: Settings.filters
+    when "delete"
+      f = request.filter
+      delete Settings.filters[f.type][f.target][f.text]
+      Settings.save "filters"
+      sendResponse filters: Settings.filters
     when "blockIframes"
       sendResponse settings.blockIframes
     when "reset"

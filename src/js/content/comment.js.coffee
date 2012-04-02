@@ -87,6 +87,9 @@ class Comment
         @filters.push filter
     return (@filters.length isnt 0)
 
+  toggle: (status) ->
+    if status then @show() else @hide()
+
   show: ->
     for child in @node.children
       if child.className isnt "filter_explanation"
@@ -102,38 +105,38 @@ class Comment
       else
         child.style.setProperty "display", "none"
 
-    unless @explanation?
-      options = for filter in @filters
-        {
-          tag: "li"
-          children:
-            tag: "a"
-            text: filter.text
-            events:
-              click: -> alert "hi"
-        }
-
-      options.push
+    @explanation.parentNode.removeChild @explanation if @explanation?
+    options = for filter in @filters
+      {
         tag: "li"
         children:
           tag: "a"
-          text: "show once"
+          text: filter.text
           events:
-            click: => @show()
+            click: => filter.remove()
+      }
 
-      @explanation = DOMBuilder.create(
-        tag: "div"
-        class: "filter_explanation"
-        children: [{
-          tag: "p"
-          text: "Remove filter:"
-        }, {
-          tag: "ul"
-          children: options
-        }]
-      )
+    options.push
+      tag: "li"
+      children:
+        tag: "a"
+        text: "show once"
+        events:
+          click: => @show()
 
-      @node.appendChild(@explanation)
+    @explanation = DOMBuilder.create(
+      tag: "div"
+      class: "filter_explanation"
+      children: [{
+        tag: "p"
+        text: "Remove filter:"
+      }, {
+        tag: "ul"
+        children: options
+      }]
+    )
+
+    @node.appendChild(@explanation)
 
   showDepth: ->
     @node.className = @node.className.replace("depth0", "depth#{@depth}")

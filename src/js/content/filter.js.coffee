@@ -23,8 +23,18 @@ class Filter
         for own text of texts
           @add type, target, text
 
+  remove: ->
+    chrome.extension.sendRequest method: "delete", filter: @serialize(), (response) ->
+      Filter.load response.filters
+      Post.reload().runFilters()
+
+  serialize: ->
+    type:   @type
+    target: @target
+    text:   @text
+
 # String filters
-class StringFilter
+class StringFilter extends Filter
   constructor: (@text) ->
   type: "string"
 
