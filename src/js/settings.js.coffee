@@ -33,6 +33,7 @@ class Settings
     queue:        []
     shareTrolls:  true
     showAltText:  true
+    showHistory:  true
     showGravatar: false
     showPictures: true
     showYouTube:  true

@@ -11,4 +11,5 @@ chrome.extension.sendRequest method: "settings", (response) ->
 
   Post.load(Filter.all).runEverything()
 
+  History.load()
   Controls.load()

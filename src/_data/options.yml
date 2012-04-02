@@ -11,6 +11,10 @@
         the list to the server. My goal is to make troll detection democratic.
   text: Share troll list to help improve the auto list
 
+- id: showHistory
+  checked: true
+  text: Show history in thread control panel
+
 - id: showAltText
   checked: true
   text: Show alt text (if available) below pictures

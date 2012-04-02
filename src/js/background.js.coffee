@@ -1,3 +1,4 @@
+MAX_HISTORY = 20
 Settings.load()
 
 chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
@@ -18,6 +19,22 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
       delete Settings.filters[f.type][f.target][f.text]
       Settings.save "filters"
       sendResponse filters: Settings.filters
+    when "history"
+      # Add any items that don't currently exist to history
+      for item in request.history
+        if (do ->
+          for currentItem in Settings.history
+            if item.id is currentItem.id
+              return false
+          return true)
+          Settings.history.push item
+
+      # Sort in reverse chronological order and cull
+      Settings.history.sort (a, b) -> b.id - a.id
+      Settings.history.pop() while Settings.history.length > MAX_HISTORY
+
+      Settings.save "history"
+      sendResponse history: Settings.history
     when "blockIframes"
       sendResponse settings.blockIframes
     when "reset"
