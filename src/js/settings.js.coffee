@@ -30,14 +30,15 @@ class Settings
                   }
     hideAuto:     true
     history:      []
-    name:         ""
+    queue:        []
     shareTrolls:  true
     showAltText:  true
-    showActivity: true
     showGravatar: false
     showPictures: true
     showYouTube:  true
     submitted:    0
+    username:     ""
 
   # Returns the numbers of days since the Unix epoch
-  @timestamp: -> parseInt(new Date / 86400000)
+  @timestamp: ->
+    parseInt new Date / 86400000

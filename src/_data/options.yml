@@ -1,14 +1,3 @@
-- id: sensitivity
-  help: The aggressiveness of autolist troll determination (the lower the value,
-        the larger and more permissive the auto-list becomes)
-  text: Sensitivity
-  type: range
-
-- id: gambolLockdown
-  checked: true
-  help: Institute the Gambol Lockdown
-  text: A few simple checks for White Injun
-
 - id: hideAuto
   checked: true
   help: This option does not affect trolls you manually blacklist or whitelist,
@@ -26,12 +15,6 @@
   checked: true
   text: Show alt text (if available) below pictures
 
-- id: showUnignore
-  checked: true
-  help: Disabling this option will help you avoid the temptation to unhide
-        flamebait
-  text: Show unignore link for trolls
-
 - id: showPictures
   checked: true
   text: Show pictures in comments
@@ -39,19 +22,6 @@
 - id: showYouTube
   checked: true
   text: Show YouTube in comments
-
-- id: keepHistory
-  checked: true
-  text: Keep links to recent posts accessible in a sidebar
-
-- id: autohideHistory
-  checked: true
-  depth: 1
-  text: Autohide history box
-
-- id: highlightMe
-  checked: true
-  text: Highlight my posts
 
 - id: showGravatar
   text: Show ["Gravatar":http://en.gravatar.com/]/Identicon next to posters
@@ -61,20 +31,7 @@
         This slows down page loads considerably.
   text: Reduce load times by blocking sharing buttons
 
-- id: showQuickInsert
-  checked: true
-  text: Show HTML helpers in commenting input
-
-- id: showActivity
-  checked: true
-  text: Show thread activity metrics
-
-- id: autohideActivity
-  checked: false
-  depth: 1
-  text: Autohide activity box
-
-- id: name
+- id: username
   placeholder: Amakudari
   text: Name to highlight
   type: text

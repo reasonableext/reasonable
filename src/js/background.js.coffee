@@ -4,6 +4,8 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
   switch request.method
     when "settings"
       sendResponse settings: Settings.all()
+    when "blockIframes"
+      sendResponse Settings.blockIframes
     when "add"
       f = request.filter
       Settings.filters[f.type] ?= name: {}, link: {}, content: {}
