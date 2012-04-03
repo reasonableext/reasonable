@@ -16,7 +16,6 @@ class Versioner
     if @ports?
       for port in @ports
         if port.version > settingsVersion
-          console.debug port.version
           port.callback()
 
     Settings.version = @getVersion()

@@ -81,5 +81,4 @@ class Markup
         # The nodes aren't created instantly, so I need to wait a second before adding stuff
         setTimeout (=>
           floatingNode = document.getElementsByClassName("leave-comment reply")[0]
-          console.debug floatingNode
           @floating ?= new Markup(floatingNode, "markup_floating")), 50
