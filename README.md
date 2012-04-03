@@ -33,9 +33,8 @@ using this extension.
 Installation
 ------------
 
-The recommend way to install is through the Chrome Web Store page. [Chrome Web
-Store][web_store] page. Chrome extensions will automatically update to the
-latest stable version.
+The recommended way to install is through the [Chrome Web Store][web_store]
+page. Chrome extensions will automatically update to the latest stable version.
 
 If you'd like to compile from the source, you'll need the following:
 
