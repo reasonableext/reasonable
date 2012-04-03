@@ -3,8 +3,9 @@ class Post
     @container   = document.getElementById("commentcontainer")
     @comments    = do =>
       if @container?
+        previousComment = null
         for block, index in @container.getElementsByClassName("com-block")
-          new Comment(block, index, this)
+          previousComment = new Comment(block, index, this, previousComment)
       else
         null
     @isThreaded = yes

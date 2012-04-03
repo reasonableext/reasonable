@@ -24,6 +24,12 @@
 
 /* CSS */
 div.com-block
+  .commentheader
+    a
+      cursor: pointer
+    .filter
+      padding-left: 0.25em
+
   div.filter_explanation
     @include horizontal-list(", ")
     color: #bbb
@@ -78,8 +84,11 @@ div.post div.ablePic > img
   max-width: 300px
   padding: 0
 
-div.ableHighlight
+div.highlight
   background-color: #eee
+
+div.collapsed
+  display: none
 
 /* Highlight myself */
 div.ableMe

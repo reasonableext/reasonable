@@ -5,6 +5,7 @@ require "RedCloth"
 require_relative "spec/support/jasmine_config.rb"
 load "jasmine/tasks/jasmine.rake"
 
+DEBUG         = true
 ROOT_DIR      = File.expand_path(File.dirname(__FILE__))
 EXTENSION_DIR = File.join(ROOT_DIR, "ext")
 SOURCE_DIR    = File.join(ROOT_DIR, "src")
@@ -71,35 +72,55 @@ namespace :build do
   desc "Compile CoffeeScript to JavaScript"
   task :coffee do
     require "coffee-script"
+    require "uglifier"
     opts = { :merge_subdirectories => true }
-    compile_sources("coffee", opts) { |c| CoffeeScript.compile(c, :bare => true) }
+    compile_sources("coffee", opts) do |content|
+      js = CoffeeScript.compile(content, :bare => true)
+      if DEBUG
+        js
+      else
+        Uglifier.compile js
+      end
+    end
   end
 
   desc "Compile HAML to HTML"
   task :haml do
     require "haml"
-    compile_sources("haml") { |c| Haml::Engine.new(c).render }
+    compile_sources("haml") do |content|
+      Haml::Engine.new(content).render
+    end
   end
 
   desc "Compile SASS to CSS"
   task :sass do
     require "sass"
-    compile_sources("sass") { |c| Sass::Engine.new(c).render }
+    compile_sources("sass") do |content|
+      Sass::Engine.new(content).render
+    end
   end
 
   desc "Compile YAML to JSON"
   task :yml do
     require "yaml"
     require "json"
-    compile_sources("yml") { |c| JSON.pretty_generate(JSON.parse(YAML.load(c).to_json)) }
+    compile_sources("yml") do |content|
+      json = YAML.load(content).to_json
+      JSON.pretty_generate JSON.parse(json)
+    end
   end
+
+  desc "Compile and copy over all extension files but leave human-readable"
+  task :debug => [:coffee, :haml, :sass, :yml]
 end
 
 namespace :jasmine do
   desc "Compile CoffeeScript specs to JavaScript specs"
   task :compile do
-    opts = { :input_dir => "../spec", :output_dir => "../spec" }
-    compile_sources("coffee", "js", opts) { |c| CoffeeScript.compile(c, :bare => true) }
+    opts = { input_dir: "../spec", output_dir: "../spec" }
+    compile_sources("coffee", "js", opts) do |content|
+      CoffeeScript.compile content, :bare => true
+    end
   end
 end
 
@@ -129,8 +150,13 @@ task :zip do
   end
 end
 
+desc "Turn debug off"
+task :production do
+  DEBUG = false
+end
+
 desc "Compile and copy over all extension files"
-task :build => ["build:coffee", "build:haml", "build:sass", "build:yml", :raw]
+task :build => [:production, "build:coffee", "build:haml", "build:sass", "build:yml", :raw]
 
 desc "Compile spec CoffeeScripts and setup tests"
 task :spec => ["jasmine:compile", "jasmine"]

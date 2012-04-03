@@ -1,5 +1,5 @@
 class Comment
-  constructor: (@node, @index, @post) ->
+  constructor: (@node, @index, @post, @previous) ->
     @id        = @node.id.replace("comment_", "").parseInt()
     @header    = @node.getElementsByTagName("h2")[0]
     @content   = (p.textContent for p in @node.getElementsByTagName("p")).join("\n")
@@ -7,12 +7,50 @@ class Comment
     @name      = @extractName()
     @link      = @extractLink()
     @timestamp = @extractTimestamp()
+    @previous.setNext this if @previous?
 
     if @name is Settings.username
       @isMe = yes
       @node.className += " ableMe"
     else
       @isMe = no
+
+  setNext: (@next) ->
+
+  showDirect: =>
+    positionOf = (node) ->
+      top = 0
+      while node.offsetParent
+        top  += node.offsetTop
+        node  = node.offsetParent
+      top
+
+    offset  = window.scrollY - positionOf(@node)
+    comment = this
+    depth   = comment.depth + 1
+    if comment.node.className.indexOf("highlight") is -1
+      while depth isnt 0
+        node = comment.node
+        if comment.depth < depth
+          node.className += " highlight"
+          node.getElementsByClassName("collapser")[0].textContent = "+"
+          depth = comment.depth
+        else
+          node.className += " collapsed"
+        comment = comment.previous
+    else
+      # getElementsByClassName returns an immutable array that will change if you remove classes
+      highlighted = (node for node in document.getElementsByClassName("highlight"))
+      for node in highlighted
+        node.className = node.className.replace(" highlight", "")
+        node.getElementsByClassName("collapser")[0].textContent = "-"
+
+      collapsed = (node for node in document.getElementsByClassName("collapsed"))
+      for node in collapsed
+        node.className = node.className.replace(" collapsed", "")
+
+    # Return focus to original node
+    window.scrollTo 0, [ positionOf(@node) + offset ]
 
   extractName: ->
     strong = @header.firstChild
@@ -40,47 +78,38 @@ class Comment
   # Filters are organized together to make it easier
   filterName:    => Filter.dialog "string", "name", @name
   filterLink:    => Filter.dialog "string", "link", @link
-  filterContent: -> Filter.dialog "string", "content"
   filterCustom:  -> Filter.dialog "regex",  "content"
   
   addControls: ->
     nodes = DOMBuilder.create([
       { tag: "span", class: "pipe", text: "|" }
-      "filters: "
       {
-        tag: "div"
-        class: "filters"
-        children:
-          tag: "ul"
-          children: [{
-            tag: "li"
-            children:
-              tag: "a"
-              text: "name"
-              events:
-                click: @filterName
-          }, {
-            tag: "li"
-            children:
-              tag: "a"
-              text: "link"
-              events:
-                click: @filterLink
-          }, {
-            tag: "li"
-            children:
-              tag: "a"
-              text: "content"
-              events:
-                click: @filterContent
-          }, {
-            tag: "li"
-            children:
-              tag: "a"
-              text: "custom"
-              events:
-                click: @filterCustom
-          }]
+        tag: "a"
+        class: "collapser"
+        text: "-"
+        events:
+          click: @showDirect
+      }
+      { tag: "span", class: "pipe", text: "|" }
+      "filter"
+      {
+        tag: "a"
+        class: "filter"
+        text: "name"
+        events:
+          click: @filterName
+      }, {
+        tag: "a"
+        class: "filter"
+        text: "link"
+        events:
+          click: @filterLink
+      }, {
+        tag: "a"
+        class: "filter"
+        text: "custom"
+        events:
+          click: @filterCustom
       }
     ])
 
