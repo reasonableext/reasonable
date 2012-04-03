@@ -5,7 +5,7 @@ class Comment.ImageExtension
     for a in comment.node.getElementsByTagName("a")
       text     = a.href
       nextNode = a.parentNode.nextSibling
-      if @REGEX.test(text)
+      if a.parentNode.tagName.toLowerCase() is "p" and @REGEX.test(text)
         image = document.createElement("img")
         image.className = "ableCommentPic"
         image.src = text
