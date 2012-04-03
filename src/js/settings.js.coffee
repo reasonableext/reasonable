@@ -17,6 +17,7 @@ BASIC_FILTERS =
       "zerzan":                       TIMESTAMP
   regex:
     name:
+      "^\\s":                         TIMESTAMP
       "\\bWI\\b":                     TIMESTAMP
       "^.+heller|heller.+$":          TIMESTAMP
       "bi.*lover":                    TIMESTAMP
