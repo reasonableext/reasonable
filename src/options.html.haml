@@ -3,13 +3,13 @@
 %html
   %head
     %title reasonable
-    - %w(options buttons).each do |style|
-      %link{:rel => "stylesheet", :type => "text/css", :href => "/css/#{style}.css"}
+    - %w(options).each do |style|
+      %link{rel: :stylesheet, :type => "text/css", :href => "/css/#{style}.css"}
   %body
     %form#options_form
       %h1<
-        %img{:src => "/img/icon_48.png", :alt => "logo", :title => "I put on my monocle and top hat",
-             :height => "48", :width => "48"}>
+        %img{src: "/img/icon_48.png", alt: :logo, title: "I put on my monocle and top hat",
+             height: 48, width: 48}>
         reason
         %span.able> able
       %p
@@ -72,4 +72,4 @@
                         %input.range_helper{id: "#{option["id"]}_helper", type: "number", min: 1, max: 300, size: 5}
               %input#save{type: :submit, value: "Save"}
     - %w(options).each do |script|
-      %script{:type => "text/javascript", :src => "/js/#{script}.js"}
+      %script{type: "text/javascript", src: "/js/#{script}.js"}

@@ -5,7 +5,7 @@ require "RedCloth"
 require_relative "spec/support/jasmine_config.rb"
 load "jasmine/tasks/jasmine.rake"
 
-DEBUG         = true
+@debug        = true
 ROOT_DIR      = File.expand_path(File.dirname(__FILE__))
 EXTENSION_DIR = File.join(ROOT_DIR, "ext")
 SOURCE_DIR    = File.join(ROOT_DIR, "src")
@@ -76,7 +76,7 @@ namespace :build do
     opts = { :merge_subdirectories => true }
     compile_sources("coffee", opts) do |content|
       js = CoffeeScript.compile(content, :bare => true)
-      if DEBUG
+      if @debug
         js
       else
         Uglifier.compile js
@@ -152,7 +152,7 @@ end
 
 desc "Turn debug off"
 task :production do
-  DEBUG = false
+  @debug = false
 end
 
 desc "Compile and copy over all extension files"
