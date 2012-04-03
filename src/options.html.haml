@@ -49,7 +49,7 @@
               %ul#options
                 - YAML.load_file(File.join(File.dirname(__FILE__), "/src/_data/options.yml")).each do |option|
                   - depth_class = "depth-#{option["depth"]}" unless option["depth"].nil?
-                  %li{:class => depth_class, title: option["help"]}<
+                  %li{class: depth_class, title: option["help"]}<
                     - if option["type"].nil?
                       %input{id: option["id"], type: "checkbox", checked: option["checked"]}
                       %label{:for  => option["id"]}

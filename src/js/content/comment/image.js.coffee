@@ -7,7 +7,7 @@ class Comment.ImageExtension
       nextNode = a.parentNode.nextSibling
       if @REGEX.test(text)
         image = document.createElement("img")
-        image.className = "ablePic"
+        image.className = "ableCommentPic"
         image.src = text
 
         nextNode.parentNode.insertBefore image, nextNode

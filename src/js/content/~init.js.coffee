@@ -6,10 +6,10 @@ chrome.extension.sendRequest method: "settings", (response) ->
 
   # Load extensions for comments
   Comment.addExtension new Comment.GravatarExtension() if Settings.showGravatar
-  Comment.addExtension new Comment.ImageExtension()    if Settings.showImage
+  Comment.addExtension new Comment.ImageExtension()    if Settings.showPictures
   Comment.addExtension new Comment.YouTubeExtension()  if Settings.showYouTube
 
   Post.load(Filter.all).runEverything()
 
-  History.load()
+  History.load() if Post.comments?
   Controls.load()

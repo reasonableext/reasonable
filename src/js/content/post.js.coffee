@@ -16,14 +16,16 @@ class Post
     this
 
   @runFilters: ->
-    for comment in @comments
-      comment.toggle not comment.isTroll()
+    if @comments
+      for comment in @comments
+        comment.toggle not comment.isTroll()
 
   @runEverything: ->
-    for comment in @comments
-      comment.runExtensions()
-      comment.addControls()
-      comment.toggle not comment.isTroll()
+    if @comments?
+      for comment in @comments
+        comment.runExtensions()
+        comment.addControls()
+        comment.toggle not comment.isTroll()
 
   @unthread: =>
     # slice(0) makes a clone of the original comments array

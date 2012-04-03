@@ -15,7 +15,6 @@ background_page: background.html
 content_scripts:
   - all_frames: true
     js:
-      - /js/const.js
       - /js/preload.js
     matches:
       - http://reason.com/*

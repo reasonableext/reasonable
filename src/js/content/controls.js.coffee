@@ -20,20 +20,29 @@ class Controls
     @history  = document.getElementById("ableHistory")
     @commands = document.getElementById("ableCommands")
 
-    @addControl "Unthread", ->
-      if @textContent is "Unthread"
-        @textContent = "Thread"
-        Post.unthread()
-      else
-        @textContent = "Unthread"
-        Post.thread()
+    # Unthreading and rethreading
+    if Post.comments?
+      @addControl "Unthread", null, ->
+        if @textContent is "Unthread"
+          @textContent = "Thread"
+          Post.unthread()
+        else
+          @textContent = "Unthread"
+          Post.thread()
 
-  @addControl: (name, callback) ->
+    # Open options page
+    @addControl "Options", chrome.extension.getURL("/options.html")
+
+  @addControl: (name, href, callback) ->
     li   = document.createElement("li")
     a    = document.createElement("a")
     text = document.createTextNode(name)
 
-    a.onclick = callback
+    if href?
+      a.href   = href
+      a.target = "_blank"
+
+    a.onclick = callback if callback?
 
     a.appendChild text
     li.appendChild a
