@@ -71,6 +71,7 @@ class Settings
     showYouTube:  true
     submitted:    0
     username:     ""
+    version:      "0.0.0"
 
   # Returns the numbers of days since the Unix epoch
   @timestamp: ->

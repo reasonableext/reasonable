@@ -45,3 +45,9 @@ chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
 # Direct page action clicks to the options page
 chrome.pageAction.onClicked.addListener (tab) ->
   chrome.tabs.create url: "options.html"
+
+# Add ports to help people along
+Versioner.addPort "2.0.9", ->
+  Settings.filters?.regex?.name?["^\\s"] = TIMESTAMP
+
+Versioner.runPorts()
