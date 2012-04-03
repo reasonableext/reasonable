@@ -142,6 +142,8 @@ class Comment
     @visible = yes
 
   hide: ->
+    BLANK = /^\s*$/
+
     # Show only the explanation of why content is filtered
     for child in @node.children
       if child.className is "filter_explanation"
@@ -155,7 +157,7 @@ class Comment
         tag: "li"
         children:
           tag: "a"
-          text: filter.text
+          text: if BLANK.test(filter.text) then "(blank)" else filter.text
           events:
             click: => filter.remove()
       }
