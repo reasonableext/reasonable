@@ -128,8 +128,9 @@ class Comment
     if status then @show() else @hide()
 
   runExtensions: ->
-    for extension in Comment.extensions
-      extension.run this
+    if Comment.extensions?
+      for extension in Comment.extensions
+        extension.run this
 
   show: ->
     return if @visible

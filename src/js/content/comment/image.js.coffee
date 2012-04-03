@@ -3,11 +3,12 @@ class Comment.ImageExtension
 
   run: (comment) ->
     for a in comment.node.getElementsByTagName("a")
-      text     = a.href
-      nextNode = a.parentNode.nextSibling
-      if a.parentNode.tagName.toLowerCase() is "p" and @REGEX.test(text)
-        image = document.createElement("img")
-        image.className = "ableCommentPic"
-        image.src = text
+      do =>
+        text     = a.href
+        nextNode = a.parentNode.nextSibling
+        if a.parentNode.tagName.toLowerCase() is "p" and @REGEX.test(text)
+          image = document.createElement("img")
+          image.className = "ableCommentPic"
+          image.src = text
 
-        nextNode.parentNode.insertBefore image, nextNode
+          nextNode.parentNode.insertBefore image, nextNode

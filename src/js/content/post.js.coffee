@@ -4,8 +4,9 @@ class Post
     @link = node.getElementsByTagName("a")[0].href
 
   runExtensions: ->
-    for extension in Post.extensions
-      extension.run this
+    if Post.extensions?
+      for extension in Post.extensions
+        extension.run this
 
   @load: (@filters) ->
     @posts = (new Post(node) for node in document.getElementsByClassName("post"))
