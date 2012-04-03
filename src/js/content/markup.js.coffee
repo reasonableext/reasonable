@@ -1,11 +1,32 @@
 class Markup
-  constructor: (@node) ->
+  constructor: (@node, @id) ->
     @textarea = @node.getElementsByTagName("textarea")[0]
     @addShortcut "link",   "a", URL: "href"
     @addShortcut "quote",  "blockquote"
     @addShortcut "bold",   "b"
     @addShortcut "italic", "i"
     @addShortcut "strike", "s"
+    @countCharacters()
+
+  countCharacters: ->
+    div    = document.createElement("div")
+    @count = document.createElement("input")
+    label  = document.createElement("label")
+    text   = document.createTextNode("characters")
+
+    div.className = "ableCount"
+    @count.id       = @id
+    @count.readonly = yes
+    @count.size     = 3
+    @count.type     = "text"
+    label.for       = @id
+    
+    @textarea.onkeyup = => @count.value = @textarea.value.length
+
+    label.appendChild text
+    div.appendChild   @count
+    div.appendChild   label
+    @textarea.parentNode.insertBefore div, @textarea.nextSibling
 
   addShortcut: (name, tag, attrs = {}) ->
     unless @shortcuts?
@@ -46,7 +67,8 @@ class Markup
     @textarea.selectionEnd   = endPos   + startTag.length
 
   @load: ->
-    @main = new Markup(document.getElementById("commentform"))
+    @main = new Markup(document.getElementById("commentform"), "markup_main")
     for button in document.getElementsByClassName("comment_reply")
       button.onclick = =>
-        @floating ?= new Markup(document.getElementsByClassName("leave-comment reply")[0])
+        floatingNode = document.getElementsByClassName("leave-comment reply")[0]
+        @floating ?= new Markup(floatingNode, "markup_floating")
