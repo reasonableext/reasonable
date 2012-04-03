@@ -24,13 +24,13 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
       for item in request.history
         if (do ->
           for currentItem in Settings.history
-            if item.id is currentItem.id
+            if item.permalink is currentItem.permalink
               return false
           return true)
           Settings.history.push item
 
       # Sort in reverse chronological order and cull
-      Settings.history.sort (a, b) -> b.id - a.id
+      Settings.history.sort (a, b) -> b.permalink - a.permalink
       Settings.history.pop() while Settings.history.length > MAX_HISTORY
 
       Settings.save "history"

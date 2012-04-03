@@ -1,3 +1,28 @@
+TIMESTAMP = 15500
+BASIC_FILTERS =
+  string:
+    name:
+      "Mary Stack":            TIMESTAMP
+    link: {}
+    content:
+      "I disavow.":            TIMESTAMP
+      "KOCH":                  TIMESTAMP
+  regex:
+    name:
+      "\\bWI\\b":              TIMESTAMP
+      "^.+heller|heller.+$":   TIMESTAMP
+      "bi.*lover":             TIMESTAMP
+      "f[i1]bertar(d|ian)":    TIMESTAMP
+      "mary stack":            TIMESTAMP
+    link: {}
+    content:
+      "city-stat(e|is[mt])":   TIMESTAMP
+      "f[i1]bertar(d|ian)":    TIMESTAMP
+      "gambol":                TIMESTAMP
+      "godesky":               TIMESTAMP
+      "market fundamentalist": TIMESTAMP
+      "zerzan":                TIMESTAMP
+
 class Settings
   @all: ->
     temp = {}
@@ -24,10 +49,7 @@ class Settings
 
   @defaults:
     blockIframes: false
-    filters:      {
-                    string: name: {}, link: {}, content: {}
-                    regex:  name: {}, link: {}, content: {}
-                  }
+    filters:      BASIC_FILTERS
     hideAuto:     true
     history:      []
     queue:        []

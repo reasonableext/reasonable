@@ -73,7 +73,7 @@ class Comment
     month  = month.parseInt() - 1
     hours  = hours.parseInt() + 5
     hours += 12 if ampm is "PM"
-    new Date(Date.UTC(year, month, day, hours, minutes, 0))
+    +new Date(Date.UTC(year, month, day, hours, minutes, 0))
 
   # Filters are organized together to make it easier
   filterName:    => Filter.dialog "string", "name", @name

@@ -5,10 +5,10 @@ class History
       Controls.addHistory response.history if Settings.showHistory
 
   @serialize: ->
-    href = window.location.href.replace(/\#.*$/, "")
+    url = window.location.href.replace(/\#.*$/, "")
     for comment in Post.comments.filter((c) -> c.isMe)
       {
-        href:      href
-        id:        comment.id
+        url:       url
+        permalink: comment.id
         timestamp: comment.timestamp
       }

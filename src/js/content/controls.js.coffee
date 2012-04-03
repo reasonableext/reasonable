@@ -41,11 +41,11 @@ class Controls
 
   @addHistory: (history) ->
     for item in history
-      shortenedLink = item.href.substr(item.href.lastIndexOf("/") + 1, 20)
+      shortenedLink = item.url.substr(item.url.lastIndexOf("/") + 1, 20)
       li = document.createElement("li")
       li.innerHTML = """
         <li>
-          <a href="#{item.href}#comment_#{item.id}">#{shortenedLink}</a>
+          <a href="#{item.url}#comment_#{item.permalink}">#{shortenedLink}</a>
         </li>
         """
       @history.appendChild li
