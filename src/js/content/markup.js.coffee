@@ -1,6 +1,10 @@
 class Markup
   constructor: (@node, @id) ->
     @textarea = @node.getElementsByTagName("textarea")[0]
+    oldNodes = (node for node in @node.getElementsByClassName("ableQuick"))
+    for node in oldNodes
+      node.parentNode.removeChild node
+
     @addShortcut "link",   "a", URL: "href"
     @addShortcut "quote",  "blockquote"
     @addShortcut "bold",   "b"
@@ -9,6 +13,10 @@ class Markup
     @countCharacters()
 
   countCharacters: ->
+    oldNodes = (node for node in @node.getElementsByClassName("ableCount"))
+    for node in oldNodes
+      node.parentNode.removeChild node
+
     div    = document.createElement("div")
     @count = document.createElement("input")
     label  = document.createElement("label")
