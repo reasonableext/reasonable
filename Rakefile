@@ -135,6 +135,13 @@ task :raw do
       FileUtils.cp path, File.join(EXTENSION_DIR, relative_path)
     end
   end
+
+  # Copy over licenses
+  puts "license"
+  %w(BEERWARE-LICENSE MIT-LICENSE).each do |license|
+    puts "  #{license}"
+    FileUtils.cp File.expand_path(license), File.join(EXTENSION_DIR, license)
+  end
 end
 
 desc "Zip extension"
