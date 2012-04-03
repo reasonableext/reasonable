@@ -18,6 +18,7 @@ BASIC_FILTERS =
   regex:
     name:
       "\\bWI\\b":                     TIMESTAMP
+      "^.+heller|heller.+$":          TIMESTAMP
       "bi.*lover":                    TIMESTAMP
       "f[i1]bertar(d|ian)":           TIMESTAMP
       "l[i1]bertard":                 TIMESTAMP

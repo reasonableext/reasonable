@@ -135,10 +135,13 @@ class Comment
   show: ->
     return if @visible
     for child in @node.children
-      if child.className isnt "filter_explanation"
-        child.style.removeProperty "display"
-      else
+      name = child.className
+      if name is "filter_explanation"
         child.style.setProperty "display", "none"
+      else if name is "comment_reply_msg"
+        # ignore
+      else
+        child.style.removeProperty "display"
     @visible = yes
 
   hide: ->
