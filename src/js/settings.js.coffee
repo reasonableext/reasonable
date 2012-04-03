@@ -31,7 +31,6 @@ BASIC_FILTERS =
     content:
       "city-stat(e|is[mt])":          TIMESTAMP
       "f[i1]bertar(d|ian)":           TIMESTAMP
-      "l[i1]bertard":                 TIMESTAMP
 
 class Settings
   @all: ->

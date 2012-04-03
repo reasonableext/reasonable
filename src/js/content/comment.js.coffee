@@ -71,7 +71,9 @@ class Comment
     [_, month, day, year, hours, minutes, ampm] = matches
     year   = year.parseInt()  + 2000
     month  = month.parseInt() - 1
-    hours  = hours.parseInt() + 5
+    hours  = hours.parseInt()
+    hours -= 12 if hours is 12
+    hours += 5
     hours += 12 if ampm is "PM"
     +new Date(Date.UTC(year, month, day, hours, minutes, 0))
 
