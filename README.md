@@ -51,4 +51,4 @@ using `rake`:
     bundle update
     rake build
 
-  [web_store]https://chrome.google.com/webstore/detail/fdbllkbadgaglaalokapjlkcagidcndj
+  [web_store]: https://chrome.google.com/webstore/detail/fdbllkbadgaglaalokapjlkcagidcndj
