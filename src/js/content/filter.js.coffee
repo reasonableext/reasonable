@@ -60,9 +60,9 @@ class ContentFilter extends StringFilter
   target: "content"
   isTroll: (comment) ->
     if @lowerCase
-      comment.content.toLowerCase() is @text
+      comment.content.toLowerCase().indexOf(@text) isnt -1
     else
-      comment.content is @text
+      comment.content.indexOf(@text) isnt -1
 
 # Regular expression filters
 class RegexFilter extends Filter

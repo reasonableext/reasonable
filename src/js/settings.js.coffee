@@ -2,26 +2,36 @@ TIMESTAMP = 15500
 BASIC_FILTERS =
   string:
     name:
-      "Mary Stack":            TIMESTAMP
-    link: {}
+      "Mary Stack":                   TIMESTAMP
+      "Newt Paul":                    TIMESTAMP
+    link:
+      "http://rctlfy.wordpress.com/": TIMESTAMP
     content:
-      "I disavow.":            TIMESTAMP
-      "KOCH":                  TIMESTAMP
+      "I disavow.":                   TIMESTAMP
+      "KOCH":                         TIMESTAMP
+      "gambol":                       TIMESTAMP
+      "godesky":                      TIMESTAMP
+      "market fundamentalist":        TIMESTAMP
+      "marxism of the right":         TIMESTAMP
+      "worst chat room":              TIMESTAMP
+      "zerzan":                       TIMESTAMP
   regex:
     name:
-      "\\bWI\\b":              TIMESTAMP
-      "^.+heller|heller.+$":   TIMESTAMP
-      "bi.*lover":             TIMESTAMP
-      "f[i1]bertar(d|ian)":    TIMESTAMP
-      "mary stack":            TIMESTAMP
-    link: {}
+      "\\bWI\\b":                     TIMESTAMP
+      "^.+heller|heller.+$":          TIMESTAMP
+      "bi.*lover":                    TIMESTAMP
+      "f[i1]bertar(d|ian)":           TIMESTAMP
+      "l[i1]bertard":                 TIMESTAMP
+      "mary stack":                   TIMESTAMP
+      "registration":                 TIMESTAMP
+    link:
+      "burberry":                     TIMESTAMP
+      "coach":                        TIMESTAMP
+      "nike":                         TIMESTAMP
     content:
-      "city-stat(e|is[mt])":   TIMESTAMP
-      "f[i1]bertar(d|ian)":    TIMESTAMP
-      "gambol":                TIMESTAMP
-      "godesky":               TIMESTAMP
-      "market fundamentalist": TIMESTAMP
-      "zerzan":                TIMESTAMP
+      "city-stat(e|is[mt])":          TIMESTAMP
+      "f[i1]bertar(d|ian)":           TIMESTAMP
+      "l[i1]bertard":                 TIMESTAMP
 
 class Settings
   @all: ->
