@@ -9,7 +9,13 @@ chrome.extension.sendRequest method: "settings", (response) ->
   Comment.addExtension new Comment.ImageExtension()    if Settings.showPictures
   Comment.addExtension new Comment.YouTubeExtension()  if Settings.showYouTube
 
+  # Load extensions for posts
+  Post.addExtension new Post.AltTextExtension() if Settings.showAltText
+
   Post.load(Filter.all).runEverything()
+
+  if Post.comments?
+    Markup.load()
 
   History.load()
   Controls.load()

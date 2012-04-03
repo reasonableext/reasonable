@@ -1,4 +1,4 @@
-chrome.extension.sendRequest type: "blockIframes", (response) ->
+chrome.extension.sendRequest method: "blockIframes", (response) ->
   # Block iframes unless turned off
   if response
     window.onload = (event) ->

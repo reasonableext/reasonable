@@ -1,5 +1,14 @@
 class Post
+  constructor: (@node) ->
+    @name = node.getElementsByTagName("h2")[0].textContent
+    @link = node.getElementsByTagName("a")[0].href
+
+  runExtensions: ->
+    for extension in Post.extensions
+      extension.run this
+
   @load: (@filters) ->
+    @posts = (new Post(node) for node in document.getElementsByClassName("post"))
     @container   = document.getElementById("commentcontainer")
     @comments    = do =>
       if @container?
@@ -21,6 +30,10 @@ class Post
         comment.toggle not comment.isTroll()
 
   @runEverything: ->
+    if @posts?
+      for post in @posts
+        post.runExtensions()
+
     if @comments?
       for comment in @comments
         comment.runExtensions()
@@ -42,3 +55,7 @@ class Post
 
   @getCommentsByTimestamp: ->
     @commentsByTimestamp ?= @comments.slice(0).sort (a, b) -> a.timestamp - b.timestamp
+
+  @addExtension: (extension) ->
+    @extensions ?= []
+    @extensions.push extension

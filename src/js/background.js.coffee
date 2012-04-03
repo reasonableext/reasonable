@@ -35,8 +35,6 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
 
       Settings.save "history"
       sendResponse history: Settings.history
-    when "blockIframes"
-      sendResponse settings.blockIframes
     else
       sendResponse {} # snub
 
