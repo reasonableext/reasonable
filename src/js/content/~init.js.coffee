@@ -11,5 +11,5 @@ chrome.extension.sendRequest method: "settings", (response) ->
 
   Post.load(Filter.all).runEverything()
 
-  History.load() if Post.comments?
+  History.load()
   Controls.load()

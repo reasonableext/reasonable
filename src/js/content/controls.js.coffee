@@ -12,6 +12,16 @@ class Controls
         """
     else
       @node.innerHTML = ""
+
+    # Comments
+    if Post.comments?
+      @node.innerHTML += """
+        <h3>Most recent comments</h3>
+        <ul id="ableComments"></ul>
+        <hr>
+        """
+
+    # Commands
     @node.innerHTML += """
         <h3>Commands</h3>
         <ul id="ableCommands"></ul>
@@ -19,6 +29,7 @@ class Controls
     document.body.appendChild @node
     @history  = document.getElementById("ableHistory")
     @commands = document.getElementById("ableCommands")
+    @comments = document.getElementById("ableComments")
 
     # Unthreading and rethreading
     if Post.comments?
@@ -29,6 +40,7 @@ class Controls
         else
           @textContent = "Unthread"
           Post.thread()
+      @addComment comment for comment in Post.getCommentsByTimestamp().slice(-5).reverse()
 
     # Open options page
     @addControl "Options", chrome.extension.getURL("/options.html")
@@ -47,6 +59,17 @@ class Controls
     a.appendChild text
     li.appendChild a
     @commands.appendChild li
+
+  @addComment: (comment) ->
+    li   = document.createElement("li")
+    a    = document.createElement("a")
+    text = document.createTextNode(comment.name)
+
+    a.href = "#comment_#{comment.id}"
+
+    a.appendChild text
+    li.appendChild a
+    @comments.appendChild li
 
   @addHistory: (history) ->
     for item in history

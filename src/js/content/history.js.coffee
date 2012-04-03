@@ -6,6 +6,7 @@ class History
 
   @serialize: ->
     url = window.location.href.replace(/\#.*$/, "")
+    return {} unless Post.comments?
     for comment in Post.comments.filter((c) -> c.isMe)
       {
         url:       url

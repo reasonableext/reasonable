@@ -1,4 +1,4 @@
-MAX_HISTORY = 20
+MAX_HISTORY = 15
 Settings.load()
 
 chrome.extension.onRequest.addListener (request, sender, sendResponse) ->

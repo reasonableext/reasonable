@@ -29,8 +29,7 @@ class Post
 
   @unthread: =>
     # slice(0) makes a clone of the original comments array
-    @commentsByTimestamp ?= @comments.slice(0).sort (a, b) -> a.timestamp - b.timestamp
-    for comment in @commentsByTimestamp
+    for comment in @getCommentsByTimestamp()
       @container.appendChild comment.node
       comment.hideDepth()
     @isThreaded = no
@@ -40,3 +39,6 @@ class Post
       @container.appendChild comment.node
       comment.showDepth()
     @isThreaded = yes
+
+  @getCommentsByTimestamp: ->
+    @commentsByTimestamp ?= @comments.slice(0).sort (a, b) -> a.timestamp - b.timestamp
