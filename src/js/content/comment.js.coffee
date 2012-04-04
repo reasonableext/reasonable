@@ -69,9 +69,9 @@ class Comment
   extractTimestamp: ->
     matches = @header.textContent.match(/(\d+)\.(\d+)\.(\d+) \@ (\d+):(\d+)(AM|PM)/)
     [_, month, day, year, hours, minutes, ampm] = matches
-    year   = year.parseInt()  + 2000
-    month  = month.parseInt() - 1
-    hours  = hours.parseInt()
+    year   = parseInt(year)  + 2000
+    month  = parseInt(month) - 1
+    hours  = parseInt(hours)
     hours -= 12 if hours is 12
     hours += 5
     hours += 12 if ampm is "PM"
