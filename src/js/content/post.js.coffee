@@ -26,9 +26,10 @@ class Post
     this
 
   @runFilters: ->
-    if @comments
+    if @comments?
       for comment in @comments
         comment.toggle not comment.isTroll()
+    Filter.updateTimestamps()
 
   @runEverything: ->
     if @posts?
@@ -40,6 +41,7 @@ class Post
         comment.runExtensions()
         comment.addControls()
         comment.toggle not comment.isTroll()
+    Filter.updateTimestamps()
 
   @unthread: =>
     # slice(0) makes a clone of the original comments array

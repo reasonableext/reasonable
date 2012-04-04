@@ -22,8 +22,9 @@ Filter.dialog = (type = "string", target = "content", text = null) ->
           <input type="radio" name="target" id="filter_content" value="content">
           <label for="filter_content">Content</label>
         </div>
-        <input type="text" id="filter_text" placeholder="Text" size="50">
-        <input type="submit" id="filter_submit">
+        <input type="text" id="filter_text" placeholder="Text" size="50"><br>
+        <input type="button" id="filter_cancel" value="Cancel">
+        <input type="submit" id="filter_submit" value="Submit">
       </form>
       """
 
@@ -38,6 +39,10 @@ Filter.dialog = (type = "string", target = "content", text = null) ->
         Post.filters = Filter.all
         for comment in Post.comments
           comment.hide() if comment.isTroll()
+      @dialog_box.style.display = "none"
+      return false
+    
+    document.getElementById("filter_cancel").onclick = =>
       @dialog_box.style.display = "none"
       return false
 

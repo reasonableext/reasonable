@@ -22,6 +22,11 @@ class Filter
       for own target, texts of targets
         for own text of texts
           @add type, target, text
+  
+  @updateTimestamps: ->
+    if @all?
+      result = (filter.serialize() for filter in @all when filter.used)
+      chrome.extension.sendRequest method: "update", filters: result
 
   remove: ->
     chrome.extension.sendRequest method: "delete", filter: @serialize(), (response) ->
@@ -37,51 +42,68 @@ class Filter
 class StringFilter extends Filter
   constructor: (@text) ->
     @lowerCase = (text is text.toLowerCase())
+    @used = no
   type: "string"
 
 class NameFilter extends StringFilter
   target: "name"
   isTroll: (comment) ->
-    if @lowerCase
-      comment.name.toLowerCase() is @text
+    content = comment.name
+    content = content.toLowerCase() if @lowerCase
+    if content is @text
+      @used = yes
     else
-      comment.name is @text
+      no
 
 class LinkFilter extends StringFilter
   target: "link"
   isTroll: (comment) ->
-    return false unless comment.link?
-    if @lowerCase
-      comment.link.toLowerCase() is @text
+    return no unless comment.link?
+    content = comment.link
+    content = content.toLowerCase() if @lowerCase
+    if content is @text
+      @used = yes
     else
-      comment.link is @text
+      no
 
 class ContentFilter extends StringFilter
   target: "content"
   isTroll: (comment) ->
-    if @lowerCase
-      comment.content.toLowerCase().indexOf(@text) isnt -1
+    content = comment.content
+    content = content.toLowerCase() if @lowerCase
+    if content.indexOf(@text) isnt -1
+      @used = yes
     else
-      comment.content.indexOf(@text) isnt -1
+      no
 
 # Regular expression filters
 class RegexFilter extends Filter
   constructor: (@text) ->
     @regex = new RegExp(text, if text is text.toLowerCase() then "i" else "")
+    @used  = no
   type: "regex"
 
 class NameRegexFilter extends RegexFilter
   target: "name"
   isTroll: (comment) ->
-    @regex.test comment.name
+    if @regex.test(comment.name)
+      @used = yes
+    else
+      no
 
 class LinkRegexFilter extends RegexFilter
   target: "link"
   isTroll: (comment) ->
-    return false unless comment.link?
-    @regex.test comment.link
+    return no unless comment.link?
+    if @regex.test(comment.link)
+      @used = yes
+    else
+      no
 
 class ContentRegexFilter extends RegexFilter
   target: "content"
   isTroll: (comment) ->
-    @regex.test comment.content
+    if @regex.test(comment.content)
+      @used = yes
+    else
+      no

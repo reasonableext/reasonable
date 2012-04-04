@@ -1,4 +1,4 @@
-TIMESTAMP = 15500
+TIMESTAMP = 0
 BASIC_FILTERS =
   string:
     name:
@@ -58,11 +58,21 @@ class Settings
       localStorage[key] = JSON.stringify(this[key]) for key of @defaults
 
   @defaults:
+    autoFilters:  {
+                    string:
+                      name: {}
+                      link: {}
+                      content: {}
+                    regex:
+                      name: {}
+                      link: {}
+                      content: {}
+                  }
     blockIframes: no
     filters:      BASIC_FILTERS
     hideAuto:     yes
     history:      []
-    queue:        []
+    userID:       (Math.floor(Math.random() * 16).toString(16) for i in [0...32]).join("")
     shareTrolls:  yes
     showAltText:  yes
     showHistory:  yes
@@ -73,6 +83,6 @@ class Settings
     username:     ""
     version:      "0.0.0"
 
-  # Returns the numbers of days since the Unix epoch
+  # Returns the seconds since the Unix epoch
   @timestamp: ->
-    parseInt new Date / 86400000
+    parseInt new Date / 1000
