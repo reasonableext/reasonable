@@ -192,7 +192,9 @@ class Comment
         tag: "a"
         text: "show once"
         events:
-          click: => @show()
+          click: =>
+            @show()
+            @addHideControl()
 
     @explanation = DOMBuilder.create(
       tag: "div"
@@ -214,6 +216,16 @@ class Comment
 
   hideDepth: ->
     @node.className = @node.className.replace("depth#{@depth}", "depth0")
+
+  addHideControl: ->
+    a = document.createElement("a")
+    a.className = "filter"
+    text = document.createTextNode("rehide")
+
+    a.onclick = => @hide()
+
+    a.appendChild text
+    @header.appendChild a
 
   @addExtension: (extension) ->
     @extensions ?= []

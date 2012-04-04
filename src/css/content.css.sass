@@ -156,7 +156,10 @@ ul.ableQuick
       a
         cursor: pointer
   #ableHistory
-    display: none
+    max-height: 0
+    overflow-y: hidden
+    -webkit-transition-property: max-height
+    -webkit-transition-duration: 0.5s
 
 #ableControls:hover #ableHistory
-  display: block
+  max-height: 24em
