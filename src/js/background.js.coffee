@@ -90,7 +90,7 @@ class Background
     xmlhttp.open "POST", @SEND_URL, yes
     xmlhttp.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
     xmlhttp.send "id=#{Settings.userID}&filters=#{encodeURIComponent(JSON.stringify(result))}"
-    Settings.submitted = Settings.timestamp
+    Settings.submitted = Settings.timestamp()
     Settings.save "submitted"
 
   @retrieveList: ->

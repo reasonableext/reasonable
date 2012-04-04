@@ -8,4 +8,8 @@ Versioner.addPort "2.1.0", ->
     delete localStorage[key]
     delete Settings[key]
 
+Versioner.addPort "2.1.2", ->
+  Settings.submitted = 0
+  Settings.save "submitted"
+
 Versioner.runPorts()
