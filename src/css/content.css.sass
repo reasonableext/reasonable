@@ -36,9 +36,19 @@ div.post.blog, div.post.inner
     padding-left: 2px
   img.pic.ableAltTextImage
     margin-bottom: 0
+  img.pic + .ableAltText
+    margin-left: auto
+    margin-right: auto
+  img.pic.left + .ableAltText
+    clear: left
+    float: left
+    margin-left: inherit
+    margin-right: inherit
   img.pic.right + .ableAltText
     clear: right
     float: right
+    margin-left: inherit
+    margin-right: inherit
     
 /* Comment */
 div.com-block
