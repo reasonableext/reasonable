@@ -1,0 +1,8 @@
+#!/bin/bash
+if [ ! "$(command -v convert)" ]
+then
+  echo "ImageMagick not found"
+  exit 0
+fi
+
+convert $1 -gravity center -crop 1280x800+0+0 output.png

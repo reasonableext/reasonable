@@ -3,4 +3,5 @@
 ext/
 spec/js/*.js
 spec/js/helpers/*.js
+*.png
 *.zip
