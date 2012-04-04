@@ -71,25 +71,27 @@ class Background
 
   @sendList: ->
     now = Settings.timestamp()
-    if now - Settings.submitted > 1.hour()
-      result =
-        string:
-          name:    {}
-          link:    {}
-          content: {}
-        regex:
-          name:    {}
-          link:    {}
-          content: {}
-      for own type, targets of Settings.filters
-        for own target, texts of targets
-          for own text, timestamp of texts
-            if timestamp > Settings.submitted
-              result[type][target][text] = timestamp
+    return unless now - Settings.submitted > 1.hour()
+    result =
+      string:
+        name:    {}
+        link:    {}
+        content: {}
+      regex:
+        name:    {}
+        link:    {}
+        content: {}
+    for own type, targets of Settings.filters
+      for own target, texts of targets
+        for own text, timestamp of texts
+          if timestamp > Settings.submitted
+            result[type][target][text] = timestamp
     xmlhttp = new XMLHttpRequest()
     xmlhttp.open "POST", @SEND_URL, yes
     xmlhttp.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
     xmlhttp.send "id=#{Settings.userID}&filters=#{encodeURIComponent(JSON.stringify(result))}"
+    Settings.submitted = Settings.timestamp
+    Settings.save "submitted"
 
   @retrieveList: ->
     xmlhttp = new XMLHttpRequest()
