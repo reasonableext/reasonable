@@ -12,13 +12,14 @@ class Versioner
 
   @runPorts: ->
     settingsVersion = @parseVersionString(Settings.version)
+    manifestVersion = @parseVersionString(@getVersion())
 
     if @ports?
       for port in @ports
-        if port.version > settingsVersion
+        if port.version > settingsVersion and port.version <= manifestVersion
           port.callback()
 
-    Settings.version = @getVersion()
+    Settings.version = @version
     Settings.save "version"
 
   @parseVersionString: (str) ->
