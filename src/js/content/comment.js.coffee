@@ -56,7 +56,7 @@ class Comment
     result = []
     for child in @node.children
       tagName = child.tagName.toLowerCase()
-      if (tagName is "p" and tag.className isnt "comment_reply_msg") or tagName is "blockquote"
+      if (tagName is "p" and child.className isnt "comment_reply_msg") or tagName is "blockquote"
         result.push child.textContent
     result.join "\n"
 
