@@ -5,7 +5,7 @@ class Comment.YouTubeExtension
     for a in comment.node.getElementsByTagName("a")
       text     = a.href
       nextNode = a.parentNode.nextSibling
-      if matches = @REGEX.exec(text)
+      if a.parentNode.tagName.toLowerCase() is "p" and matches = @REGEX.exec(text)
         youTube = document.createElement("iframe")
         youTube.className = "youtube-player"
         youTube.title = "YouTube video player"
