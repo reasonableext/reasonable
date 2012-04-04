@@ -5,4 +5,24 @@ then
   exit 0
 fi
 
-convert $1 -gravity center -crop 1280x800+0+0 output.png
+convert $1 -gravity south -crop 1280x680+0+60 screenshot.png
+OUTPUT_NAME="$(echo $1 | sed 's/\.png/_converted.png/g')"
+
+
+if [ "$#" -ge "3" ]
+then
+  convert -font Helvetica -background white -pointsize 48 -fill black -size 1280x48 -gravity north caption:"$3" sublabel.png
+  LABEL_SIZE=72
+  TILES=3
+  EXTRA_PNGS=sublabel.png
+  LABEL_DIR=south
+else
+  LABEL_SIZE=120
+  TILES=2
+  EXTRA_PNGS=
+  LABEL_DIR=center
+fi
+
+convert -font Helvetica-Bold -background white -pointsize 72 -fill black -size 1280x$LABEL_SIZE -gravity $LABEL_DIR caption:"$2" label.png
+montage screenshot.png label.png $EXTRA_PNGS -geometry +0+0 -tile 1x$TILES -background white $OUTPUT_NAME
+rm screenshot.png sublabel.png label.png
