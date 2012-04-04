@@ -70,6 +70,7 @@ class Background
     @retrieveList()
 
   @sendList: ->
+    return unless Settings.shareTrolls
     now = Settings.timestamp()
     return unless now - Settings.submitted > 1.hour()
     result =
@@ -94,6 +95,7 @@ class Background
     Settings.save "submitted"
 
   @retrieveList: ->
+    return unless Settings.hideAuto
     xmlhttp = new XMLHttpRequest()
     xmlhttp.open "GET", @RETRIEVE_URL, yes
 
