@@ -25,8 +25,8 @@ chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
         if (do ->
           for currentItem in Settings.history
             if item.permalink is currentItem.permalink
-              return false
-          return true)
+              return no
+          return yes)
           Settings.history.push item
 
       # Sort in reverse chronological order and cull

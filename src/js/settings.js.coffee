@@ -58,17 +58,17 @@ class Settings
       localStorage[key] = JSON.stringify(this[key]) for key of @defaults
 
   @defaults:
-    blockIframes: false
+    blockIframes: no
     filters:      BASIC_FILTERS
-    hideAuto:     true
+    hideAuto:     yes
     history:      []
     queue:        []
-    shareTrolls:  true
-    showAltText:  true
-    showHistory:  true
-    showGravatar: false
-    showPictures: true
-    showYouTube:  true
+    shareTrolls:  yes
+    showAltText:  yes
+    showHistory:  yes
+    showGravatar: no
+    showPictures: yes
+    showYouTube:  yes
     submitted:    0
     username:     ""
     version:      "0.0.0"
