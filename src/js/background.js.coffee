@@ -110,9 +110,6 @@ class Background
               unless text of Settings.autoFilters[type][target]
                 Settings.autoFilters[type][target][text] = timestamp
                 Settings.filters[type][target][text]     = timestamp
-            for own text, timestamp of Settings.autoFilters[type][target]
-              unless text in texts
-                delete Settings.autoFilters[type][target][text]
         Settings.save "autoFilters"
         Settings.save "filters"
 
