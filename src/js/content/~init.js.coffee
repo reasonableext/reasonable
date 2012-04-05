@@ -19,3 +19,7 @@ XBrowser.sendRequest method: "settings", (response) ->
 
   History.load()
   Controls.load()
+
+  if /^#comment_/.test(window.location.hash)
+    node = document.getElementById(window.location.hash.slice(1))
+    node.scrollIntoViewIfNeeded() if node?
