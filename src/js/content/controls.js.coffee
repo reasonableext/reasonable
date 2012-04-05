@@ -73,7 +73,7 @@ class Controls
 
   @addHistory: (history) ->
     for item in history
-      article = item.url.substring(item.url.lastIndexOf("/") + 1, item.url.length)
+      article = item.url.substr(item.url.lastIndexOf("/") + 1, 20)
       li = document.createElement("li")
       li.innerHTML = """
         <li>
