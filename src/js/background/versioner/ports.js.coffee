@@ -5,7 +5,7 @@ Versioner.addPort "2.0.9", ->
 Versioner.addPort "2.1.0", ->
   for key in [ "admin", "autohideActivity", "autohideHistory", "gambolLockdown", "lookupFrequency",
                "name", "showUnignore", "trolls", "updatePosts"]
-    delete localStorage[key]
+    delete XBrowser.storage[key]
     delete Settings[key]
 
 Versioner.addPort "2.1.2", ->

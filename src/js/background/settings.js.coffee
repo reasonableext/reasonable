@@ -41,7 +41,7 @@ class Settings
 
   @load: ->
     # Load parsed values from local storage
-    this[key] = JSON.parse(value) for key, value of localStorage
+    this[key] = JSON.parse(value) for key, value of XBrowser.storage
 
     # Set undefined settings to defaults
     for key, value of @defaults
@@ -52,10 +52,10 @@ class Settings
   @save: (key) ->
     if this[key]?
       # Save key if specified
-      localStorage[key] = JSON.stringify(this[key])
+      XBrowser.save key, this[key]
     else
       # Save everything if unspecified
-      localStorage[key] = JSON.stringify(this[key]) for key of @defaults
+      XBrowser.save key, this[key] for key of @defaults
 
   @defaults:
     autoFilters:  {
