@@ -29,7 +29,7 @@ class Filter
       XBrowser.sendRequest method: "update", filters: result, self
 
   remove: ->
-    XBrowser.sendRequest method: "delete", filter: @serialize(), self, (response) ->
+    XBrowser.sendRequest method: "delete", filter: @serialize(), (response) ->
       Filter.load response.filters
       Post.reload().runFilters()
 

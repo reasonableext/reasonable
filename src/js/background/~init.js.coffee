@@ -8,7 +8,6 @@ Number::day     = Number::days
 
 Settings.load()
 Versioner.runPorts()
-self = this unless self?
 
 class Background
   @MAX_HISTORY:  15
@@ -16,7 +15,7 @@ class Background
   @RETRIEVE_URL: "http://www.brymck.com/reasonable/retrieve"
 
   @load: ->
-    XBrowser.addRequestListener self, (request, sender, sendResponse) =>
+    XBrowser.addRequestListener (request, sender, sendResponse) =>
       switch request.method
         when "settings"
           sendResponse settings: Settings.all()

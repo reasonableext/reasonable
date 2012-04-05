@@ -6,7 +6,7 @@ class XBrowser
 
     # Chrome
     if @chrome
-      @addRequestListener = (context, callback) ->
+      @addRequestListener = (callback) ->
         chrome.extension.onRequest.addListener callback
       @getURL = (path) ->
         chrome.extension.getURL path
@@ -29,7 +29,7 @@ class XBrowser
       @save = (key, value) ->
         localStorage[key] = JSON.stringify(value)
       @storage = localStorage
-      @sendRequest = (request, context, responseCallback) ->
+      @sendRequest = (request, responseCallback) ->
         if responseCallback?
           chrome.extension.sendRequest request, responseCallback
         else
@@ -43,9 +43,9 @@ class XBrowser
         self    = require("self")
         ss      = require("simple-storage")
       
-      @addRequestListener = (context, callback) ->
-        browser.messageManager.addMessageListener "message", (name, sync, json, target) ->
-          callback json.method, 
+      @addRequestListener = (callback) =>
+        XBrowser.self.on "message", (data) ->
+          console.log JSON.stringify data
       @getURL = (path) ->
         self.data.url(path)
       @load = (key) ->
@@ -55,8 +55,10 @@ class XBrowser
           include: params.include
           contentScriptFile: self.data.url(params.url)
           contentScriptWhen: "ready"
-          onMessage: (response) ->
-            console.log response.method
+          onAttach: (worker) ->
+            worker.postMessage "hi"
+            worker.on "message", (data) ->
+              console.log "Received message from worker: #{JSON.stringify data}"
         }
       @request = (params, callback) ->
         r = request {
@@ -72,9 +74,9 @@ class XBrowser
         ss.storage[key] = value
       @storage = ->
         ss.storage
-      @sendRequest = (request, context, responseCallback) ->
-        context.sendSyncMessage request.method, request
-        browser.messageManager.addMessageListener request.method, ->
-          console.log "afjkdsakljflksajflajflkadsjfl"
+      @sendRequest = (request, responseCallback) =>
+        XBrowser.self.postMessage "message"
 
+
+XBrowser.self = if self? then self else this
 XBrowser.load()

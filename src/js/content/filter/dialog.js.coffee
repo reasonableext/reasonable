@@ -34,7 +34,7 @@ Filter.dialog = (type = "string", target = "content", text = null) ->
     form = document.getElementById("filter_form")
 
     form.onsubmit = =>
-      XBrowser.sendRequest method: "add", filter: Filter.serialize_form(), self, (response) ->
+      XBrowser.sendRequest method: "add", filter: Filter.serialize_form(), (response) ->
         Filter.load response.filters
         Post.filters = Filter.all
         for comment in Post.comments
