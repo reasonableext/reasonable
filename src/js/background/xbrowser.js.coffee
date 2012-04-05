@@ -1,7 +1,10 @@
 class XBrowser
   # Detect existence of Chrome and Firefox extension APIs
   @load: ->
-    @chrome = chrome?
+    @chrome  = chrome?
+    @firefox = not @chrome
+
+    # Chrome
     if @chrome
       @addRequestListener = (request, sender, sendResponse) ->
         if sendResponse?
@@ -15,5 +18,18 @@ class XBrowser
           chrome.extension.sendRequest request, responseCallback
         else
           chrome.extension.sendRequest request
+      @pageMod = (params) ->
+        # snub; this is handled by the manifest
+
+    # Firefox
+    else if @firefox
+      @pageMod = (params) ->
+        pageMod = require("page-mod")
+        self    = require("self")
+
+        pageMod.PageMod {
+          include: params.include,
+          contentScriptFile: self.data.url(params.url)
+        }
 
 XBrowser.load()

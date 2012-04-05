@@ -22,7 +22,6 @@ content_scripts:
   - css:
       - /css/content.css
     js:
-      - /js/xbrowser.js
       - /js/content.js
     matches:
       - http://reason.com/*

@@ -114,9 +114,6 @@ namespace :build do
       JSON.pretty_generate JSON.parse(json)
     end
   end
-
-  desc "Compile and copy over all extension files but leave human-readable"
-  task :debug => [:coffee, :haml, :sass, :yml]
 end
 
 namespace :jasmine do
@@ -171,16 +168,29 @@ end
 
 desc "Run some file organization tasks for browser-specific implementations"
 task :browser do
-  FileUtils.cp_r CHROME_DIR, FIREFOX_DIR
+  FileUtils.rm_rf FIREFOX_DIR
+  FileUtils.cp_r  CHROME_DIR, FIREFOX_DIR
+
+  # Chrome
   %w(package.json).each do |path|
     full_path = File.join(CHROME_DIR, path)
     File.delete full_path if File.exist?(full_path)
+  end
+
+  # Firefox
+  Dir.chdir(FIREFOX_DIR) do
+    FileUtils.mv "js", "lib"
+    FileUtils.mv "lib/background.js", "lib/main.js"
   end
 end
 
 desc "Compile and copy over all extension files"
 task :build => [:production, "build:coffee", "build:haml", "build:sass", "build:yml",
                 :browser, :raw, :zip]
+
+desc "Compile and copy over all extension files but leave human-readable"
+task "build:debug" => ["build:coffee", "build:haml", "build:sass", "build:yml",
+                       :browser, :raw, :zip]
 
 desc "Compile spec CoffeeScripts and setup tests"
 task :spec => ["jasmine:compile", "jasmine"]

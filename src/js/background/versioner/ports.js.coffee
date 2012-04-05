@@ -11,5 +11,3 @@ Versioner.addPort "2.1.0", ->
 Versioner.addPort "2.1.2", ->
   Settings.submitted = 0
   Settings.save "submitted"
-
-Versioner.runPorts()

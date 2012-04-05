@@ -7,6 +7,7 @@ Number::days    = -> @ * 86400
 Number::day     = Number::days
 
 Settings.load()
+Versioner.runPorts()
 
 class Background
   @MAX_HISTORY:  15
@@ -72,6 +73,8 @@ class Background
       # Direct page action clicks to the options page
       chrome.pageAction.onClicked.addListener (tab) ->
         chrome.tabs.create url: "options.html"
+    else if XBrowser.firefox
+      XBrowser.pageMod include: "http://reason.com/*", url: "content.js"
 
     @retrieveList()
 

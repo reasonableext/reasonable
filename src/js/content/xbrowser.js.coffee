@@ -1,0 +1,1 @@
+../background/xbrowser.js.coffee
