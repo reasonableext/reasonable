@@ -1,6 +1,6 @@
-# Content scripts can't access local storage directly,
-# so we have to wait for info from the background script before proceeding
-XBrowser.sendRequest method: "settings", (response) ->
+self = this unless self?
+
+XBrowser.sendRequest method: "settings", self, (response) ->
   Settings.load response.settings
   Filter.load Settings.filters
 
@@ -20,7 +20,7 @@ XBrowser.sendRequest method: "settings", (response) ->
   History.load()
   Controls.load()
 
-  XBrowser.sendRequest url: window.location.href, (isMatch) ->
+  XBrowser.sendRequest url: window.location.href, self, (isMatch) ->
     if /^#comment_/.test(window.location.hash) and not isMatch
       node = document.getElementById(window.location.hash.slice(1))
       node.scrollIntoViewIfNeeded() if node?

@@ -110,7 +110,10 @@ class Background
       method: "GET"
       url:    @RETRIEVE_URL
     }, ->
-      result = JSON.parse(@responseText)
+      if @responseText
+        result = JSON.parse(@responseText)
+      else
+        result = @result
       timestamp = Settings.timestamp() - 7.days()
       for own type, targets of result
         for own target, texts of targets
@@ -120,7 +123,5 @@ class Background
               Settings.filters[type][target][text]     = timestamp
       Settings.save "autoFilters"
       Settings.save "filters"
-
-    xmlhttp.send null
 
 Background.load()

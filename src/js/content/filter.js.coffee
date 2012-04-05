@@ -26,10 +26,10 @@ class Filter
   @updateTimestamps: ->
     if @all?
       result = (filter.serialize() for filter in @all when filter.used)
-      XBrowser.sendRequest method: "update", filters: result
+      XBrowser.sendRequest method: "update", filters: result, self
 
   remove: ->
-    XBrowser.sendRequest method: "delete", filter: @serialize(), (response) ->
+    XBrowser.sendRequest method: "delete", filter: @serialize(), self, (response) ->
       Filter.load response.filters
       Post.reload().runFilters()
 

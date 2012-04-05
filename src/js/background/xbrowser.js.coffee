@@ -32,7 +32,7 @@ class XBrowser
       @save = (key, value) ->
         localStorage[key] = JSON.stringify(value)
       @storage = localStorage
-      @sendRequest = (request, responseCallback) ->
+      @sendRequest = (request, context, responseCallback) ->
         if responseCallback?
           chrome.extension.sendRequest request, responseCallback
         else
@@ -40,10 +40,11 @@ class XBrowser
 
     # Firefox
     else if @firefox
-      pageMod = require("page-mod")
-      request = require("request").Request
-      self    = require("self")
-      ss      = require("simple-storage")
+      if require?
+        pageMod = require("page-mod")
+        request = require("request").Request
+        self    = require("self")
+        ss      = require("simple-storage")
       
       @addRequestListener = (request, sender, sendResponse) ->
         # implementation pending
@@ -53,8 +54,12 @@ class XBrowser
         ss.storage[key]
       @pageMod = (params) ->
         pageMod.PageMod {
-          include: params.include,
+          include: params.include
           contentScriptFile: self.data.url(params.url)
+          onAttach: (worker) ->
+            console.log "Attaching content scripts"
+            worker.on "detach", (data) ->
+              console.log data
         }
       @request = (params, callback) ->
         r = request {
@@ -68,8 +73,12 @@ class XBrowser
           r.get()
       @save = (key, value) ->
         ss.storage[key] = value
-      @storage = ss.storage
-      @sendRequest = (request, responseCallback) ->
-        # implementation pending
+      @storage = ->
+        ss.storage
+      @sendRequest = (request, context, responseCallback) ->
+        context.postMessage "hi"
+        context.removeMessageListener request.method
+        context.addMessageListener request.method, (response) ->
+          responseCallback response
 
 XBrowser.load()

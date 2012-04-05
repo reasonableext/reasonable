@@ -1,7 +1,7 @@
 class History
   @load: ->
     @items = []
-    XBrowser.sendRequest method: "history", history: @serialize(), (response) =>
+    XBrowser.sendRequest method: "history", history: @serialize(), self, (response) =>
       Controls.addHistory response.history if Settings.showHistory
 
   @serialize: ->
