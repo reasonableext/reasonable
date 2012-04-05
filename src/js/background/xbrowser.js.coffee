@@ -16,10 +16,23 @@ class XBrowser
       @load = (key) ->
         JSON.parse localStorage[key]
       @pageMod = (params) -> # snub; this is handled by the manifest
+      @request = (params, callback) ->
+        xmlhttp = new XMLHttpRequest()
+
+        if params.method?.toLowerCase() is "post"
+          xmlhttp.open "POST", params.url, yes
+          xmlhttp.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
+        else
+          xmlhttp.open "GET", params.url, yes
+
+        if callback?
+          xmlhttp.onreadystatechange = ->
+            callback() if @readyState is @DONE and @status is 200
+
       @save = (key, value) ->
         localStorage[key] = JSON.stringify(value)
       @storage = localStorage
-      @sendRequest = (request, responseCallback = null) ->
+      @sendRequest = (request, responseCallback) ->
         if responseCallback?
           chrome.extension.sendRequest request, responseCallback
         else
@@ -28,9 +41,14 @@ class XBrowser
     # Firefox
     else if @firefox
       pageMod = require("page-mod")
+      request = require("request").Request
       self    = require("self")
       ss      = require("simple-storage")
       
+      @addRequestListener = (request, sender, sendResponse) ->
+        # implementation pending
+      @getURL = (path) ->
+        self.data.url(path)
       @load = (key) ->
         ss.storage[key]
       @pageMod = (params) ->
@@ -38,8 +56,20 @@ class XBrowser
           include: params.include,
           contentScriptFile: self.data.url(params.url)
         }
+      @request = (params, callback) ->
+        r = request {
+          url:        params.url
+          content:    params.params
+          onComplete: callback
+        }
+        if params.method?.toLowerCase() is "post"
+          r.post()
+        else
+          r.get()
       @save = (key, value) ->
         ss.storage[key] = value
       @storage = ss.storage
+      @sendRequest = (request, responseCallback) ->
+        # implementation pending
 
 XBrowser.load()

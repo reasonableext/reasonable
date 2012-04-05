@@ -96,30 +96,30 @@ class Background
         for own text, timestamp of texts
           if timestamp > Settings.submitted
             result[type][target][text] = timestamp
-    xmlhttp = new XMLHttpRequest()
-    xmlhttp.open "POST", @SEND_URL, yes
-    xmlhttp.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
-    xmlhttp.send "id=#{Settings.userID}&filters=#{encodeURIComponent(JSON.stringify(result))}"
+    XBrowser.request {
+      method: "post"
+      url: @SEND_URL
+      params: "id=#{Settings.userID}&filters=#{encodeURIComponent(JSON.stringify(result))}"
+    }
     Settings.submitted = Settings.timestamp()
     Settings.save "submitted"
 
   @retrieveList: ->
     return unless Settings.hideAuto
-    xmlhttp = new XMLHttpRequest()
-    xmlhttp.open "GET", @RETRIEVE_URL, yes
-
-    xmlhttp.onreadystatechange = ->
-      if @readyState is @DONE and @status is 200
-        result = JSON.parse(@responseText)
-        timestamp = Settings.timestamp() - 7.days()
-        for own type, targets of result
-          for own target, texts of targets
-            for text in texts
-              unless text of Settings.autoFilters[type][target]
-                Settings.autoFilters[type][target][text] = timestamp
-                Settings.filters[type][target][text]     = timestamp
-        Settings.save "autoFilters"
-        Settings.save "filters"
+    XBrowser.request {
+      method: "GET"
+      url:    @RETRIEVE_URL
+    }, ->
+      result = JSON.parse(@responseText)
+      timestamp = Settings.timestamp() - 7.days()
+      for own type, targets of result
+        for own target, texts of targets
+          for text in texts
+            unless text of Settings.autoFilters[type][target]
+              Settings.autoFilters[type][target][text] = timestamp
+              Settings.filters[type][target][text]     = timestamp
+      Settings.save "autoFilters"
+      Settings.save "filters"
 
     xmlhttp.send null
 

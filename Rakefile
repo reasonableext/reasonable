@@ -179,8 +179,12 @@ task :browser do
 
   # Firefox
   Dir.chdir(FIREFOX_DIR) do
-    FileUtils.mv "js", "lib"
-    FileUtils.mv "lib/background.js", "lib/main.js"
+    FileUtils.mv "js", "data"
+    FileUtils.mkdir "lib"
+    FileUtils.mv "data/background.js", "lib/main.js"
+    FileUtils.mv "img/icon_48.png", "data/icon.png"
+    FileUtils.rm_rf "img"
+    FileUtils.rm "manifest.json"
   end
 end
 

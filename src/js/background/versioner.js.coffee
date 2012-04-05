@@ -1,18 +1,11 @@
 class Versioner
-  @getVersion: ->
-    return @version if @version?
-    xmlhttp = new XMLHttpRequest()
-    xmlhttp.open "GET", "manifest.json", no
-    xmlhttp.send null
-    @version = JSON.parse(xmlhttp.responseText).version
-
   @addPort: (version, callback) ->
     @ports ?= []
     @ports.push version: @parseVersionString(version), callback: callback
 
   @runPorts: ->
     settingsVersion = @parseVersionString(Settings.version)
-    manifestVersion = @parseVersionString(@getVersion())
+    manifestVersion = @parseVersionString(VERSION)
 
     if @ports?
       for port in @ports
