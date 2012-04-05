@@ -26,10 +26,10 @@ class Filter
   @updateTimestamps: ->
     if @all?
       result = (filter.serialize() for filter in @all when filter.used)
-      chrome.extension.sendRequest method: "update", filters: result
+      XBrowser.sendRequest method: "update", filters: result
 
   remove: ->
-    chrome.extension.sendRequest method: "delete", filter: @serialize(), (response) ->
+    XBrowser.sendRequest method: "delete", filter: @serialize(), (response) ->
       Filter.load response.filters
       Post.reload().runFilters()
 

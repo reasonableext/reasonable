@@ -43,7 +43,7 @@ class Controls
       @addComment comment for comment in Post.getCommentsByTimestamp().slice(-5).reverse()
 
     # Open options page
-    @addControl "Options", chrome.extension.getURL("/options.html")
+    @addControl "Options", XBrowser.getURL("/options.html")
 
   @addControl: (name, href, callback) ->
     li   = document.createElement("li")

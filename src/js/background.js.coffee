@@ -14,7 +14,7 @@ class Background
   @RETRIEVE_URL: "http://www.brymck.com/reasonable/retrieve"
 
   @load: ->
-    chrome.extension.onRequest.addListener (request, sender, sendResponse) =>
+    XBrowser.addRequestListener (request, sender, sendResponse) =>
       switch request.method
         when "settings"
           sendResponse settings: Settings.all()
@@ -59,13 +59,14 @@ class Background
         else
           sendResponse {} # snub
 
-    # Show page action icon if we're on reason.com
-    chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
-      chrome.pageAction.show tabId if tab.url.indexOf("reason.com") > -1
+    if XBrowser.chrome
+      # Show page action icon if we're on reason.com
+      chrome.tabs.onUpdated.addListener (tabId, changeInfo, tab) ->
+        chrome.pageAction.show tabId if tab.url.indexOf("reason.com") > -1
 
-    # Direct page action clicks to the options page
-    chrome.pageAction.onClicked.addListener (tab) ->
-      chrome.tabs.create url: "options.html"
+      # Direct page action clicks to the options page
+      chrome.pageAction.onClicked.addListener (tab) ->
+        chrome.tabs.create url: "options.html"
 
     @retrieveList()
 
