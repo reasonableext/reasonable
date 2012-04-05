@@ -148,16 +148,23 @@ end
 
 desc "Zip extension"
 task :zip do
-  base_name = "#{manifest["name"]}_%s_#{manifest["version"]}.zip"
-  zip_name  = File.join(ROOT_DIR, base_name)
+  base_name = "#{manifest["name"]}_#{manifest["version"]}"
+  full_name = File.join(ROOT_DIR, base_name)
 
-  File.delete(zip_name) if File.exists?(zip_name)
+  FileUtils.rm Dir["#{full_name}.*"]
 
-  puts base_name
-  BROWSERS.each do |browser, dir|
-    Dir.chdir(dir) do
-      puts %x[zip -T #{zip_name % browser} *.* **/*.*]
-    end
+  # Chrome
+  Dir.chdir(CHROME_DIR) do
+    puts %x[zip -T #{full_name}.zip *.* **/*.*]
+  end
+
+  # Firefox
+  if ENV["MOZ_TOOLS"].nil?
+    puts "Environment variable MOZ_TOOLS doesn't exist"
+    puts "Set this variable to point to the location of the Firefox Add-on SDK"
+  else
+    puts %x[cd $MOZ_TOOLS && source bin/activate && cd #{FIREFOX_DIR} && cfx xpi]
+    FileUtils.mv File.join(FIREFOX_DIR, "reasonable.xpi"), "#{full_name}.xpi"
   end
 end
 

@@ -5,4 +5,5 @@ firefox/
 spec/js/*.js
 spec/js/helpers/*.js
 *.png
+*.xpi
 *.zip
