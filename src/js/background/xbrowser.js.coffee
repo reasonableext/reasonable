@@ -6,11 +6,8 @@ class XBrowser
 
     # Chrome
     if @chrome
-      @addRequestListener = (request, sender, sendResponse) ->
-        if sendResponse?
-          chrome.extension.onRequest.addListener request, sender, sendResponse
-        else
-          chrome.extension.onRequest.addListener request, sender
+      @addRequestListener = (context, callback) ->
+        chrome.extension.onRequest.addListener callback
       @getURL = (path) ->
         chrome.extension.getURL path
       @load = (key) ->
@@ -46,8 +43,9 @@ class XBrowser
         self    = require("self")
         ss      = require("simple-storage")
       
-      @addRequestListener = (request, sender, sendResponse) ->
-        # implementation pending
+      @addRequestListener = (context, callback) ->
+        browser.messageManager.addMessageListener "message", (name, sync, json, target) ->
+          callback json.method, 
       @getURL = (path) ->
         self.data.url(path)
       @load = (key) ->
@@ -56,10 +54,9 @@ class XBrowser
         pageMod.PageMod {
           include: params.include
           contentScriptFile: self.data.url(params.url)
-          onAttach: (worker) ->
-            console.log "Attaching content scripts"
-            worker.on "detach", (data) ->
-              console.log data
+          contentScriptWhen: "ready"
+          onMessage: (response) ->
+            console.log response.method
         }
       @request = (params, callback) ->
         r = request {
@@ -76,9 +73,8 @@ class XBrowser
       @storage = ->
         ss.storage
       @sendRequest = (request, context, responseCallback) ->
-        context.postMessage "hi"
-        context.removeMessageListener request.method
-        context.addMessageListener request.method, (response) ->
-          responseCallback response
+        context.sendSyncMessage request.method, request
+        browser.messageManager.addMessageListener request.method, ->
+          console.log "afjkdsakljflksajflajflkadsjfl"
 
 XBrowser.load()
