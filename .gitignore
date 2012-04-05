@@ -1,6 +1,7 @@
 .DS_Store
 .sass-cache
-ext/
+chrome/
+firefox/
 spec/js/*.js
 spec/js/helpers/*.js
 *.png

@@ -7,30 +7,35 @@ load "jasmine/tasks/jasmine.rake"
 
 @debug        = true
 ROOT_DIR      = File.expand_path(File.dirname(__FILE__))
-EXTENSION_DIR = File.join(ROOT_DIR, "ext")
+CHROME_DIR    = File.join(ROOT_DIR, "chrome")
+FIREFOX_DIR   = File.join(ROOT_DIR, "firefox")
 SOURCE_DIR    = File.join(ROOT_DIR, "src")
 STATIC_EXTENSIONS = %w(png)
+BROWSERS = {
+  chrome:  CHROME_DIR,
+  firefox: FIREFOX_DIR
+}
 
 def verify_directory(path)
   FileUtils.mkdir_p(path) unless File.directory?(path)
 end
 
 def verify_extension_structure
-  verify_directory EXTENSION_DIR
+  verify_directory CHROME_DIR
   %w(css img js).each do |subdirectory|
-    verify_directory File.join(EXTENSION_DIR, subdirectory)
+    verify_directory File.join(CHROME_DIR, subdirectory)
   end
 end
 
 def manifest
   require "json"
-  @manifest ||= JSON.parser.new(File.read(File.join(EXTENSION_DIR, "manifest.json"))).parse
+  @manifest ||= JSON.parser.new(File.read(File.join(CHROME_DIR, "manifest.json"))).parse
 end
 
 def compile_sources(input_type, opts = {})
   verify_extension_structure
 
-  output_dir = File.join(EXTENSION_DIR, opts[:output_dir] || "")
+  output_dir = File.join(CHROME_DIR, opts[:output_dir] || "")
   input_dir  = File.join(SOURCE_DIR,    opts[:input_dir]  || "")
   subdir_search = opts[:merge_subdirectories] ? "*" : "**"
 
@@ -132,7 +137,7 @@ task :raw do
     Dir[File.join(SOURCE_DIR, "**", "*.#{ext}")].each do |path|
       relative_path = path.sub(SOURCE_DIR, "").sub(/^\//, "")
       puts "  #{relative_path}"
-      FileUtils.cp path, File.join(EXTENSION_DIR, relative_path)
+      FileUtils.cp path, File.join(CHROME_DIR, relative_path)
     end
   end
 
@@ -140,20 +145,22 @@ task :raw do
   puts "license"
   %w(BEERWARE-LICENSE MIT-LICENSE).each do |license|
     puts "  #{license}"
-    FileUtils.cp File.expand_path(license), File.join(EXTENSION_DIR, license)
+    FileUtils.cp File.expand_path(license), File.join(CHROME_DIR, license)
   end
 end
 
 desc "Zip extension"
 task :zip do
-  base_name = "#{manifest["name"]}_#{manifest["version"]}.zip"
+  base_name = "#{manifest["name"]}_%s_#{manifest["version"]}.zip"
   zip_name  = File.join(ROOT_DIR, base_name)
 
   File.delete(zip_name) if File.exists?(zip_name)
 
   puts base_name
-  Dir.chdir(EXTENSION_DIR) do
-    puts %x[zip -T #{zip_name} *.* **/*.*]
+  BROWSERS.each do |browser, dir|
+    Dir.chdir(dir) do
+      puts %x[zip -T #{zip_name % browser} *.* **/*.*]
+    end
   end
 end
 
@@ -162,8 +169,18 @@ task :production do
   @debug = false
 end
 
+desc "Run some file organization tasks for browser-specific implementations"
+task :browser do
+  FileUtils.cp_r CHROME_DIR, FIREFOX_DIR
+  %w(package.json).each do |path|
+    full_path = File.join(CHROME_DIR, path)
+    File.delete full_path if File.exist?(full_path)
+  end
+end
+
 desc "Compile and copy over all extension files"
-task :build => [:production, "build:coffee", "build:haml", "build:sass", "build:yml", :raw]
+task :build => [:production, "build:coffee", "build:haml", "build:sass", "build:yml",
+                :browser, :raw, :zip]
 
 desc "Compile spec CoffeeScripts and setup tests"
 task :spec => ["jasmine:compile", "jasmine"]
