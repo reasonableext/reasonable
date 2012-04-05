@@ -73,6 +73,7 @@ class Settings
     hideAuto:     yes
     history:      []
     userID:       (Math.floor(Math.random() * 16).toString(16) for i in [0...32]).join("")
+    previousURL:  ""
     shareTrolls:  yes
     showAltText:  yes
     showHistory:  yes

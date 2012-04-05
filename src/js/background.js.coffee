@@ -40,6 +40,11 @@ class Background
             Settings.filters[f.type]?[f.target]?[f.text] = Settings.timestamp()
           Settings.save "filters"
           @sendList()
+        when "url"
+          result = request.url is Settings.previousURL
+          Settings.previousURL = request.url
+          Settings.save "previousURL"
+          sendResponse result
         when "history"
           # Add any items that don't currently exist to history
           for item in request.history
