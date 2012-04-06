@@ -41,6 +41,9 @@ class Background
             Settings.filters[f.type]?[f.target]?[f.text] = Settings.timestamp()
           Settings.save "filters"
           @sendList()
+        when "lastIDs"
+          Settings.lastIDs[request.url] = [ request.lastID, Settings.timestamp() ]
+          Settings.save "lastIDs"
         when "url"
           result = request.url is Settings.previousURL
           Settings.previousURL = request.url

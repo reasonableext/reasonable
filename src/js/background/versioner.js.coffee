@@ -12,7 +12,7 @@ class Versioner
         if port.version > settingsVersion and port.version <= manifestVersion
           port.callback()
 
-    Settings.version = @version
+    Settings.version = VERSION
     Settings.save "version"
 
   @parseVersionString: (str) ->

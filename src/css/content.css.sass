@@ -1,3 +1,6 @@
+/* Global variables */
+$reason-orange: #ff5600
+
 /* Mixins */
 @mixin centered($width, $height)
   height: $height
@@ -81,6 +84,9 @@ div.com-block
     display: inline-block
     a
       cursor: pointer
+
+  &.unread
+    background-color: lighten($reason-orange, 49%)
 
 div#filter_dialog
   @include centered(21em, 7em)

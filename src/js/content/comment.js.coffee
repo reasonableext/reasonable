@@ -15,6 +15,10 @@ class Comment
     else
       @isMe = no
 
+  markIfUnread: (maxID) ->
+    if @id > maxID
+      @node.className += " unread"
+
   setNext: (@next) ->
 
   showDirect: =>

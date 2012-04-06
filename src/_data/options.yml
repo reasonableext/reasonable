@@ -35,6 +35,10 @@
         This slows down page loads considerably.
   text: Reduce load times by blocking sharing buttons
 
+- id: markUnread
+  checked: true
+  text: Highlight unread comments
+
 - id: username
   placeholder: Amakudari
   text: Name to highlight
