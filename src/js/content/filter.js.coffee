@@ -26,7 +26,7 @@ class Filter
   @updateTimestamps: ->
     if @all?
       result = (filter.serialize() for filter in @all when filter.used)
-      XBrowser.sendRequest method: "update", filters: result, self
+      XBrowser.sendRequest method: "update", filters: result
 
   remove: ->
     XBrowser.sendRequest method: "delete", filter: @serialize(), (response) ->
