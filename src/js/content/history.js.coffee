@@ -5,7 +5,7 @@ class History
       Controls.addHistory response.history if Settings.showHistory
 
   @serialize: ->
-    url = window.location.href.replace(/\#.*$/, "")
+    url = window.location.pathname.split("/").pop()
     return {} unless Post.comments?
     result = []
     for comment in Post.comments

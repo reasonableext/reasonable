@@ -12,31 +12,29 @@ class Post
     @posts = (new Post(node) for node in document.getElementsByClassName("post"))
     @container   = document.getElementById("commentcontainer")
 
-    # Determine whether or not to determine the last read ID
-    isMarking = no
-    if Settings.markUnread
-      url       = window.location.pathname.split("/").pop()
-      lastID    = Settings.lastIDs[url]?[0]
-      if lastID?
-        isMarking = yes
-      else
-        lastID = 0
-      newLastID = lastID
-
     @comments    = do =>
       if @container?
+        # Determine whether or not to determine the last read ID
+        if Settings.markUnread
+          url       = window.location.pathname.split("/").pop()
+          lastID    = Settings.lastIDs[url]?[0] or 0
+          newLastID = lastID
+        isMarking = (lastID? and lastID isnt 0)
+
+        # Iterate over comments
         previous = null
-        for block, index in @container.getElementsByClassName("com-block")
+        result = for block, index in @container.getElementsByClassName("com-block")
           comment  = new Comment(block, index, this, previous)
           comment.markIfUnread(lastID) if isMarking
           newLastID = comment.id if Settings.markUnread and comment.id > newLastID
           previous = comment
-      else
-        null
-    @isThreaded = yes
 
-    if Settings.markUnread
-      XBrowser.sendRequest method: "lastIDs", url: url, lastID: newLastID
+        # Report the last ID of the page
+        if Settings.markUnread
+          XBrowser.sendRequest method: "lastIDs", url: url, lastID: newLastID
+
+      return result or null
+    @isThreaded = yes
 
     this
 
