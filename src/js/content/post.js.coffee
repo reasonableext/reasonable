@@ -33,7 +33,7 @@ class Post
         if Settings.markUnread
           XBrowser.sendRequest method: "lastIDs", url: url, lastID: newLastID
 
-      return result or null
+      result ? null
     @isThreaded = yes
 
     this
