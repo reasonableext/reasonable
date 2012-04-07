@@ -16,7 +16,7 @@ class Post
     isMarking = no
     if Settings.markUnread
       url       = window.location.pathname.split("/").pop()
-      lastID    = Settings.lastIDs[url][0]
+      lastID    = Settings.lastIDs[url]?[0]
       if lastID?
         isMarking = yes
       else
