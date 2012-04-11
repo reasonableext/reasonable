@@ -88,6 +88,11 @@ div.com-block
   &.unread
     background-color: lighten($reason-orange, 49%)
 
+  /* Highlight myself */
+  &.ableMe, &.unread.ableMe
+    background-color: #ffc
+
+
 div#filter_dialog
   @include centered(21em, 7em)
   @include shadowed(10px, 0.3)
@@ -103,10 +108,6 @@ div.highlight
 
 div.collapsed
   display: none
-
-/* Highlight myself */
-div.ableMe
-  background-color: #ffc
 
 iframe.youtube-player
   display: block
