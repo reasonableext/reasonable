@@ -45,13 +45,13 @@ div.post.blog, div.post.inner
   img.pic.left + .ableAltText
     clear: left
     float: left
-    margin-left: inherit
+    margin-left: 0px
     margin-right: inherit
   img.pic.right + .ableAltText
     clear: right
     float: right
     margin-left: inherit
-    margin-right: inherit
+    margin-right: 0px
     
 /* Comment */
 div.com-block
@@ -123,8 +123,11 @@ img.ableGravatar
   padding-left: 4px
   z-index: -1
 
-/* Character count */
+/* Comment form */
 div.leave-comment
+  background-color: #fff
+
+  /* Character count */
   div.ableCount
     input
       border: none
