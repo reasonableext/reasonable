@@ -27,6 +27,7 @@ class Markup
     @count.readonly = yes
     @count.size     = 3
     @count.type     = "text"
+    @count.value    = @textarea.value.length
     label.for       = @id
     
     @textarea.onkeyup = => @count.value = @textarea.value.length
