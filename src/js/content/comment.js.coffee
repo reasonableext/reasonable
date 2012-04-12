@@ -47,7 +47,7 @@ class Comment
       highlighted = (node for node in document.getElementsByClassName("highlight"))
       for node in highlighted
         node.className = node.className.replace(" highlight", "")
-        node.getElementsByClassName("collapser")[0].textContent = "-"
+        node.getElementsByClassName("collapser")[0].textContent = "–"
 
       collapsed = (node for node in document.getElementsByClassName("collapsed"))
       for node in collapsed
@@ -121,7 +121,7 @@ class Comment
       {
         tag: "a"
         class: "collapser"
-        text: "-"
+        text: "–"
         events:
           click: @showDirect
       }
