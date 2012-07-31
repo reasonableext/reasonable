@@ -54,8 +54,8 @@ div.post.blog, div.post.inner
     margin-right: 0px
     
 /* Comment */
-div.com-block
-  .commentheader
+li.com-block
+  .meta
     a
       cursor: pointer
     .filter
@@ -64,6 +64,7 @@ div.com-block
   div.filter_explanation
     @include horizontal-list(", ")
     color: #bbb
+    font-size: 0.75em
     margin-bottom: 8px
     opacity: 0
     &:hover
@@ -76,8 +77,17 @@ div.com-block
       display: inline-block
       margin-bottom: 0
     ul
+      border-bottom: none !important
       display: inline-block
+      margin-bottom: 0 !important
+      padding-bottom: 0 !important
       padding-left: 0.5em
+      li
+        border-bottom: none !important
+        margin-bottom: 0 !important
+        padding-bottom: 0 !important
+        a
+          font-size: 100%
 
   div.filters
     @include horizontal-list("\a0")
@@ -103,10 +113,10 @@ div#filter_dialog
   label + input
     margin-left: 1em
 
-div.highlight
+li.highlight
   background-color: #eee
 
-div.collapsed
+li.collapsed
   display: none
 
 iframe.youtube-player

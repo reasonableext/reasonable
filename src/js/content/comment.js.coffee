@@ -1,7 +1,7 @@
 class Comment
   constructor: (@node, @index, @post, @previous) ->
     @id        = @node.id.replace("comment_", "").parseInt()
-    @header    = @node.getElementsByTagName("h2")[0]
+    @header    = @node.getElementsByClassName("meta")[0]
     @content   = @extractContent()
     @depth     = @node.className.substr(-1).parseInt()
     @name      = @extractName()
@@ -29,8 +29,10 @@ class Comment
         node  = node.offsetParent
       top
 
+    console.debug "hello"
     offset  = window.scrollY - positionOf(@node)
     comment = this
+    console.debug comment.depth
     depth   = comment.depth + 1
     if comment.node.className.indexOf("highlight") is -1
       while depth isnt 0
@@ -65,50 +67,22 @@ class Comment
     result.join "\n"
 
   extractName: ->
-    strong = @header.firstChild
-    if strong.hasChildNodes()
-      strong.lastChild.textContent
+    first = @header.firstChild
+    if first.nodeName is "SCRIPT"
+      first.nextSibling.textContent
     else
-      strong.textContent
+      first.textContent
 
   extractLink: ->
-    strong = @header.firstChild
-    if strong.hasChildNodes()
-      strong.lastChild.href
+    first = @header.firstChild
+    if first.nodeName is "SCRIPT"
+      first.nextSibling.href
     else
       null
     
   extractTimestamp: ->
-    matches = @header.textContent.match(/(\d+)\.(\d+)\.(\d+) \@ (\d+):(\d+)(AM|PM)/)
-    [_, month, day, year, hours, minutes, ampm] = matches
-    year   = parseInt(year)  + 2000
-    month  = parseInt(month) - 1
-    hours  = parseInt(hours)
-    hours -= 12 if hours is 12
-    hours += 12 if ampm is "PM"
-
-    # Adjust hours for daylight saving time
-    if month is 2
-      marchOffset  = new Date(year, 2, 1).getDay()
-      marchOffset += 7 if marchOffset is 0
-      secondSundayOfMarch = 15 - marchOffset
-      if day is secondSundayOfMarch and hours >= 2
-        hours--
-      else if day > secondSundayOfMarch
-        hours--
-    else if month > 2 and month < 10
-      hours--
-    else if month is 10
-      novemberOffset  = new Date(year, 10, 1).getDay()
-      novemberOffset += 7 if novemberOffset is 0
-      firstSundayOfNovember = 8 - novemberOffset
-      if day is firstSundayOfNovember and hours < 2
-        hours--
-      else if day < firstSundayOfNovember
-        hours--
-
-    hours += 5
-    +new Date(Date.UTC(year, month, day, hours, minutes, 0))
+    text = @header.getElementsByTagName("time")[0].getAttribute("datetime")
+    +new Date(text)
 
   # Filters are organized together to make it easier
   filterName:    => Filter.dialog "string", "name", @name

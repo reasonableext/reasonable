@@ -1,6 +1,7 @@
 ---
 name: reasonable
-version: "2.2"
+version: "2.3.1"
+manifest_version: 2
 description: For a site called reason, you'd think it would block trolls, help users
   navigate comment threads, and show inline media. (Drink.)
 icons:
@@ -11,7 +12,8 @@ icons:
 page_action:
   default_icon: /img/icon_16.png
   default_title: reasonable
-background_page: background.html
+background: 
+  page: background.html
 content_scripts:
   - all_frames: true
     js:
