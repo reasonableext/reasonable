@@ -2,7 +2,7 @@ class Comment.YouTubeExtension
   REGEX: /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9-_]+)(?:\#t\=[0-9]{2}m[0-9]{2}s)?/gi
 
   run: (comment) ->
-    for a in comment.node.getElementsByTagName("a")
+    for a in comment.body.getElementsByTagName("a")
       text     = a.href
       nextNode = a.parentNode.nextSibling
       if a.parentNode.tagName.toLowerCase() is "p" and matches = @REGEX.exec(text)

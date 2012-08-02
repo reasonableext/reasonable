@@ -82,4 +82,14 @@ class Markup
         # The nodes aren't created instantly, so I need to wait a second before adding stuff
         setTimeout (=>
           floatingNode = document.getElementsByClassName("leave-comment reply")[0]
+
+          # Fix the stupid order of the preview and buttons
+          if Settings.fixPreview
+            for submit in floatingNode.getElementsByClassName("submit")
+              if submit.nodeName is "INPUT"
+                sib = submit.nextElementSibling
+                if sib?.className.indexOf("preview") isnt -1
+                  submit.parentNode.insertBefore sib, submit
+                  break
+                
           @floating ?= new Markup(floatingNode, "markup_floating")), 50

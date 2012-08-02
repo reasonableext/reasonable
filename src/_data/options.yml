@@ -39,6 +39,10 @@
   checked: true
   text: Highlight unread comments
 
+- id: fixPreview
+  checked: true
+  text: Fix order of preview and submit buttons in reply-to form
+
 - id: username
   placeholder: Amakudari
   text: Name to highlight

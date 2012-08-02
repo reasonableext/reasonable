@@ -2,6 +2,7 @@ class Comment
   constructor: (@node, @index, @post, @previous) ->
     @id        = @node.id.replace("comment_", "").parseInt()
     @header    = @node.getElementsByClassName("meta")[0]
+    @body      = @node.getElementsByClassName("content")[0]
     @content   = @extractContent()
     @depth     = @node.className.substr(-1).parseInt()
     @name      = @extractName()
@@ -59,12 +60,7 @@ class Comment
     window.scrollTo 0, [ positionOf(@node) + offset ]
 
   extractContent: ->
-    result = []
-    for child in @node.children
-      tagName = child.tagName.toLowerCase()
-      if (tagName is "p" and child.className isnt "comment_reply_msg") or tagName is "blockquote"
-        result.push child.textContent
-    result.join "\n"
+    @body.textContent
 
   extractName: ->
     first = @header.firstChild

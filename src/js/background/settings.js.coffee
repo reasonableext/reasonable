@@ -70,6 +70,7 @@ class Settings
                   }
     blockIframes: no
     filters:      BASIC_FILTERS
+    fixPreview:   yes
     hideAuto:     yes
     markUnread:   yes
     history:      []

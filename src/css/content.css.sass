@@ -76,24 +76,25 @@ li.com-block
     p
       display: inline-block
       margin-bottom: 0
-    ul
-      border-bottom: none !important
-      display: inline-block
-      margin-bottom: 0 !important
-      padding-bottom: 0 !important
-      padding-left: 0.5em
-      li
-        border-bottom: none !important
-        margin-bottom: 0 !important
-        padding-bottom: 0 !important
-        a
-          font-size: 100%
 
   div.filters
     @include horizontal-list("\a0")
     display: inline-block
     a
       cursor: pointer
+
+  ul
+    border-bottom: none !important
+    display: inline-block
+    margin-bottom: 0 !important
+    padding-bottom: 0 !important
+    padding-left: 0.5em
+    li
+      border-bottom: none !important
+      margin-bottom: 0 !important
+      padding-bottom: 0 !important
+      a
+        font-size: 100%
 
   &.unread
     background-color: lighten($reason-orange, 48%)
@@ -134,7 +135,7 @@ img.ableGravatar
   z-index: -1
 
 /* Comment form */
-div.leave-comment
+#commentform, div.leave-comment
   background-color: #fff
 
   form
@@ -146,8 +147,10 @@ div.leave-comment
     /* Character count */
     div.ableCount
       input
+        background-image: none
         border: none
-        padding-right: 0
+        float: none
+        padding-right: 0.5em
         text-align: right
         width: 3em
       input, label
@@ -166,10 +169,14 @@ ul.ableQuick
   li + li
     padding-left: 0.25em
 
+/* Character counting */
 .ableCount
+  float: left
   font-size: 87.5%
   .pipe
     padding: 0 1px
+div.submit
+  float: right
 
 /* Control panel */
 #ableControls
