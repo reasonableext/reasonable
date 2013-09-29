@@ -1,4 +1,6 @@
 class Controls
+  MAX_NAME_LENGTH = 30
+
   @load: ->
     @node    = document.createElement("div")
     @node.id = "ableControls"
@@ -63,7 +65,7 @@ class Controls
   @addComment: (comment) ->
     li   = document.createElement("li")
     a    = document.createElement("a")
-    text = document.createTextNode(comment.name)
+    text = document.createTextNode(comment.name.truncate(MAX_NAME_LENGTH))
 
     a.href = "#comment_#{comment.id}"
 

@@ -159,13 +159,13 @@ task :zip do
   end
 
   # Firefox
-  if ENV["MOZ_TOOLS"].nil?
-    puts "Environment variable MOZ_TOOLS doesn't exist"
-    puts "Set this variable to point to the location of the Firefox Add-on SDK"
-  else
-    puts %x[cd $MOZ_TOOLS && source bin/activate && cd #{FIREFOX_DIR} && cfx xpi]
-    FileUtils.mv File.join(FIREFOX_DIR, "reasonable.xpi"), "#{full_name}.xpi"
-  end
+  # if ENV["MOZ_TOOLS"].nil?
+  #   puts "Environment variable MOZ_TOOLS doesn't exist"
+  #   puts "Set this variable to point to the location of the Firefox Add-on SDK"
+  # else
+  #   puts %x[cd $MOZ_TOOLS && source bin/activate && cd #{FIREFOX_DIR} && cfx xpi]
+  #   FileUtils.mv File.join(FIREFOX_DIR, "reasonable.xpi"), "#{full_name}.xpi"
+  # end
 end
 
 desc "Turn debug off"
@@ -185,14 +185,14 @@ task :browser do
   end
 
   # Firefox
-  Dir.chdir(FIREFOX_DIR) do
-    FileUtils.mv "js", "data"
-    FileUtils.mkdir "lib"
-    FileUtils.mv "data/background.js", "lib/main.js"
-    FileUtils.mv "img/icon_48.png", "data/icon.png"
-    FileUtils.rm_rf "img"
-    FileUtils.rm "manifest.json"
-  end
+  # Dir.chdir(FIREFOX_DIR) do
+  #   FileUtils.mv "js", "data"
+  #   FileUtils.mkdir "lib"
+  #   FileUtils.mv "data/background.js", "lib/main.js"
+  #   FileUtils.mv "img/icon_48.png", "data/icon.png"
+  #   FileUtils.rm_rf "img"
+  #   FileUtils.rm "manifest.json"
+  # end
 end
 
 desc "Compile and copy over all extension files"

@@ -30,10 +30,8 @@ class Comment
         node  = node.offsetParent
       top
 
-    console.debug "hello"
     offset  = window.scrollY - positionOf(@node)
     comment = this
-    console.debug comment.depth
     depth   = comment.depth + 1
     if comment.node.className.indexOf("highlight") is -1
       while depth isnt 0
@@ -63,19 +61,19 @@ class Comment
     @body.textContent
 
   extractName: ->
-    first = @header.firstChild
+    first = @header.firstChild.firstChild
     if first.nodeName is "SCRIPT"
       first.nextSibling.textContent
     else
       first.textContent
 
   extractLink: ->
-    first = @header.firstChild
+    first = @header.firstChild.firstChild
     if first.nodeName is "SCRIPT"
       first.nextSibling.href
     else
       null
-    
+
   extractTimestamp: ->
     text = @header.getElementsByTagName("time")[0].getAttribute("datetime")
     +new Date(text)
@@ -84,7 +82,7 @@ class Comment
   filterName:    => Filter.dialog "string", "name", @name
   filterLink:    => Filter.dialog "string", "link", @link
   filterCustom:  -> Filter.dialog "regex",  "content"
-  
+
   addControls: ->
     nodes = DOMBuilder.create([
       { tag: "span", class: "pipe", text: "|" }
