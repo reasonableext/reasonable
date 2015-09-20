@@ -2,8 +2,7 @@
   checked: true
   help: This option does not affect trolls you manually blacklist or whitelist,
         just those with the auto tag
-  text: Hide trolls automatically based on
-        "remote list":http://www.brymck.com/reasonable/get
+  text: Hide trolls automatically based on <a href="http://www.brymck.com/reasonable/get">remote list</a>
 
 - id: shareTrolls
   checked: true
@@ -28,7 +27,7 @@
   text: Show YouTube in comments
 
 - id: showGravatar
-  text: Show ["Gravatar":http://en.gravatar.com/]/Identicon next to posters
+  text: Show <a href="http://en.gravatar.com/">Gravatar</a>/Identicon next to posters
 
 - id: blockIframes
   help: Facebook, Twitter and Google+ buttons all load their own mini-pages.

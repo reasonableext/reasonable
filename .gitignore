@@ -4,6 +4,7 @@ chrome/
 firefox/
 spec/js/*.js
 spec/js/helpers/*.js
+Gemfile.lock
 *.png
 *.xpi
 *.zip

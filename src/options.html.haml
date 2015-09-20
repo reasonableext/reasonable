@@ -52,21 +52,13 @@
                   %li{class: depth_class, title: option["help"]}<
                     - if option["type"].nil?
                       %input{id: option["id"], type: "checkbox", checked: option["checked"]}
-                      %label{:for  => option["id"]}
-                        -# The extra space at the beginning of the text prevents
-                        -# RedCloth from wrapping the output in <p> tags
-                        :textile
-                           #{option["text"]}
+                      %label{:for  => option["id"]} #{option["text"]}
                     - elsif option["type"] == "text"
-                      %label{:for => option["id"]}
-                        :textile
-                           #{option["text"]}
+                      %label{:for => option["id"]} #{option["text"]}
                       %input{id: option["id"], type: "text", placeholder: option["placeholder"]}
                     - elsif option["type"] == "range"
                       .range
-                        %label{:for => option["id"]}
-                          :textile
-                             #{option["text"]}
+                        %label{:for => option["id"]} #{option["text"]}
                         %br
                         %input{id: option["id"], type: "range", min: 1, max: 300}
                         %input.range_helper{id: "#{option["id"]}_helper", type: "number", min: 1, max: 300, size: 5}
