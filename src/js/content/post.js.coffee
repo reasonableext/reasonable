@@ -1,7 +1,7 @@
 class Post
   constructor: (@node) ->
-    @name = node.getElementsByTagName("h2")[0].textContent
-    @link = node.getElementsByTagName("a")[0].href
+    @name = @node.getElementsByTagName("h2")[0].textContent
+    @link = @node.getElementsByTagName("a")[0].href
 
   runExtensions: ->
     if Post.extensions?

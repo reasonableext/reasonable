@@ -22,7 +22,7 @@ class Filter
       for own target, texts of targets
         for own text of texts
           @add type, target, text
-  
+
   @updateTimestamps: ->
     if @all?
       result = (filter.serialize() for filter in @all when filter.used)
@@ -41,7 +41,7 @@ class Filter
 # String filters
 class StringFilter extends Filter
   constructor: (@text) ->
-    @lowerCase = (text is text.toLowerCase())
+    @lowerCase = (@text is @text.toLowerCase())
     @used = no
   type: "string"
 
@@ -79,7 +79,7 @@ class ContentFilter extends StringFilter
 # Regular expression filters
 class RegexFilter extends Filter
   constructor: (@text) ->
-    @regex = new RegExp(text, if text is text.toLowerCase() then "i" else "")
+    @regex = new RegExp(@text, if @text is @text.toLowerCase() then "i" else "")
     @used  = no
   type: "regex"
 
