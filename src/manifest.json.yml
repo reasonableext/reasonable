@@ -19,14 +19,14 @@ content_scripts:
     js:
       - /js/preload.js
     matches:
-      - *://reason.com/*
+      - '*://reason.com/*'
     run_at: document_start
   - css:
       - /css/content.css
     js:
       - /js/content.js
     matches:
-      - *://reason.com/*
+      - '*://reason.com/*'
 options_page: options.html
 permissions:
   - tabs
