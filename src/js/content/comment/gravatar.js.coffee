@@ -1,5 +1,5 @@
 class Comment.GravatarExtension
-  AVATAR_PREFIX: "http://www.gravatar.com/avatar/"
+  AVATAR_PREFIX: "https://www.gravatar.com/avatar/"
   AVATAR_SUFFIX: "?s=40&d=identicon"
   MY_MD5:        "b5ce5f2f748ceefff8b6a5531d865a27"
 

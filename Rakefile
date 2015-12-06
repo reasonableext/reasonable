@@ -1,6 +1,5 @@
 require "fileutils"
 require "jasmine"
-require "RedCloth"
 
 require_relative "spec/support/jasmine_config.rb"
 load "jasmine/tasks/jasmine.rake"

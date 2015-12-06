@@ -12,7 +12,7 @@ class Comment.YouTubeExtension
         youTube.type = "text/html"
         youTube.width = 480
         youTube.height = 390
-        youTube.src = "http://www.youtube.com/embed/#{matches[1]}"
+        youTube.src = "https://www.youtube.com/embed/#{matches[1]}"
         youTube.frameborder = 0
 
         nextNode.parentNode.insertBefore youTube, nextNode
